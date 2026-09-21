@@ -1,0 +1,23 @@
+<graph id="S1ReadTest">
+    <version>1.0</version>
+
+    <node id="read">
+        <operator>Read</operator>
+        <parameters>
+            <file>${source}</file>
+            <pixelRegion>0,0,1024,1024</pixelRegion>
+            <sourceBands>VV,VH</sourceBands>
+        </parameters>
+    </node>
+
+    <node id="write">
+        <operator>Write</operator>
+        <sources>
+            <source>read</source>
+        </sources>
+        <parameters>
+            <file>${target}</file>
+            <formatName>BEAM-DIMAP</formatName>
+        </parameters>
+    </node>
+</graph>

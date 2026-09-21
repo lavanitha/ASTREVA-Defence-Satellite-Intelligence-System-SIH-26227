@@ -1,0 +1,47 @@
+<graph id="S1CalibrationTest">
+    <version>1.0</version>
+
+    <node id="read">
+        <operator>Read</operator>
+        <parameters>
+            <file>${source}</file>
+        </parameters>
+    </node>
+
+    <node id="orbit">
+        <operator>Apply-Orbit-File</operator>
+        <sources>
+            <source>read</source>
+        </sources>
+        <parameters>
+            <orbitType>Sentinel Restituted (Auto Download)</orbitType>
+            <continueOnFail>false</continueOnFail>
+        </parameters>
+    </node>
+
+    <node id="calibration">
+        <operator>Calibration</operator>
+        <sources>
+            <source>orbit</source>
+        </sources>
+        <parameters>
+            <outputSigmaBand>true</outputSigmaBand>
+            <outputGammaBand>false</outputGammaBand>
+            <outputBetaBand>false</outputBetaBand>
+            <outputImageScaleInDb>false</outputImageScaleInDb>
+            <selectedPolarisations>VV,VH</selectedPolarisations>
+        </parameters>
+    </node>
+
+    <node id="write">
+        <operator>Write</operator>
+        <sources>
+            <source>calibration</source>
+        </sources>
+        <parameters>
+            <file>${target}</file>
+            <formatName>GeoTIFF-BigTIFF</formatName>
+        </parameters>
+    </node>
+
+</graph>

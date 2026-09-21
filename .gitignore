@@ -1,0 +1,76 @@
+# =========================
+# Environment / Secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# =========================
+# Satellite / Geospatial Data
+# =========================
+data/raw/*
+data/intermediate/*
+data/tiles/*
+data/labels/*
+
+# Preserve directory structure
+!data/raw/**/.gitkeep
+!data/intermediate/**/.gitkeep
+!data/tiles/**/.gitkeep
+!data/labels/**/.gitkeep
+
+# =========================
+# Large Remote Sensing Files
+# =========================
+*.SAFE
+*.zip
+*.jp2
+*.tif
+*.tiff
+*.img
+*.hdr
+*.dim
+*.vrt
+
+# =========================
+# ML Artifacts
+# =========================
+models/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.h5
+*.keras
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# Track satellite catalogue metadata
+!data/raw/sentinel2/catalogue.json

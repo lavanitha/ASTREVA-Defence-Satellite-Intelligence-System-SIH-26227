@@ -1,0 +1,61 @@
+<graph id="S1PreprocessAOI">
+    <version>1.0</version>
+
+    <node id="read">
+        <operator>Read</operator>
+        <parameters>
+            <file>${source}</file>
+        </parameters>
+    </node>
+
+    <node id="orbit">
+        <operator>Apply-Orbit-File</operator>
+        <sources>
+            <source>read</source>
+        </sources>
+        <parameters>
+            <orbitType>Sentinel Precise (Auto Download)</orbitType>
+            <continueOnFail>false</continueOnFail>
+        </parameters>
+    </node>
+
+    <node id="calibration">
+        <operator>Calibration</operator>
+        <sources>
+            <source>orbit</source>
+        </sources>
+        <parameters>
+            <outputSigmaBand>true</outputSigmaBand>
+            <outputGammaBand>false</outputGammaBand>
+            <outputBetaBand>false</outputBetaBand>
+            <outputImageScaleInDb>false</outputImageScaleInDb>
+            <selectedPolarisations>VV,VH</selectedPolarisations>
+        </parameters>
+    </node>
+
+    <node id="terrainCorrection">
+        <operator>Terrain-Correction</operator>
+        <sources>
+            <source>calibration</source>
+        </sources>
+        <parameters>
+            <demName>Copernicus 30m Global DEM</demName>
+            <demResamplingMethod>BILINEAR_INTERPOLATION</demResamplingMethod>
+            <imgResamplingMethod>BILINEAR_INTERPOLATION</imgResamplingMethod>
+            <pixelSpacingInMeter>10.0</pixelSpacingInMeter>
+            <mapProjection>WGS84(DD)</mapProjection>
+        </parameters>
+    </node>
+
+    <node id="write">
+        <operator>Write</operator>
+        <sources>
+            <source>terrainCorrection</source>
+        </sources>
+        <parameters>
+            <file>${target}</file>
+            <formatName>GeoTIFF-BigTIFF</formatName>
+        </parameters>
+    </node>
+
+</graph>

@@ -1,0 +1,44 @@
+{
+  "type": "FeatureCollection",
+  "name": "development_aoi",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Northern_India_Development_AOI",
+        "purpose": "SIH26227 development",
+        "sensors": [
+          "Sentinel-1",
+          "Sentinel-2"
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.9,
+              32.55
+            ],
+            [
+              78.15,
+              32.55
+            ],
+            [
+              78.15,
+              32.75
+            ],
+            [
+              77.9,
+              32.75
+            ],
+            [
+              77.9,
+              32.55
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

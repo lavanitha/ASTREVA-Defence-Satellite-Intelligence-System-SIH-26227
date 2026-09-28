@@ -74,3 +74,10 @@ Thumbs.db
 
 # Track satellite catalogue metadata
 !data/raw/sentinel2/catalogue.json
+# ASTREVA local development
+backend/.venv/
+frontend/node_modules/
+frontend/dist/
+
+# Other local project
+SIH-2PGITB&U2/

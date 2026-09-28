@@ -1,22 +1,33 @@
 # ASTREVA: Defence Satellite Intelligence System
+
 ### Semantic Retrieval and Multi-Temporal Change Analysis of Satellite Imagery
 
+[![SIH 2026](https://img.shields.io/badge/Smart%20India%20Hackathon-2026-1f2937?style=flat-square)](https://www.sih.gov.in/)
+[![Problem Statement](https://img.shields.io/badge/SIH26227-Ministry%20of%20Defence-374151?style=flat-square)](#smart-india-hackathon-2026)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.119-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![FAISS](https://img.shields.io/badge/FAISS-Vector%20Search-374151?style=flat-square)](https://github.com/facebookresearch/faiss)
+[![Docker](https://img.shields.io/badge/Docker-Deployment-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
+
 **Smart India Hackathon 2026**  
-**Problem Statement ID**: SIH26227  
-**Organization**: Ministry of Defence — Directorate General of Information Systems (DGIS), Indian Army  
-**Theme**: Space Technology  
-**Category**: Software  
-**Team**: Impacteers  
+**Problem Statement ID:** SIH26227  
+**Organization:** Ministry of Defence — Directorate General of Information Systems (DGIS), Indian Army  
+**Theme:** Space Technology  
+**Category:** Software  
+**Team:** Impacteers
 
 ---
 
 ## Executive Summary
 
-ASTREVA is a defence-oriented satellite intelligence platform for semantic retrieval and multi-temporal analysis of Earth observation imagery. Developed as an engineering prototype for Smart India Hackathon 2026 under problem statement SIH26227, the platform addresses the operational limitations of legacy geospatial archive retrieval systems. 
+ASTREVA is a defence-oriented satellite intelligence platform for semantic retrieval and multi-temporal analysis of Earth observation imagery. Developed as an engineering prototype for Smart India Hackathon 2026 under problem statement SIH26227, the platform addresses the operational limitations of conventional geospatial archive retrieval systems.
 
-Traditional Earth observation workflows restrict imagery retrieval to scalar metadata parameters (geographic bounding boxes, acquisition timestamps, and sensor identities). ASTREVA introduces multi-modal vector search and temporal change inference, allowing imagery analysts to search satellite catalogues by semantic description and trace structural and physical changes over multi-year observation intervals.
+Traditional Earth observation workflows commonly depend on scalar metadata such as geographic bounding boxes, acquisition timestamps, and sensor identities. ASTREVA introduces multi-modal vector search and temporal change inference, allowing imagery analysts to search satellite catalogues using semantic descriptions and trace structural and physical changes over multi-year observation intervals.
 
-> **Operational Concept**: *"Describe what you seek. Trace what changed."*
+> **Operational Concept:** *"Describe what you seek. Trace what changed."*
 
 ---
 
@@ -24,121 +35,153 @@ Traditional Earth observation workflows restrict imagery retrieval to scalar met
 
 ASTREVA operates across a five-stage intelligence sequence:
 
-$$\text{DISCOVER} \longrightarrow \text{RETRIEVE} \longrightarrow \text{TRACE} \longrightarrow \text{VERIFY} \longrightarrow \text{ACT}$$
+**DISCOVER → RETRIEVE → TRACE → VERIFY → ACT**
 
-1. **Discover**: Define surveillance sectors, monitor regional Areas of Interest (AOIs), or identify terrain groupings through unsupervised representation clustering.
-2. **Retrieve**: Formulate natural-language descriptions or provide reference image patches to retrieve top-$k$ relevant granules using cross-modal vector similarity.
-3. **Trace**: Perform multi-temporal pairwise evaluation between historical baseline passes and recent acquisitions to compute spectral deltas and morphological anomalies.
-4. **Verify**: Evaluate automated false-change suppression metrics (seasonal confounders, nodata coverage, atmospheric interference) and inspect synchronized before/after/mask raster layers in the analyst review queue.
-5. **Act**: Record official analyst validation decisions (Confirmed / Rejected / Pending) with structured justifications, establishing an immutable provenance trail for mission dossier export.
+1. **Discover** — Define surveillance sectors, monitor regional Areas of Interest (AOIs), or identify terrain groupings through representation clustering.
+2. **Retrieve** — Formulate natural-language descriptions or provide reference image patches to retrieve top-ranked relevant satellite tiles using cross-modal vector similarity.
+3. **Trace** — Perform multi-temporal evaluation between historical baseline passes and recent acquisitions to identify spectral and morphological differences.
+4. **Verify** — Apply false-change suppression checks for seasonal variation, data quality, atmospheric interference, and related confounders while presenting synchronized evidence layers for analyst review.
+5. **Act** — Record analyst validation decisions such as Confirmed, Rejected, or Pending with structured justification and provenance information for intelligence dossier export.
 
 ---
 
 ## Operational Background and Problem Definition
 
 ### Context
-Defence commands and intelligence directorates ingest massive volumes of high- and medium-resolution satellite imagery daily from sovereign constellations and open Earth-observation platforms (such as Sentinel, Landsat, and Cartosat). The primary operational bottleneck is not sensor throughput, but the human cognitive load required to identify tactical developments across petabyte-scale archives.
+
+Defence commands and intelligence organizations process large volumes of high- and medium-resolution Earth observation imagery from sovereign constellations and open Earth-observation platforms. The operational challenge is not only imagery availability, but the analyst effort required to discover relevant scenes and identify meaningful changes across large archives.
 
 ### Limitations of Conventional Systems
-1. **Metadata-Constrained Discovery**: Keyword or catalogue search cannot identify visual features such as "newly built structures near a river embankment" or "linear clearing in forested terrain." Analysts must manually scan hundreds of square kilometers.
-2. **High False-Alarm Rates in Temporal Comparison**: Traditional pixel-differencing algorithms misclassify seasonal agricultural harvesting, cloud shadows, sun-angle shifts, and vegetative phenology as physical military or infrastructural developments.
-3. **Cloud Dependency vs. Sovereign Security**: Many commercial AI services rely on external cloud APIs, violating defence enclave isolation, air-gapped security doctrines, and sovereign data governance mandates.
-4. **Fragmented Provenance**: Automated alerts frequently lack traceable sensor parameters, georeferencing lineage, and recorded human-in-the-loop decisions.
+
+1. **Metadata-Constrained Discovery** — Keyword and catalogue search cannot directly express visual concepts such as newly built structures, linear clearings, road development, or changes near terrain features.
+2. **False Alarms in Temporal Comparison** — Pixel-level comparison can interpret seasonal agriculture, cloud shadows, illumination changes, vegetation cycles, and other environmental effects as physical change.
+3. **Cloud Dependency and Sovereign Security** — External AI inference services can introduce data-governance and connectivity constraints for controlled defence environments.
+4. **Fragmented Provenance** — Automated detections may lack a complete chain linking the source scene, processing steps, analyst decision, and exported evidence.
 
 ---
 
 ## Core Capabilities
 
 ### 1. Semantic Satellite Retrieval
-- **Natural-Language Search**: Vectorizes arbitrary textual queries into a shared cross-modal latent space.
-- **Text-to-Image Retrieval**: Matches textual tactical descriptions directly to indexed satellite tile embeddings.
-- **Image-to-Image Retrieval**: Takes an uploaded or selected satellite image patch and returns visually and spectrally similar scenes across the archive.
-- **Embedding-Based Similarity Search**: Employs exact inner-product vector indexing (cosine similarity over L2-normalized embeddings).
-- **Ranked Results**: Returns confidence-ranked candidates with georeferenced bounding boxes and acquisition dates.
+
+- **Natural-Language Search** — Converts textual queries into a shared embedding space.
+- **Text-to-Image Retrieval** — Matches textual descriptions against indexed satellite tile embeddings.
+- **Image-to-Image Retrieval** — Uses a selected or uploaded image patch to retrieve visually and semantically similar scenes.
+- **Embedding-Based Similarity Search** — Performs vector similarity search over normalized embeddings.
+- **Ranked Results** — Presents candidates with similarity information, geographic context, and acquisition metadata.
 
 ### 2. Multi-Temporal Change Analysis
-- **Before/After Comparison**: Synchronized dual-window inspection supporting swipe slider, side-by-side split, and opacity cross-fading.
-- **Multi-Date Temporal Trajectories**: Tracks geographical coordinates across multi-year observation epochs to isolate inflection points.
-- **Taxonomy of Detected Changes**:
+
+- **Before/After Comparison** — Synchronized inspection using swipe, side-by-side, and opacity comparison views.
+- **Multi-Date Temporal Analysis** — Tracks locations across multiple observation epochs to identify changes over time.
+- **Change Categories**:
   - Linear road development and earthworks
-  - Structural construction and site foundation preparation
+  - Structural construction and site preparation
   - Land clearance and vegetation loss
-  - Water extent shifts, alluvial accretion, and embankment breaches
-  - Object extraction using morphological boundary localization
+  - Water extent shifts and embankment changes
+  - Morphological object and boundary changes
 
 ### 3. False-Change Suppression
-ASTREVA integrates an explicit confidence calibration and false-alarm suppression mechanism designed to mitigate non-tactical anomalies:
-- **Seasonal Variation Filtering**: Restricts direct comparative inference to matched season windows (Dry/Winter to Dry/Winter, Monsoon to Monsoon), applying numerical confidence penalties to mismatched comparisons.
-- **Cloud and Quality Indexing**: Evaluates valid pixel ratios and penalizes granules with excessive nodata fractions.
-- **Atmospheric and Illumination Normalization**: Uses percentile stretch bounds ($p_2$ and $p_{98}$) computed across calibrated Level-2A surface reflectance data.
+
+ASTREVA incorporates confidence calibration and false-alarm mitigation to reduce non-tactical changes:
+
+- **Seasonal Variation Filtering** — Uses matched seasonal windows when evaluating temporal differences.
+- **Cloud and Data Quality Assessment** — Evaluates valid-pixel coverage and penalizes scenes with excessive invalid or missing data.
+- **Atmospheric and Illumination Normalization** — Uses calibrated reflectance and percentile-based normalization to reduce radiometric inconsistencies.
 
 ### 4. Similar-Location Discovery
-- **Unsupervised Vector Clustering**: Partitions satellite granule embeddings into distinct semantic terrain clusters using $k$-means clustering.
-- **One-Click Site Discovery**: Given any detected candidate or reference tile, queries the vector space to uncover geographically disparate sites exhibiting identical physical characteristics.
+
+- **Unsupervised Vector Clustering** — Groups satellite embeddings into semantic terrain clusters using k-means.
+- **Similar-Site Search** — Retrieves geographically separate locations exhibiting similar visual or physical characteristics.
 
 ### 5. Analyst Review Queue and Human-in-the-Loop Decisioning
-- **Prioritized Queue**: Orders candidates strictly by adjusted confidence scores.
-- **Decision Capture**: Provides atomic confirmation and rejection actions with mandatory analyst rationale.
-- **Persistent State**: Stores decision records, analyst identifiers, and timestamps directly into structured decision logs.
+
+- **Prioritized Queue** — Orders candidates using adjusted confidence information.
+- **Decision Capture** — Supports confirmation and rejection actions with analyst rationale.
+- **Persistent State** — Records decision state, timestamps, and review information in structured logs.
 
 ### 6. Evidence, Provenance, and Intelligence Dossiers
-Preserves the full analytical chain of custody:
+
+ASTREVA preserves the analytical chain associated with reviewed candidates:
+
 - Source scene identifier and STAC item reference
-- Sensor platform (e.g., Sentinel-2 MSI, Sentinel-1 SAR)
-- Coordinate boundaries (WGS84 lat/lon and UTM projections)
+- Sensor platform
+- Geographic coordinates and boundaries
 - Acquisition timestamp and temporal interval
-- Spectral indices (RGB, NDVI, NDBI, SAR amplitude approximations)
-- Human decision logs and audit trail entries
+- Analytical layers such as RGB, NDVI, NDBI, and SAR representations
+- Analyst decisions and audit records
+- Processing and export information
 
 ### 7. Air-Gapped and Sovereign On-Premises Design
-- All model weights, vector indices, geospatial processing libraries, and database logs reside strictly inside the host infrastructure.
-- Zero network requests are made to third-party inference services during evaluation or runtime.
+
+The intended controlled-deployment architecture keeps models, vector indexes, imagery, geospatial processing, and operational logs inside the host infrastructure.
+
+The local prototype is designed to operate without requiring third-party inference services during evaluation.
 
 ---
 
 ## Technical Architecture
 
-The ASTREVA architecture is structured into modular layers, decoupling user presentation, geospatial raster processing, vector search, and model execution.
+The ASTREVA architecture separates user presentation, geospatial processing, vector retrieval, model execution, analyst review, and evidence generation.
 
 ```mermaid
-graph TD
-    User([Defence Analyst / Evaluator]) --> UI[ASTREVA Analyst Interface<br/><i>React 18 / Vite / TypeScript / Tailwind / Leaflet</i><br/><b>[Implemented Prototype]</b>]
-    
-    UI --> API[Security & REST API Layer<br/><i>FastAPI / CORS Middleware / Pydantic</i><br/><b>[Implemented Prototype]</b>]
-    
-    subgraph Data & Preprocessing Layer
-        API --> Ingest[Ingestion & Preprocessing Engine<br/><i>Rasterio / GDAL / PyProj / Tiling 512x512</i><br/><b>[Implemented Prototype]</b>]
-        DataStore[(Satellite Imagery Archive<br/><i>GeoTIFF / Level-2A BOA Reflectance</i><br/><b>[Implemented Prototype]</b>)]
-        Ingest <--> DataStore
-    end
-    
-    subgraph AI/ML & Retrieval Engines
-        Ingest --> RetEng[Semantic Retrieval Engine<br/><i>OpenCLIP ViT-B/32 Encoder</i><br/><b>[Implemented Prototype]</b>]
-        RetEng --> VSearch[(Vector Index<br/><i>FAISS IndexFlatIP 512-dim</i><br/><b>[Implemented Prototype]</b>)]
-        VSearch --> RetRes[Ranked Tile Candidates]
-        
-        Ingest --> DetEng[Multi-Temporal Change Detector<br/><i>Pairwise Embedding Distance + Spectral Delta</i><br/><b>[Implemented Prototype]</b>]
-        DetEng --> Suppress[False-Change Suppression Module<br/><i>Seasonal Matching + Quality Factor Penalization</i><br/><b>[Implemented Prototype]</b>]
-        
-        VSearch --> Cluster[Similar-Site Discovery Engine<br/><i>KMeans k=8 Clustering + Cosine Search</i><br/><b>[Implemented Prototype]</b>]
-    end
-    
-    RetRes --> Queue[Analyst Review Queue<br/><i>Ranked Prioritization</i><br/><b>[Implemented Prototype]</b>]
-    Suppress --> Queue
-    Cluster --> Queue
-    
-    subgraph Governance & Output Layer
-        Queue --> Review[Analyst Confirmation / Rejection<br/><i>Interactive Human-in-the-Loop</i><br/><b>[Implemented Prototype]</b>]
-        Review --> Audit[(Audit Trail & Provenance Store<br/><i>JSON / CSV Logging</i><br/><b>[Implemented Prototype]</b>)]
-        Audit --> Export[Intelligence Dossier Export<br/><i>GeoJSON / GeoTIFF / Analytical Reports</i><br/><b>[Implemented Prototype]</b>]
+flowchart TD
+    USER["Defence Analyst / Evaluator"] --> UI["ASTREVA Analyst Interface<br/>React 18 | Vite | TypeScript | Tailwind | Leaflet<br/>IMPLEMENTED PROTOTYPE"]
+
+    UI --> API["Security and REST API Layer<br/>FastAPI | CORS | Pydantic<br/>IMPLEMENTED PROTOTYPE"]
+
+    subgraph DATA["Data and Preprocessing Layer"]
+        API --> INGEST["Ingestion and Preprocessing Engine<br/>Rasterio | GDAL | PyProj | Tiling"]
+        STORE[("Satellite Imagery Archive<br/>GeoTIFF / Earth Observation Data")]
+        INGEST <--> STORE
     end
 
-    subgraph Production Hardening Path
-        Hardening1[Prithvi-EO-2.0 Multi-Spectral Backbone<br/><b>[Planned / Production Hardening]</b>]
-        Hardening2[Qdrant Distributed Vector Cluster<br/><b>[Planned / Production Hardening]</b>]
-        Hardening3[Automated STAC Ingestion Pipelines<br/><b>[Planned / Production Hardening]</b>]
+    subgraph AIML["AI / ML and Retrieval Engines"]
+        INGEST --> RET["Semantic Retrieval Engine<br/>OpenCLIP ViT-B/32"]
+        RET --> VECTOR[("FAISS Vector Index<br/>IndexFlatIP")]
+        VECTOR --> RESULTS["Ranked Tile Candidates"]
+
+        INGEST --> CHANGE["Multi-Temporal Change Analysis<br/>Spectral Delta + Temporal Comparison"]
+        CHANGE --> SUPPRESS["False-Change Suppression<br/>Seasonal Matching + Quality Penalties"]
+
+        VECTOR --> CLUSTER["Similar-Location Discovery<br/>KMeans + Cosine Search"]
+    end
+
+    RESULTS --> QUEUE["Analyst Review Queue<br/>Confidence-Ranked Candidates"]
+    SUPPRESS --> QUEUE
+    CLUSTER --> QUEUE
+
+    subgraph GOV["Governance and Output Layer"]
+        QUEUE --> REVIEW["Analyst Confirmation / Rejection<br/>Human-in-the-Loop"]
+        REVIEW --> AUDIT[("Audit Trail and Provenance Store<br/>JSON / CSV")]
+        AUDIT --> EXPORT["Intelligence Dossier Export<br/>GeoJSON / GeoTIFF / Reports"]
+    end
+
+    subgraph HARDEN["Production Hardening Path"]
+        P1["Prithvi-EO-2.0<br/>PLANNED / PRODUCTION HARDENING"]
+        P2["Qdrant Vector Infrastructure<br/>PLANNED / PRODUCTION HARDENING"]
+        P3["Automated STAC Ingestion<br/>PLANNED / PRODUCTION HARDENING"]
     end
 ```
+
+### Architecture Status
+
+| Layer | Current Status |
+|---|---|
+| Analyst Interface | Implemented Prototype |
+| FastAPI REST API | Implemented Prototype |
+| Satellite Tile Processing | Implemented Prototype |
+| OpenCLIP Semantic Retrieval | Implemented Prototype |
+| FAISS Vector Search | Implemented Prototype |
+| Multi-Temporal Change Analysis | Implemented Prototype |
+| False-Change Suppression | Implemented Prototype |
+| Similar-Location Discovery | Implemented Prototype |
+| Analyst Review Queue | Implemented Prototype |
+| Audit and Provenance | Implemented Prototype |
+| GeoJSON / Raster / Report Export | Implemented Prototype |
+| Prithvi-EO-2.0 Integration | Planned / Production Hardening |
+| Qdrant Distributed Indexing | Planned / Production Hardening |
+| Automated STAC Ingestion | Planned / Production Hardening |
 
 ---
 
@@ -147,203 +190,545 @@ graph TD
 The following captures demonstrate the working ASTREVA engineering prototype during local operational testing.
 
 ### Multi-Temporal Change Analysis
-*Dual-pane comparative analysis evaluating structural construction within the Ranchi Subarnarekha monitoring sector. The interface displays calibrated RGB true-color tiles, analytical confidence metrics, and false-alarm risk assessments.*
+
+Dual-pane comparative analysis for reviewing a detected change within the monitored sector. The interface provides before/after imagery, analytical layers, confidence information, and false-alarm assessment.
 
 ![Multi-Temporal Change Analysis](frontend/public/assets/change%20detcetion-i1.jpeg)
 
 ### ASTREVA Intelligence Workspace
-*Semantic satellite retrieval interface executing natural-language text vector queries ("Dense urban buildings and paved roads") against the 180-granule FAISS vector index, returning ranked results with cosine similarity scores in real time.*
+
+Semantic satellite retrieval interface for submitting natural-language queries against the local vector index and reviewing ranked satellite results.
 
 ![ASTREVA Intelligence Workspace](frontend/public/assets/i2.jpeg)
+
+> **Repository path note:** These images are stored inside `frontend/public/assets/`, so GitHub can render them directly using repository-relative paths.
 
 ---
 
 ## Implemented Prototype System Specifications
 
-The engineering prototype developed in this repository includes the following verified implementations:
+The engineering prototype in this repository includes the following components.
 
-| Subsystem | Component Specification | Prototype Implementation Status |
-| :--- | :--- | :--- |
+| Subsystem | Component Specification | Status |
+|---|---|---|
 | **User Interface** | React 18, Vite 5, TypeScript, Tailwind CSS, Lucide icons, Leaflet / CartoDB integration | **Implemented** |
-| **API Backend** | Python 3.11, FastAPI, Uvicorn, Pydantic schemas, Static file mountings | **Implemented** |
-| **Visual Encoder** | OpenCLIP ViT-B/32 (`laion2b_s34b_b79k` pre-trained checkpoint, 512-dim embeddings) | **Implemented** |
-| **Vector Engine** | FAISS CPU (`IndexFlatIP`, exact cosine distance search, 368 KB footprint) | **Implemented** |
-| **Dataset Granules** | 180 calibrated $512 \times 512$ 4-band GeoTIFF chips (Sentinel-2 L2A surface reflectance) | **Implemented** |
-| **Coverage Area** | $868\text{ km}^2$ surveillance footprint over Ranchi Plateau, Jharkhand ($85.15^\circ\text{E}$ to $85.45^\circ\text{E}$, $23.20^\circ\text{N}$ to $23.45^\circ\text{N}$) | **Implemented** |
-| **Temporal Epochs** | 6 distinct temporal baselines spanning 2020 through 2024 | **Implemented** |
-| **Spectral Rendering** | Dynamic conversion of 4-band GeoTIFF to RGB, NDVI, NDBI, and SAR representations | **Implemented** |
-| **Change Processing** | Spectral delta calculation, pairwise embedding distance, morphological segmentation | **Implemented** |
-| **False-Alarm Mitigation** | Same-season pairing validation, nodata penalization, calibrated confidence adjustment | **Implemented** |
-| **Decision Logging** | Persistent JSON and CSV audit records tracking analyst overrides, timestamps, and classifications | **Implemented** |
-| **Query Latency** | Mean retrieval time of $88.28\text{ ms}$ on standard multi-core CPU architecture | **Verified** |
+| **API Backend** | Python 3.11, FastAPI, Uvicorn, Pydantic schemas, static file handling | **Implemented** |
+| **Visual Encoder** | OpenCLIP ViT-B/32, 512-dimensional embeddings | **Implemented** |
+| **Vector Engine** | FAISS CPU, `IndexFlatIP` similarity search | **Implemented** |
+| **Dataset Granules** | 180 calibrated 512 × 512 four-band GeoTIFF chips | **Implemented** |
+| **Coverage Area** | Ranchi monitoring footprint used by the prototype | **Implemented** |
+| **Temporal Analysis** | Multiple observation epochs spanning the prototype dataset | **Implemented** |
+| **Spectral Rendering** | RGB, NDVI, NDBI and related analytical representations | **Implemented** |
+| **Change Processing** | Spectral delta, embedding distance and morphological analysis | **Implemented** |
+| **False-Alarm Mitigation** | Seasonal pairing, data-quality penalties and confidence adjustment | **Implemented** |
+| **Decision Logging** | Persistent JSON / CSV analyst decision records | **Implemented** |
+| **Retrieval Latency** | Mean retrieval time reported by the prototype evaluation | **Verified in prototype evaluation** |
 
 ---
 
 ## Application Modules
 
-The ASTREVA workstation interface comprises eight primary operational modules:
+The ASTREVA workstation interface includes the following operational modules:
 
-1. **Workspace (`/workspace`)**: Overview terminal providing overall fleet health, active AOI bounding summaries, recent candidate alerts, and real-time system diagnostic feeds.
-2. **Semantic Search (`/search`)**: Multi-modal query interface allowing analysts to perform natural-language prompt searches or query by uploaded image chip.
-3. **Change Analysis (`/change-analysis`)**: Side-by-side inspection console featuring swipe sliders, opacity blending, multi-spectral band switching (RGB, NDVI, NDBI, SAR), and change mask overlays.
-4. **Discovery (`/discovery`)**: Unsupervised clustering visualizer displaying the 8-cluster terrain segmentation and the one-click similar site search utility.
-5. **Review Queue (`/review-queue`)**: Filterable, confidence-ranked triage queue enabling rapid validation, false-alarm rejection, and status updating.
-6. **Scene Archive (`/scenes`)**: Metadata catalogue detailing raw ingested scenes, cloud coverage percentages, coordinate footprints, and sensor checksums.
-7. **Exports & Dossiers (`/exports`)**: Intelligence packaging utility for compiling verified change candidates into GeoJSON vectors, raster clips, and formatted briefing summaries.
-8. **System Diagnostics (`/system`)**: Hardware utilization tracker, model latency benchmarks, and enclave status monitor confirming zero external network egress.
-9. **Sector Manager (`/sectors`)**: AOI registry for configuring geographic surveillance zones and monitoring parameters.
-10. **Audit Trail (`/audit`)**: Tamper-evident operational log recording every analyst decision, system diagnostic, and search query.
+1. **Workspace** — Overview of the active Area of Interest, candidate alerts, system state, and operational information.
+2. **Semantic Search** — Natural-language and image-based satellite retrieval.
+3. **Change Analysis** — Before/after comparison with analytical layers and change masks.
+4. **Discovery** — Embedding-based clustering and similar-location search.
+5. **Review Queue** — Confidence-ranked candidate review and analyst decision capture.
+6. **Scene Archive** — Satellite scene and acquisition metadata.
+7. **Exports and Dossiers** — Packaging of reviewed evidence and analytical outputs.
+8. **System Diagnostics** — Model, service, and local-environment status.
+9. **Sector / AOI Manager** — Geographic monitoring area configuration.
+10. **Audit Trail** — Search, review, decision, and system audit records.
 
 ---
 
 ## Technology Stack
 
-### Frontend Architecture
-- **Framework**: React 18.3.1
-- **Build Tool**: Vite 5.4.2
-- **Language**: TypeScript 5.5.3
-- **Styling**: Tailwind CSS 3.4.10, PostCSS, Autoprefixer
-- **State Management**: Zustand 4.5.5, TanStack React Query 5.56.2
-- **Mapping & GIS**: Leaflet 1.9.4, OpenLayers 9.2.4
-- **Iconography**: Lucide React 0.441.0
+### Frontend
 
-### Backend & API Framework
-- **Runtime**: Python 3.11.9
-- **Web Framework**: FastAPI 0.119.0
-- **ASGI Server**: Uvicorn 0.37.0
-- **Data Validation**: Pydantic 2.x, Pydantic-Settings
-- **Multi-Part / File I/O**: Python-Multipart
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Leaflet](https://img.shields.io/badge/Leaflet-GIS-199900?style=flat-square&logo=leaflet&logoColor=white)](https://leafletjs.com/)
 
-### Geospatial & Remote Sensing Libraries
-- **Raster Processing**: Rasterio 1.4.4, GDAL
-- **Geospatial Projections**: PyProj 3.7.2, Affine 3.0.1
-- **Vector Operations**: GeoPandas 1.1.4, Shapely 2.1.2, PyOgrio 0.13.0
-- **Catalogue & Ingestion**: PySTAC 1.15.2, OpenEO 0.52.0
+- React 18
+- Vite
+- TypeScript
+- Tailwind CSS
+- Zustand
+- TanStack React Query
+- Leaflet / OpenLayers
+- Lucide React
 
-### AI, Machine Learning, and Vector Indexing
-- **Deep Learning Framework**: PyTorch 2.14.0 (CPU inference operational)
-- **Vision Transforms**: TorchVision 0.29.0
-- **Cross-Modal Foundation Model**: OpenCLIP 3.3.0 (ViT-B/32 architecture)
-- **Vector Index Engine**: FAISS (`faiss-cpu` 1.15.0, `IndexFlatIP`)
-- **Scientific Computing**: NumPy 2.4.6, SciPy 1.17.1 (morphological labeling)
-- **Clustering & Diagnostics**: Scikit-Learn 1.9.0 ($k$-means, silhouette scoring)
+### Backend and API
+
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.119-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Uvicorn](https://img.shields.io/badge/Uvicorn-ASGI-111827?style=flat-square)](https://www.uvicorn.org/)
+
+- Python 3.11
+- FastAPI
+- Uvicorn
+- Pydantic
+- Python Multipart
+
+### Geospatial and Remote Sensing
+
+[![Rasterio](https://img.shields.io/badge/Rasterio-Geospatial-2E7D32?style=flat-square)](https://rasterio.readthedocs.io/)
+[![GDAL](https://img.shields.io/badge/GDAL-Geospatial-5C6BC0?style=flat-square)](https://gdal.org/)
+[![GeoPandas](https://img.shields.io/badge/GeoPandas-Vector%20GIS-139C5A?style=flat-square)](https://geopandas.org/)
+[![STAC](https://img.shields.io/badge/STAC-Geospatial%20Catalog-374151?style=flat-square)](https://stacspec.org/)
+
+- Rasterio
+- GDAL
+- PyProj
+- Affine
+- GeoPandas
+- Shapely
+- PySTAC
+- GeoTIFF / Cloud-Optimized GeoTIFF concepts
+- STAC metadata structures
+
+### AI, Machine Learning, and Vector Search
+
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![FAISS](https://img.shields.io/badge/FAISS-Vector%20Search-374151?style=flat-square)](https://github.com/facebookresearch/faiss)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+
+- PyTorch
+- TorchVision
+- OpenCLIP ViT-B/32
+- FAISS CPU
+- NumPy
+- SciPy
+- Scikit-learn
+- K-means clustering
+
+### Deployment
+
+[![Docker](https://img.shields.io/badge/Docker-Containerization-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Vercel](https://img.shields.io/badge/Vercel-Demo%20Frontend-000000?style=flat-square&logo=vercel&logoColor=white)](https://vercel.com/)
+[![Render](https://img.shields.io/badge/Render-Demo%20Backend-46E3B7?style=flat-square&logo=render&logoColor=black)](https://render.com/)
+
+- Docker
+- Vercel
+- Render
+- Local Windows execution
+- On-premises / offline deployment architecture
+
+---
+
+## Data and Geospatial Processing
+
+ASTREVA is designed around georeferenced Earth observation imagery and associated acquisition metadata.
+
+The prototype works with:
+
+- Sentinel-2 imagery
+- Multi-band GeoTIFF tiles
+- RGB representations
+- NDVI
+- NDBI
+- SAR-related analytical representations
+- Geographic coordinates
+- Acquisition timestamps
+- Scene and tile metadata
+- STAC-oriented provenance structures
+
+The architecture can be extended to additional satellite sources and sovereign imagery archives without changing the core analyst workflow.
 
 ---
 
 ## Deployment Architecture
 
-ASTREVA supports two distinct deployment modes to satisfy both public hackathon evaluation requirements and sovereign operational mandates:
+ASTREVA supports two distinct deployment modes.
 
-### 1. Public Demonstration Deployment (Dual-Cloud Staging)
-*Designed strictly for hackathon jury evaluation and remote interactive review.*
+### 1. Public Demonstration Deployment
 
-- **Frontend Tier**: Hosted on **Vercel** as an optimized Single Page Application (SPA) with automated client-side rewrites configured via `frontend/vercel.json`.
-- **Backend Tier**: Hosted on **Render** (or equivalent container service) executing `uvicorn backend.main:app` within a standardized Linux container defined by `render.yaml` and `Dockerfile`.
-- **Communication**: Frontend directs asynchronous REST requests to the backend using the environment variable `VITE_API_BASE_URL`.
-- *Security Note*: This public deployment model is utilized solely for remote judging accessibility.
+This mode is intended for Smart India Hackathon jury evaluation and remote demonstration.
 
-### 2. Sovereign On-Premises Deployment (Air-Gapped Enclave)
-*The intended production operational architecture for defence applications.*
+```text
+                 Public Internet
+                       |
+                       v
+             +--------------------+
+             | Vercel              |
+             | React / Vite SPA    |
+             +----------+---------+
+                        |
+                        | HTTPS REST API
+                        v
+             +--------------------+
+             | Render              |
+             | FastAPI + Docker    |
+             +----------+---------+
+                        |
+                        v
+             +--------------------+
+             | ASTREVA Services    |
+             | Retrieval / Analysis|
+             +--------------------+
+```
 
-- **Hardware**: Secure local workstation or internal secure cluster.
-- **Network Profile**: Completely disconnected from the public internet (air-gapped).
-- **Inference**: PyTorch and FAISS operate locally using pre-staged model weights (`hf-hub:laion/CLIP-ViT-B-32-laion2B-s34B-b79K`) and pre-computed index files.
-- **Data Archive**: Satellite imagery is ingested directly from sovereign storage archives into the local file system.
-- **Execution**: Launched with a single script:
-  ```bash
-  start_astreva_local.bat
-  ```
+- **Frontend:** Vercel
+- **Backend:** Render
+- **Containerization:** Docker
+- **API configuration:** `VITE_API_BASE_URL`
+- **SPA routing:** `frontend/vercel.json`
+
+This public deployment model is intended for demonstration and evaluation. It is separate from the intended controlled operational deployment model.
+
+### 2. Sovereign On-Premises Deployment
+
+The intended defence-oriented architecture is local and controlled:
+
+```text
+Secure Workstation / Internal Server
+              |
+              v
+       ASTREVA Interface
+              |
+              v
+         FastAPI API
+              |
+      +-------+-------+
+      |               |
+      v               v
+Local AI Models   Local Vector Index
+      |               |
+      +-------+-------+
+              |
+              v
+      Local Satellite Archive
+              |
+              v
+      Geospatial Processing
+              |
+              v
+     Analyst Review / Audit
+              |
+              v
+      Evidence and Export
+```
+
+The local prototype can be launched using:
+
+```cmd
+start_astreva_local.bat
+```
+
+The design keeps imagery, models, vector indexes, processing, and operational records within the local environment.
 
 ---
 
 ## Local Development and Evaluation Setup
 
 ### Prerequisites
-- Python 3.10 or 3.11 (64-bit)
-- Node.js 18+ and npm
-- Git with Git LFS installed (`git lfs install`)
 
-### 1. Clone Repository and Staged Data
+- Python 3.10 or 3.11, 64-bit
+- Node.js 18+
+- npm
+- Git
+- Git LFS where required for large repository assets
+
+### 1. Clone the Repository
+
 ```bash
-git clone https://github.com/MR-ROGUE01/SIH-PS-26227.git
-cd SIH-PS-26227
+git clone https://github.com/lavanitha/ASTREVA-Defence-Satellite-Intelligence-System-SIH-26227.git
+cd ASTREVA-Defence-Satellite-Intelligence-System-SIH-26227
+```
+
+If the working project is inside `Change-Detection-`, enter that directory:
+
+```bash
+cd Change-Detection-
 ```
 
 ### 2. Backend Setup
+
 ```bash
-# Navigate to backend root
-cd Change-Detection-
-
-# Create and activate virtual environment
 python -m venv .venv
-# On Windows:
-.venv\Scripts\activate
-# On Linux/macOS:
-source .venv/bin/activate
+```
 
-# Install dependencies
+Windows:
+
+```powershell
+.venv\Scripts\activate
+```
+
+Linux/macOS:
+
+```bash
+source .venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
 pip install --upgrade pip
 pip install -r requirements.txt
+```
 
-# Run FastAPI backend service
+Run FastAPI:
+
+```bash
 python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```
-*The interactive API documentation is accessible at `http://localhost:8000/docs`.*
+
+API documentation:
+
+```text
+http://localhost:8000/docs
+```
 
 ### 3. Frontend Setup
+
+Open a separate terminal:
+
 ```bash
-# Open a separate terminal and navigate to frontend
-cd Change-Detection-/frontend
-
-# Install node dependencies
+cd frontend
 npm install
-
-# Verify local environment variables
-# Copy template if necessary:
-cp .env.production.example .env
-
-# Launch Vite development server
 npm run dev
 ```
-*The ASTREVA workstation will launch at `http://localhost:5173` (or `http://localhost:3001`).*
 
-### 4. 1-Click Offline Execution (Windows)
-For single-step local testing without manual terminal orchestration, execute:
+The Vite development server is configured to expose the ASTREVA interface locally.
+
+Typical local address:
+
+```text
+http://localhost:5173
+```
+
+If Vite selects another available port, use the URL printed by the terminal.
+
+### 4. One-Click Local Execution
+
+For the configured Windows launcher:
+
 ```cmd
 start_astreva_local.bat
 ```
+
+The launcher starts the configured backend and frontend services for local evaluation.
+
+---
+
+## Security and Operational Considerations
+
+ASTREVA is designed around controlled geospatial intelligence processing.
+
+Key considerations include:
+
+- Local model execution
+- Local imagery storage
+- Local vector indexing
+- Controlled API access
+- Analyst authentication and review workflows where configured
+- Provenance and audit records
+- Reduced dependence on external inference services
+- Separation between public demonstration deployment and controlled operational deployment
+
+The public demonstration deployment must not be interpreted as an operational defence enclave.
+
+Production deployment would require organization-specific security accreditation, infrastructure controls, access policies, network controls, logging policies, and security validation before operational use.
+
+---
+
+## Scalability
+
+ASTREVA follows an incremental processing model:
+
+### Update, Don't Rebuild
+
+New imagery can be processed and indexed incrementally rather than requiring complete reprocessing of the archive.
+
+### Stage Once → Run Offline
+
+Imagery, model weights, indexes, and required processing dependencies can be staged inside a controlled environment before offline execution.
+
+### Process Smart, Not Everything
+
+Selective retrieval, temporal filtering, tile-based processing, and vector search reduce the amount of imagery that must be inspected directly by analysts.
+
+### Production Scaling Path
+
+For larger national-scale archives, the architecture can be extended through:
+
+- Distributed vector indexing
+- Automated STAC ingestion
+- Larger geospatial foundation models
+- SAR-specific change detection
+- Parallel raster processing
+- Dedicated secure compute infrastructure
+
+These items represent the production hardening path rather than the complete current prototype.
 
 ---
 
 ## Feasibility, Viability, and Impact
 
 ### Feasibility
-- **Demonstrated Engineering**: The prototype proves that multi-modal foundation models (OpenCLIP) can generalize zero-shot to multispectral Earth observation tiles without task-specific retraining.
-- **Resource Efficiency**: Exact FAISS inner-product vector indexing over 180 tiles requires only 368 KB of memory and operates with sub-100ms latency on commodity CPU hardware, eliminating mandatory GPU infrastructure for inference.
+
+The prototype demonstrates that cross-modal visual embeddings can be used for semantic retrieval over satellite imagery without requiring task-specific retraining for every search concept.
+
+The current prototype also demonstrates CPU-based vector retrieval over the indexed tile archive.
 
 ### Viability
-- **Standardized Formats**: Built upon open remote sensing standards (Cloud-Optimized GeoTIFF, OGC compliant geometries, STAC catalog structures).
-- **Low Operational Overhead**: Can be integrated into existing defence command center environments without re-architecting legacy GIS databases.
 
-### Defence and Strategic Impact
-- **Drastic Reduction in Triage Latency**: Shrinks the search and verification cycle from hours of manual visual inspection down to seconds.
-- **Intelligence Traceability**: Provides immutable, human-verified evidence packages suitable for command briefing and tactical reporting.
-- **Sovereign Independence**: Ensures that sensitive coordinates, target profiles, and surveillance priorities remain entirely within sovereign infrastructure boundaries.
+ASTREVA uses established geospatial formats, open-source processing libraries, vector indexing, and standard web technologies. This provides a practical foundation for integration into controlled GIS and intelligence-analysis environments.
+
+### Defence and Strategic Relevance
+
+The system is designed to reduce the analyst effort associated with:
+
+- Searching large satellite archives
+- Locating relevant scenes
+- Comparing multiple temporal observations
+- Reviewing potential change candidates
+- Maintaining evidence and provenance
+- Preparing structured intelligence outputs
+
+Any operational performance improvement should be validated using representative production datasets and mission-specific evaluation protocols.
 
 ---
 
 ## Project Status and Roadmap
 
-- [x] **Phase 1: Ingestion & Tiling Prototype**: $512 \times 512$ tile segmentation over Ranchi AOI (Sentinel-2 L2A).
-- [x] **Phase 2: Semantic Vector Indexing**: OpenCLIP ViT-B/32 + FAISS vector indexing.
-- [x] **Phase 3: Multi-Temporal Spectral Delta**: Pairwise change candidate generation.
-- [x] **Phase 4: False-Change Suppression**: Seasonal matching and nodata penalty calibration.
-- [x] **Phase 5: Analyst Station Interface**: Full React/TypeScript operational workstation.
-- [x] **Phase 6: Audit & Provenance**: Persistent human decision logging and dossier exports.
-- [ ] **Phase 7 (Planned / Production Hardening)**: Integration of geospatial foundation models (e.g., NASA/IBM Prithvi-EO-2.0, RemoteCLIP).
-- [ ] **Phase 8 (Planned / Production Hardening)**: Distributed vector indexing via Qdrant for multi-million tile national archives.
-- [ ] **Phase 9 (Planned / Production Hardening)**: Native integration of SAR coherence change detection (Sentinel-1 and NISAR).
+### Implemented Prototype
+
+- [x] Ingestion and satellite tile processing
+- [x] Semantic vector indexing
+- [x] OpenCLIP-based retrieval
+- [x] FAISS vector search
+- [x] Multi-temporal change analysis
+- [x] False-change suppression
+- [x] Analyst workstation interface
+- [x] Similar-location discovery
+- [x] Review queue
+- [x] Audit and provenance records
+- [x] Evidence and export workflow
+- [x] Local deployment launcher
+- [x] Public deployment configuration
+
+### Planned / Production Hardening
+
+- [ ] Prithvi-EO-2.0 integration for advanced Earth observation modelling
+- [ ] RemoteCLIP evaluation/integration for remote-sensing-specific retrieval
+- [ ] Qdrant-based distributed vector indexing for large archives
+- [ ] Automated STAC ingestion pipelines
+- [ ] Native SAR coherence change detection
+- [ ] Expanded multi-sensor fusion
+- [ ] Production security hardening and accreditation
+- [ ] National-scale archive evaluation
 
 ---
 
-*ASTREVA | Smart India Hackathon 2026 | Problem Statement SIH26227 | Ministry of Defence (DGIS) — Indian Army*
+## Smart India Hackathon 2026
+
+**Problem Statement:** SIH26227  
+**Organization:** Ministry of Defence — Directorate General of Information Systems (DGIS), Indian Army  
+**Theme:** Space Technology  
+**Category:** Software  
+**Team:** Impacteers
+
+ASTREVA addresses the problem of semantic retrieval and multi-temporal change analysis of satellite imagery by combining:
+
+**Semantic Retrieval + Vector Search + Temporal Analysis + False-Change Suppression + Analyst Review + Provenance**
+
+The prototype is intended to demonstrate the technical feasibility of this workflow and provide a foundation for further production hardening.
+
+---
+
+## Research and References
+
+### RemoteCLIP
+
+Remote-sensing vision-language representation learning for semantic image-text retrieval.
+
+- https://arxiv.org/abs/2306.11029
+- https://ieeexplore.ieee.org/document/10504785
+
+### Prithvi-EO-2.0
+
+Multi-temporal Earth observation foundation model research.
+
+- https://arxiv.org/abs/2412.02732
+
+### SpatioTemporal Asset Catalog
+
+Standardized metadata and catalogue specification for geospatial assets.
+
+- https://www.ogc.org/standards/stac/
+- https://stacspec.org/
+
+### Remote Sensing Change Detection
+
+Research background on multi-temporal remote sensing change detection.
+
+- https://ch.whu.edu.cn/en/article/doi/10.13203/j.whugis20180251
+- https://doi.org/10.1016/j.rsase.2024.101168
+
+### Core Engineering Technologies
+
+- React: https://react.dev/
+- FastAPI: https://fastapi.tiangolo.com/
+- PyTorch: https://pytorch.org/
+- Rasterio: https://rasterio.readthedocs.io/
+- GDAL: https://gdal.org/
+- GeoPandas: https://geopandas.org/
+- FAISS: https://github.com/facebookresearch/faiss
+- STAC: https://stacspec.org/
+
+---
+
+## Repository Structure
+
+```text
+ASTREVA-Defence-Satellite-Intelligence-System-SIH-26227/
+│
+├── Change-Detection-/
+│   ├── backend/
+│   │   └── main.py
+│   │
+│   ├── frontend/
+│   │   ├── public/
+│   │   │   └── assets/
+│   │   ├── src/
+│   │   ├── package.json
+│   │   ├── vite.config.ts
+│   │   └── vercel.json
+│   │
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   ├── render.yaml
+│   ├── start_astreva_local.bat
+│   └── README.md
+│
+└── README.md
+```
+
+---
+
+## Prototype Disclaimer
+
+ASTREVA is an engineering prototype developed for Smart India Hackathon 2026 problem statement SIH26227.
+
+The prototype demonstrates the proposed technical workflow using a controlled dataset and local processing environment. Prototype capabilities, measurements, and interfaces should not be interpreted as certified operational defence capabilities.
+
+Any transition to operational deployment would require organization-specific validation, security accreditation, infrastructure hardening, representative multi-sensor datasets, mission-specific testing, and appropriate authorization.
+
+---
+
+## Team
+
+**Impacteers**
+
+Smart India Hackathon 2026  
+Problem Statement SIH26227  
+Ministry of Defence — Directorate General of Information Systems (DGIS), Indian Army
+
+---
+
+**ASTREVA | Defence Satellite Intelligence System | SIH 2026 | SIH26227**

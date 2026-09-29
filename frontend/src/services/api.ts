@@ -1,4 +1,18 @@
-import { AOI, ChangeCandidate, SceneRecord, ExportPackage, AuditLog } from '../types/geoint';
+import {
+  AOI,
+  ChangeCandidate,
+  SceneRecord,
+  ExportPackage,
+  AuditLog,
+  IncrementalIngestResponse,
+  AuditVerificationResponse,
+  ZeroEgressProofResponse,
+  HeldoutEvaluationMetricsResponse,
+  EarliestChangeBacktracking,
+  ExplainableFalseAlarm6Factor,
+  OpticalSarCrossValidation,
+  CoRegistrationRadiometricValidation,
+} from '../types/geoint';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
@@ -45,10 +59,10 @@ export const apiService = {
     min_confidence?: number;
   }): Promise<ChangeCandidate[]> {
     const searchParams = new URLSearchParams();
-    if (params?.aoi_id) searchParams.append('aoi_id', params.aoi_id);
-    if (params?.status) searchParams.append('status', params.status);
-    if (params?.change_type) searchParams.append('change_type', params.change_type);
-    if (params?.min_confidence !== undefined) searchParams.append('min_confidence', params.min_confidence.toString());
+    if (params?.aoi_id && params.aoi_id !== 'ALL') searchParams.append('aoi_id', params.aoi_id);
+    if (params?.status && params.status !== 'ALL') searchParams.append('status', params.status);
+    if (params?.change_type && params.change_type !== 'ALL') searchParams.append('change_type', params.change_type);
+    if (params?.min_confidence !== undefined && params.min_confidence > 0) searchParams.append('min_confidence', params.min_confidence.toString());
 
     const queryStr = searchParams.toString();
     return fetchJson<ChangeCandidate[]>(`/api/candidates${queryStr ? `?${queryStr}` : ''}`);
@@ -70,6 +84,66 @@ export const apiService = {
       method: 'POST',
       body: JSON.stringify({ note }),
     });
+  },
+
+  // ─── 10 SIH PRIORITY FEATURE SERVICE METHODS ───────────────────────────────
+
+  // 1. Earliest-Change Backtracking
+  async getBacktracking(candidateId: string): Promise<EarliestChangeBacktracking> {
+    return fetchJson<EarliestChangeBacktracking>(`/api/candidates/${candidateId}/backtracking`);
+  },
+
+  // 2. Incremental Ingestion
+  async ingestSceneIncremental(payload: {
+    scene_name: string;
+    sensor?: string;
+    acquisition_date?: string;
+    lat?: number;
+    lon?: number;
+  }): Promise<IncrementalIngestResponse> {
+    return fetchJson<IncrementalIngestResponse>('/api/ingest/incremental', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  // 3. Explainable 6-Factor False-Alarm Suppression
+  async getFalseAlarmExplanation(candidateId: string): Promise<ExplainableFalseAlarm6Factor> {
+    return fetchJson<ExplainableFalseAlarm6Factor>(`/api/candidates/${candidateId}/false-alarm-explain`);
+  },
+
+  // 4. Sentinel-2 + Sentinel-1 Cross-Validation
+  async getCrossValidation(candidateId: string): Promise<OpticalSarCrossValidation> {
+    return fetchJson<OpticalSarCrossValidation>(`/api/candidates/${candidateId}/cross-validation`);
+  },
+
+  // 5. Cryptographic Audit Trail Verification
+  async verifyAuditTrail(): Promise<AuditVerificationResponse> {
+    return fetchJson<AuditVerificationResponse>('/api/audit/verify');
+  },
+
+  // 6. Full STAC Provenance
+  async getStacItem(itemId: string): Promise<any> {
+    return fetchJson<any>(`/api/stac/items/${itemId}`);
+  },
+
+  async getStacCatalog(): Promise<any> {
+    return fetchJson<any>('/api/stac/catalog');
+  },
+
+  // 7. Zero-Egress Offline Proof
+  async getZeroEgressProof(): Promise<ZeroEgressProofResponse> {
+    return fetchJson<ZeroEgressProofResponse>('/api/system/zero-egress-proof');
+  },
+
+  // 8. Held-Out Evaluation Metrics
+  async getEvaluationMetrics(): Promise<HeldoutEvaluationMetricsResponse> {
+    return fetchJson<HeldoutEvaluationMetricsResponse>('/api/evaluation/metrics');
+  },
+
+  // 10. Radiometric + Co-Registration Validation
+  async getCoRegistration(candidateId: string): Promise<CoRegistrationRadiometricValidation> {
+    return fetchJson<CoRegistrationRadiometricValidation>(`/api/candidates/${candidateId}/co-registration`);
   },
 
   // Vector / Semantic Search

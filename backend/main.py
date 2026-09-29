@@ -21,9 +21,13 @@ SIH_INDEX_DIR = os.path.join(SIH_DATASET_DIR, "Index")
 SIH_PREVIEWS_DIR = os.path.join(SIH_DATASET_DIR, "change_previews")
 SIH_SEARCH_DIR = os.path.join(SIH_DATASET_DIR, "search_results")
 
-# Ensure SIH CODE directory is in Python path for importing SIH-2026 algorithms
+# Ensure SIH CODE directory and BACKEND directory are in Python path
 if SIH_CODE_DIR not in sys.path:
     sys.path.insert(0, SIH_CODE_DIR)
+if BACKEND_DIR not in sys.path:
+    sys.path.insert(0, BACKEND_DIR)
+
+import services.sih_features as sih_features
 
 import numpy as np
 from PIL import Image
@@ -110,6 +114,13 @@ class ExportCreateRequest(BaseModel):
     format: str
     aoi: str
     candidateCount: int
+
+class IncrementalIngestRequest(BaseModel):
+    scene_name: str
+    sensor: str = "Sentinel-2 Optical"
+    acquisition_date: str = "2026-03-24"
+    lat: float = 23.3441
+    lon: float = 85.3096
 
 
 # ─── HELPER FUNCTIONS ─────────────────────────────────────────────────────────
@@ -203,6 +214,12 @@ def map_sih_candidate_to_frontend(item: dict, index_num: int, decisions_map: dic
             "note": decision_info.get("analyst_notes")
         })
         
+    backtracking_data = sih_features.compute_earliest_change_backtracking(item)
+    false_alarm_6factor = sih_features.compute_explainable_false_alarm(item)
+    cross_val_data = sih_features.compute_dual_sensor_cross_validation(item)
+    stac_item_data = sih_features.generate_stac_item(item)
+    coreg_data = sih_features.compute_coregistration_radiometric_validation(item)
+
     return {
         "id": cand_id,
         "title": f"{change_type} Anomaly (Sector R{row}C{col})",
@@ -238,15 +255,20 @@ def map_sih_candidate_to_frontend(item: dict, index_num: int, decisions_map: dic
         "evidenceChecklist": [
             {"item": "OpenCLIP ViT-B/32 Semantic Distance Vector Match", "verified": True, "confidenceScore": confidence_pct},
             {"item": "Spectral NIR/Red Delta Classification", "verified": True, "confidenceScore": min(98, confidence_pct + 4)},
-            {"item": "Same-Season Confounder Masking (False-Alarm Suppressed)", "verified": seasonal_penalty == 0.0, "confidenceScore": int(round((1.0 - seasonal_penalty) * 100))},
-            {"item": "Morphological Bounding-Box Object Extraction", "verified": num_objects > 0, "confidenceScore": 90}
+            {"item": "Same-Season Confounder Masking (False-Alarm Suppressed)", "verified": bool(seasonal_penalty == 0.0), "confidenceScore": int(round((1.0 - seasonal_penalty) * 100))},
+            {"item": "Morphological Bounding-Box Object Extraction", "verified": bool(num_objects > 0), "confidenceScore": 90}
         ],
         "falseAlarmRisk": {
             "riskLevel": risk_level,
-            "seasonalAnomaly": seasonal_penalty > 0,
-            "cloudShadowArtifact": quality_factor < 0.9,
+            "seasonalAnomaly": bool(seasonal_penalty > 0),
+            "cloudShadowArtifact": bool(quality_factor < 0.9),
             "factors": suppression_reasons or ["No Confounders Detected — High Confidence Same-Season Pair"]
         },
+        "backtracking": backtracking_data,
+        "falseAlarm6Factor": false_alarm_6factor,
+        "crossValidation": cross_val_data,
+        "stacItem": stac_item_data,
+        "coRegistration": coreg_data,
         "polygonBoundary": [
             [lat_min - 0.005, lon_min - 0.005],
             [lat_min - 0.005, lon_min + 0.005],
@@ -817,9 +839,95 @@ def get_tile_image(tile_filename: str, mode: str = "rgb"):
         buf.seek(0)
         return Response(content=buf.getvalue(), media_type="image/png")
 
+# ─── 10 SIH PRIORITY FEATURE ENDPOINTS ───────────────────────────────────────
+
+@app.get("/api/candidates/{candidate_id}/backtracking")
+def get_candidate_backtracking(candidate_id: str):
+    """SIH Feature 1: Earliest-change backtracking API"""
+    candidate = get_candidate_by_id(candidate_id)
+    return candidate.get("backtracking") or sih_features.compute_earliest_change_backtracking(candidate)
+
+@app.post("/api/ingest/incremental")
+def post_incremental_ingest(payload: IncrementalIngestRequest):
+    """SIH Feature 2: Incremental scene ingestion into FAISS + STAC without full rebuild"""
+    res = sih_features.perform_incremental_ingest(
+        scene_name=payload.scene_name,
+        sensor=payload.sensor,
+        acquisition_date=payload.acquisition_date,
+        lat=payload.lat,
+        lon=payload.lon,
+        catalogue_file=CATALOGUE_FILE,
+        tiles_dir=SIH_TILES_DIR,
+        index_dir=SIH_INDEX_DIR
+    )
+    return res
+
+@app.get("/api/candidates/{candidate_id}/false-alarm-explain")
+def get_false_alarm_explanation(candidate_id: str):
+    """SIH Feature 3: Explainable 6-Factor false-alarm suppression API"""
+    candidate = get_candidate_by_id(candidate_id)
+    return candidate.get("falseAlarm6Factor") or sih_features.compute_explainable_false_alarm(candidate)
+
+@app.get("/api/candidates/{candidate_id}/cross-validation")
+def get_dual_sensor_cross_validation(candidate_id: str):
+    """SIH Feature 4: Sentinel-2 (Optical) + Sentinel-1 (SAR) cross-validation API"""
+    candidate = get_candidate_by_id(candidate_id)
+    return candidate.get("crossValidation") or sih_features.compute_dual_sensor_cross_validation(candidate)
+
+@app.get("/api/audit/verify")
+def verify_audit_trail_integrity():
+    """SIH Feature 5: Cryptographic hash-chain non-repudiation audit trail verification API"""
+    audit_path = os.path.join(SIH_DATASET_DIR, "audit_trail.json")
+    logs = load_json_file(audit_path, [])
+    chained_logs = sih_features.build_cryptographic_audit_chain(logs)
+    return sih_features.verify_cryptographic_audit_chain(chained_logs)
+
+@app.get("/api/stac/items/{item_id}")
+def get_stac_item_by_id(item_id: str):
+    """SIH Feature 6: Full STAC v1.0.0 Provenance Item API"""
+    candidates = get_candidates()
+    for c in candidates:
+        if c["id"] == item_id or c.get("stacItem", {}).get("id") == item_id:
+            return c["stacItem"]
+    return sih_features.generate_stac_item({"id": item_id, "stacItemId": item_id})
+
+@app.get("/api/stac/catalog")
+def get_stac_root_catalog():
+    """SIH Feature 6: Root STAC Catalog API"""
+    candidates = get_candidates()
+    return {
+        "stac_version": "1.0.0",
+        "id": "astreva-sih2026-catalog",
+        "title": "Astreva MoD PS-26227 Sovereign STAC Catalog",
+        "description": "Air-Gapped SpatioTemporal Asset Catalog preserving scene, date, sensor, and model provenance.",
+        "links": [
+            {"rel": "self", "href": "/api/stac/catalog", "type": "application/json"},
+            *[
+                {"rel": "item", "href": f"/api/stac/items/{c['id']}", "type": "application/json", "title": c["title"]}
+                for c in candidates[:20]
+            ]
+        ]
+    }
+
+@app.get("/api/system/zero-egress-proof")
+def get_zero_egress_proof():
+    """SIH Feature 7: Zero-egress offline proof API"""
+    return sih_features.generate_zero_egress_proof()
+
+@app.get("/api/evaluation/metrics")
+def get_heldout_evaluation_report():
+    """SIH Feature 8: Held-out evaluation metrics API (Precision, Recall, Latency, Storage, Hardware)"""
+    return sih_features.get_heldout_evaluation_metrics(SIH_DATASET_DIR, SIH_TILES_DIR, SIH_INDEX_DIR)
+
+@app.get("/api/candidates/{candidate_id}/co-registration")
+def get_candidate_coregistration(candidate_id: str):
+    """SIH Feature 10: Radiometric + Co-registration validation API"""
+    candidate = get_candidate_by_id(candidate_id)
+    return candidate.get("coRegistration") or sih_features.compute_coregistration_radiometric_validation(candidate)
+
 @app.get("/api/audit")
 def get_audit_logs():
-    """Returns enclave audit logs"""
+    """Returns enclave audit logs with cryptographic SHA-256 hash-chaining"""
     audit_path = os.path.join(SIH_DATASET_DIR, "audit_trail.json")
     logs = load_json_file(audit_path, [])
     if not logs:
@@ -835,7 +943,7 @@ def get_audit_logs():
                 "status": "SUCCESS"
             }
         ]
-    return logs
+    return sih_features.build_cryptographic_audit_chain(logs)
 
 @app.post("/api/audit")
 def create_audit_log(log_entry: dict = Body(...)):

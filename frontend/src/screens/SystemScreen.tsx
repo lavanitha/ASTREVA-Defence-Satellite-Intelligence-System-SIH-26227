@@ -64,7 +64,7 @@ export const SystemScreen: React.FC = () => {
       }
 
       setDiagnosticStatus('success');
-      setDiagnosticMessage(`All 5 core enclave subsystems verified OPERATIONAL. OpenCLIP ViT-B/32 active (${health.faiss_index_tiles} tiles indexed, mean query latency: ${health.mean_latency_ms}ms).`);
+      setDiagnosticMessage(`OpenCLIP and FAISS are active (${health.faiss_index_tiles} tiles indexed${health.mean_latency_ms == null ? '' : `, mean query latency: ${health.mean_latency_ms}ms`}).`);
       addAuditLog('SYSTEM_CHECK', `System diagnostic completed: All 5 enclave components verified OPERATIONAL (${health.faiss_index_tiles} tiles).`, 'SUCCESS');
     }).catch(() => {
       setIsRunningDiagnostic(false);
@@ -494,12 +494,12 @@ export const SystemScreen: React.FC = () => {
               <div className="flex items-center space-x-6 text-xs font-mono text-slate-300 pt-2 md:pt-0 border-t md:border-t-0 border-slate-800">
                 <div>
                   <span className="text-[10px] text-slate-500 block">LATENCY</span>
-                  <span className="text-cyan-300 font-bold">{item.latencyMs} ms</span>
+                  <span className="text-cyan-300 font-bold">{item.latencyMs == null ? 'Not measured' : `${item.latencyMs} ms`}</span>
                 </div>
 
                 <div>
                   <span className="text-[10px] text-slate-500 block">MEMORY / LOAD</span>
-                  <span className="text-slate-200 font-bold">{item.memoryUsage}</span>
+                  <span className="text-slate-200 font-bold">{item.memoryUsage || 'Not reported'}</span>
                 </div>
 
                 <div>

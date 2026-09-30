@@ -80,10 +80,13 @@ export const apiService = {
   async getHealth() {
     return fetchJson<{
       status: string;
+      python_version?: string;
       sih_ml_active: boolean;
       sih_ml_import_error?: string | null;
       faiss_index_tiles: number;
-      mean_latency_ms: number;
+      catalogue_tiles?: number;
+      candidate_count?: number;
+      mean_latency_ms: number | null;
       components: any[];
     }>('/api/health');
   },

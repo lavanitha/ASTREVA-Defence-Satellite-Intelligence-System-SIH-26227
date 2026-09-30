@@ -320,22 +320,32 @@ def get_health():
         faiss_loaded = True
         ntotal = semantic_search.index.ntotal
 
+    ml_status = "OPERATIONAL" if faiss_loaded and HAS_SIH_ML else "DEGRADED"
+    component_status = "OPERATIONAL" if HAS_SIH_ML else "STANDBY"
+    component_details = "Required ML modules and indexed runtime are loaded" if HAS_SIH_ML else (SIH_ML_IMPORT_ERROR or "Required ML runtime is not initialized")
+    components = [
+        {"component": name, "status": component_status, "latencyMs": None, "memoryUsage": "runtime not measured", "version": "runtime-reported", "details": component_details, "lastTested": "health check"}
+        for name in (
+            "FAISS Vector Index (tiles.faiss)",
+            "OpenCLIP ViT-B/32 Inference Engine",
+            "Multi-Temporal Change Detector",
+            "False-Alarm Confounder Suppressor",
+            "Unsupervised Terrain Clusterer",
+        )
+    ]
     return {
-        "status": "OPERATIONAL",
+        "status": ml_status,
         "enclave": "AIR-GAPPED DEFENCE SYSTEM (100% LOCAL)",
+        "python_version": sys.version.split()[0],
         "sih_ml_active": HAS_SIH_ML,
         "sih_ml_import_error": SIH_ML_IMPORT_ERROR,
         "clip_model": "OpenCLIP ViT-B/32 (laion2b_s34b_b79k)",
         "faiss_index_tiles": ntotal,
-        "mean_latency_ms": 88.28,
+        "catalogue_tiles": len(load_catalogue()),
+        "candidate_count": len(load_candidate_records()),
+        "mean_latency_ms": None,
         "dataset_location": "Ranchi, Jharkhand (868 sq km)",
-        "components": [
-            {"component": "FAISS Vector Index (tiles.faiss)", "status": "OPERATIONAL" if faiss_loaded else "STANDBY", "latencyMs": 12, "memoryUsage": "4.2 MB", "version": "1.15.0", "details": f"{ntotal} tile vectors indexed", "lastTested": "Active"},
-            {"component": "OpenCLIP ViT-B/32 Inference Engine", "status": "OPERATIONAL" if HAS_SIH_ML else "STANDBY", "latencyMs": 76, "memoryUsage": "340 MB", "version": "3.3.0", "details": "Zero-shot visual/text embedding generator", "lastTested": "Active"},
-            {"component": "Multi-Temporal Change Detector", "status": "OPERATIONAL", "latencyMs": 18, "memoryUsage": "18 MB", "version": "1.0.0", "details": "Same-season spectral delta & morphological box tagger", "lastTested": "Active"},
-            {"component": "False-Alarm Confounder Suppressor", "status": "OPERATIONAL", "latencyMs": 8, "memoryUsage": "2 MB", "version": "1.0.0", "details": "Seasonal penalty & nodata quality factor calibration", "lastTested": "Active"},
-            {"component": "Unsupervised KMeans Terrain Clusterer", "status": "OPERATIONAL", "latencyMs": 14, "memoryUsage": "6 MB", "version": "1.0.0", "details": "8-cluster semantic landscape partitioning", "lastTested": "Active"}
-        ]
+        "components": components,
     }
 
 @app.get("/api/aois")

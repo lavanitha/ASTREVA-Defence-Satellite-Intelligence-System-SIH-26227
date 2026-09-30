@@ -78,12 +78,8 @@ export const SystemScreen: React.FC = () => {
       addAuditLog('UPDATE_AOI', `Incremental scene ${ingestSceneName} ingested in ${res.ingestion_time_ms} ms without full index rebuild.`, 'SUCCESS');
     } catch (err: any) {
       setIngestResult({
-        status: 'SUCCESS',
-        added_scene_name: ingestSceneName,
-        ingestion_time_ms: 38.4,
-        index_updated_incrementally: true,
-        rebuild_required: false,
-        updated_index_total_tiles: 181,
+        status: 'ERROR',
+        message: err?.message || 'Incremental ingestion failed.',
       });
     } finally {
       setIsIngesting(false);
@@ -261,18 +257,22 @@ export const SystemScreen: React.FC = () => {
         </div>
 
         {ingestResult && (
-          <div className="p-3 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-xs font-mono text-emerald-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className={`p-3 rounded-lg border text-xs font-mono flex flex-col sm:flex-row sm:items-center justify-between gap-2 ${ingestResult.status === 'ERROR' ? 'bg-rose-950/40 border-rose-500/40 text-rose-300' : 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'}`}>
             <div className="flex items-center space-x-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>
-                Successfully ingested <strong>{ingestResult.added_scene_name}</strong> in <strong className="text-white">{ingestResult.ingestion_time_ms} ms</strong>!
-              </span>
+              {ingestResult.status === 'ERROR' ? (
+                <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+              ) : (
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              )}
+              <span>{ingestResult.status === 'ERROR' ? ingestResult.message : <>Successfully ingested <strong>{ingestResult.added_scene_name}</strong> in <strong className="text-white">{ingestResult.ingestion_time_ms} ms</strong>.</>}</span>
             </div>
-            <div className="text-[11px] text-slate-400 flex items-center space-x-2">
-              <span>Full Rebuild Required: <strong className="text-emerald-400">NO</strong></span>
-              <span>•</span>
-              <span>Total Indexed Tiles: <strong className="text-cyan-300">{ingestResult.updated_index_total_tiles || 181}</strong></span>
-            </div>
+            {ingestResult.status !== 'ERROR' && (
+              <div className="text-[11px] text-slate-400 flex items-center space-x-2">
+                <span>Full Rebuild Required: <strong className="text-emerald-400">NO</strong></span>
+                <span>•</span>
+                <span>Total Indexed Tiles: <strong className="text-cyan-300">{ingestResult.updated_index_total_tiles}</strong></span>
+              </div>
+            )}
           </div>
         )}
       </div>

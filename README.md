@@ -380,6 +380,12 @@ This mode is intended for Smart India Hackathon jury evaluation and remote demon
 
 This public deployment model is intended for demonstration and evaluation. It is separate from the intended controlled operational deployment model.
 
+#### Render Runtime Data
+
+The Render build installs the CPU-only ML dependencies and resolves the satellite imagery tracked with Git LFS. It fails the build if the FAISS index, its metadata, catalogue, or indexed GeoTIFF files are missing or inconsistent. On first start, the service copies only the 180 indexed tiles and a deduplicated catalogue to its persistent disk; analyst decisions, audit records, change outputs, and model caches remain on that disk across restarts.
+
+The Blueprint reserves a 3 GB persistent disk at `/var/data`. Render persistent disks add a recurring storage charge and disable zero-downtime deploys for the attached service. Increment `ASTREVA_DATA_VERSION` in `render.yaml` whenever the indexed dataset changes so the service refreshes its disk copy. OpenCLIP weights are downloaded into the persistent cache on first startup, so initial startup requires outbound access to the model source.
+
 ### 2. Sovereign On-Premises Deployment
 
 The intended defence-oriented architecture is local and controlled:

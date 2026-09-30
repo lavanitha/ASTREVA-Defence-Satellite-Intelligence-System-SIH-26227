@@ -7,14 +7,17 @@ import os
 import sys
 import json
 import time
+import csv
 import hashlib
 import hmac
 import socket
 import platform
+import threading
 import numpy as np
 from typing import Dict, Any, List, Optional
 
 ENCLAVE_SECRET_KEY = b"ASTREVA_SOVEREIGN_ENCLAVE_SECRET_2026_HMAC_SHA256"
+_INCREMENTAL_INGEST_LOCK = threading.Lock()
 
 # ─── 1. EARLIEST-CHANGE BACKTRACKING ──────────────────────────────────────────
 def compute_earliest_change_backtracking(item: dict) -> dict:
@@ -95,48 +98,107 @@ def perform_incremental_ingest(
     """
     t_start = time.perf_counter()
     
-    # 1. Create tile file if it does not exist (or simulate registration)
-    safe_filename = scene_name.replace(" ", "_").lower()
+    # 1. Resolve only existing source imagery; ingestion never fabricates a raster.
+    safe_filename = os.path.basename(scene_name.strip().replace("\\", "/").replace(" ", "_")).lower()
     if not safe_filename.endswith(".tif"):
         safe_filename += ".tif"
-        
+
     tile_path = os.path.join(tiles_dir, safe_filename)
     if not os.path.exists(tile_path):
-        # Create a lightweight valid TIFF chip
-        from PIL import Image
-        img = Image.new("RGB", (512, 512), (40, 60, 40))
-        img.save(tile_path, format="TIFF")
+        raise FileNotFoundError(f"Source GeoTIFF is not available: {safe_filename}")
+
+    if not os.path.exists(catalogue_file):
+        raise FileNotFoundError("Satellite tile catalogue is not available")
 
     # 2. Extract STAC Item metadata
     stac_item_id = safe_filename.replace(".tif", "")
-    
-    # 3. Perform incremental FAISS vector embedding & index update
+
+    # 3. Keep the FAISS row and its metadata row in lockstep across requests.
     try:
         import semantic_search
-        if hasattr(semantic_search, "index") and semantic_search.index is not None:
-            # Generate feature embedding vector (512-dim)
-            if os.path.exists(tile_path):
-                vec = semantic_search.embed_image_tile(tile_path)
-            else:
-                vec = np.random.randn(1, 512).astype(np.float32)
-                vec /= np.linalg.norm(vec)
-            
-            # Incrementally add to FAISS index (index.add())
-            semantic_search.index.add(vec)
-            updated_total_tiles = semantic_search.index.ntotal
-        else:
-            updated_total_tiles = 181
-    except Exception as e:
-        print(f"Incremental FAISS update note: {e}")
-        updated_total_tiles = 181
+        import faiss
+    except Exception as exc:
+        raise RuntimeError("Semantic indexing dependencies are unavailable") from exc
+
+    with _INCREMENTAL_INGEST_LOCK:
+        index = getattr(semantic_search, "index", None)
+        metadata = getattr(semantic_search, "metadata", None)
+        if index is None or metadata is None:
+            raise RuntimeError("Semantic index or tile metadata is unavailable")
+        if index.ntotal != len(metadata):
+            raise RuntimeError("FAISS index and tile metadata are out of sync")
+
+        known_tiles = {item.get("tile_file") for item in metadata}
+        if safe_filename not in known_tiles:
+            try:
+                vector = np.asarray(semantic_search.embed_image_tile(tile_path), dtype=np.float32)
+            except Exception as exc:
+                raise ValueError(f"Unable to read and embed source GeoTIFF: {safe_filename}") from exc
+            if vector.ndim != 2 or vector.shape != (1, index.d):
+                raise ValueError("Source tile embedding has an incompatible dimension")
+
+            tile_metadata = {
+                "tile_file": safe_filename,
+                "source_file": safe_filename,
+                "acquisition_date": acquisition_date,
+                "lon_min": lon,
+                "lat_min": lat,
+                "lon_max": lon + 0.05,
+                "lat_max": lat + 0.05,
+                "sensor": sensor,
+            }
+            updated_index = faiss.clone_index(index)
+            updated_index.add(vector)
+            updated_metadata = [*metadata, tile_metadata]
+            index_path = os.path.join(index_dir, "tiles.faiss")
+            metadata_path = os.path.join(index_dir, "tile_metadata.json")
+            index_temporary = f"{index_path}.{os.getpid()}.tmp"
+            metadata_temporary = f"{metadata_path}.{os.getpid()}.tmp"
+            try:
+                faiss.write_index(updated_index, index_temporary)
+                with open(metadata_temporary, "w", encoding="utf-8") as metadata_file:
+                    json.dump(updated_metadata, metadata_file, indent=2)
+                os.replace(index_temporary, index_path)
+                os.replace(metadata_temporary, metadata_path)
+            finally:
+                for temporary_path in (index_temporary, metadata_temporary):
+                    if os.path.exists(temporary_path):
+                        os.remove(temporary_path)
+            semantic_search.index = updated_index
+            semantic_search.metadata = updated_metadata
+
+        updated_total_tiles = semantic_search.index.ntotal
 
     # 4. Append to catalogue CSV if exists
-    if os.path.exists(catalogue_file):
-        try:
-            with open(catalogue_file, "a", encoding="utf-8") as f:
-                f.write(f"\n{safe_filename},{acquisition_date},{lat},{lat+0.05},{lon},{lon+0.05},{sensor},0.02")
-        except Exception:
-            pass
+    with _INCREMENTAL_INGEST_LOCK:
+        with open(catalogue_file, "r", encoding="utf-8", newline="") as catalogue:
+            reader = csv.DictReader(catalogue)
+            fieldnames = reader.fieldnames or []
+            rows = list(reader)
+        if fieldnames and not any(row.get("tile_file") == safe_filename for row in rows):
+            row = {field: "" for field in fieldnames}
+            row.update({
+                "tile_file": safe_filename,
+                "source_file": safe_filename,
+                "acquisition_date": acquisition_date,
+                "lon_min": lon,
+                "lat_min": lat,
+                "lon_max": lon + 0.05,
+                "lat_max": lat + 0.05,
+                "sensor": sensor,
+                "nodata_fraction": 0.02,
+            })
+            catalogue_temporary = f"{catalogue_file}.{os.getpid()}.tmp"
+            try:
+                with open(catalogue_temporary, "w", encoding="utf-8", newline="") as catalogue:
+                    writer = csv.DictWriter(catalogue, fieldnames=fieldnames)
+                    writer.writeheader()
+                    writer.writerows(rows)
+                    writer.writerow(row)
+                os.replace(catalogue_temporary, catalogue_file)
+            finally:
+                if os.path.exists(catalogue_temporary):
+                    os.remove(catalogue_temporary)
 
     t_end = time.perf_counter()
     duration_ms = round((t_end - t_start) * 1000, 2)

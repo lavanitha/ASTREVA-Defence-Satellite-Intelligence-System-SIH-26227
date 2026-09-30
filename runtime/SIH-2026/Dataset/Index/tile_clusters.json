@@ -1,0 +1,1498 @@
+{
+  "0": {
+    "cluster_id": 0,
+    "total_tiles": 17,
+    "exemplar_tile": "ranchi_2022_12_tile_0_5.tif",
+    "members": [
+      {
+        "tile_file": "ranchi_2022_12_tile_0_5.tif",
+        "date": "2022-12-01",
+        "lat": 23.406589,
+        "lon": 85.396995,
+        "dist_to_center": 0.2337,
+        "vector_idx": 95
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_2_4.tif",
+        "date": "2024-12-01",
+        "lat": 23.313608,
+        "lon": 85.348035,
+        "dist_to_center": 0.2493,
+        "vector_idx": 166
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_3_3.tif",
+        "date": "2020-01-01",
+        "lat": 23.266843,
+        "lon": 85.298551,
+        "dist_to_center": 0.2547,
+        "vector_idx": 21
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_1_4.tif",
+        "date": "2020-01-01",
+        "lat": 23.359838,
+        "lon": 85.347461,
+        "dist_to_center": 0.2597,
+        "vector_idx": 10
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_2_2.tif",
+        "date": "2024-12-01",
+        "lat": 23.312521,
+        "lon": 85.247891,
+        "dist_to_center": 0.2629,
+        "vector_idx": 164
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_3_3.tif",
+        "date": "2022-12-01",
+        "lat": 23.266843,
+        "lon": 85.298551,
+        "dist_to_center": 0.2665,
+        "vector_idx": 111
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_1_2.tif",
+        "date": "2024-12-01",
+        "lat": 23.358748,
+        "lon": 85.247283,
+        "dist_to_center": 0.2698,
+        "vector_idx": 158
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_3_3.tif",
+        "date": "2024-12-01",
+        "lat": 23.266843,
+        "lon": 85.298551,
+        "dist_to_center": 0.2706,
+        "vector_idx": 171
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_2_4.tif",
+        "date": "2022-12-01",
+        "lat": 23.313608,
+        "lon": 85.348035,
+        "dist_to_center": 0.2746,
+        "vector_idx": 106
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_0_3.tif",
+        "date": "2020-01-01",
+        "lat": 23.40553,
+        "lon": 85.296779,
+        "dist_to_center": 0.2957,
+        "vector_idx": 3
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_2_3.tif",
+        "date": "2024-12-01",
+        "lat": 23.313072,
+        "lon": 85.297962,
+        "dist_to_center": 0.2967,
+        "vector_idx": 165
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_2_2.tif",
+        "date": "2020-01-01",
+        "lat": 23.312521,
+        "lon": 85.247891,
+        "dist_to_center": 0.2971,
+        "vector_idx": 14
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_2_2.tif",
+        "date": "2022-12-01",
+        "lat": 23.312521,
+        "lon": 85.247891,
+        "dist_to_center": 0.3031,
+        "vector_idx": 104
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_1_2.tif",
+        "date": "2020-01-01",
+        "lat": 23.358748,
+        "lon": 85.247283,
+        "dist_to_center": 0.3315,
+        "vector_idx": 8
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_2_3.tif",
+        "date": "2020-06-01",
+        "lat": 23.313072,
+        "lon": 85.297962,
+        "dist_to_center": 0.3333,
+        "vector_idx": 45
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_2_3.tif",
+        "date": "2022-12-01",
+        "lat": 23.313072,
+        "lon": 85.297962,
+        "dist_to_center": 0.3419,
+        "vector_idx": 105
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_2_3.tif",
+        "date": "2020-01-01",
+        "lat": 23.313072,
+        "lon": 85.297962,
+        "dist_to_center": 0.3799,
+        "vector_idx": 15
+      }
+    ]
+  },
+  "1": {
+    "cluster_id": 1,
+    "total_tiles": 46,
+    "exemplar_tile": "ranchi_2021_06_tile_3_4.tif",
+    "members": [
+      {
+        "tile_file": "ranchi_2021_06_tile_3_4.tif",
+        "date": "2021-06-01",
+        "lat": 23.267378,
+        "lon": 85.348607,
+        "dist_to_center": 0.2018,
+        "vector_idx": 82
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_2_1.tif",
+        "date": "2021-06-01",
+        "lat": 23.311953,
+        "lon": 85.197822,
+        "dist_to_center": 0.2565,
+        "vector_idx": 73
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_0_0.tif",
+        "date": "2020-06-01",
+        "lat": 23.40382,
+        "lon": 85.146467,
+        "dist_to_center": 0.2654,
+        "vector_idx": 30
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_0_2.tif",
+        "date": "2021-06-01",
+        "lat": 23.404976,
+        "lon": 85.246674,
+        "dist_to_center": 0.2763,
+        "vector_idx": 62
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_0_4.tif",
+        "date": "2020-06-01",
+        "lat": 23.406067,
+        "lon": 85.346887,
+        "dist_to_center": 0.2778,
+        "vector_idx": 34
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_2_0.tif",
+        "date": "2021-06-01",
+        "lat": 23.31137,
+        "lon": 85.147755,
+        "dist_to_center": 0.2843,
+        "vector_idx": 72
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_1_1.tif",
+        "date": "2021-06-01",
+        "lat": 23.35818,
+        "lon": 85.197197,
+        "dist_to_center": 0.2857,
+        "vector_idx": 67
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_2_1.tif",
+        "date": "2020-06-01",
+        "lat": 23.311953,
+        "lon": 85.197822,
+        "dist_to_center": 0.2876,
+        "vector_idx": 43
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_1_0.tif",
+        "date": "2021-06-01",
+        "lat": 23.357595,
+        "lon": 85.147112,
+        "dist_to_center": 0.2881,
+        "vector_idx": 66
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_0_1.tif",
+        "date": "2021-06-01",
+        "lat": 23.404406,
+        "lon": 85.19657,
+        "dist_to_center": 0.2886,
+        "vector_idx": 61
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_1_5.tif",
+        "date": "2020-06-01",
+        "lat": 23.360358,
+        "lon": 85.397552,
+        "dist_to_center": 0.2901,
+        "vector_idx": 41
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_0_2.tif",
+        "date": "2020-06-01",
+        "lat": 23.404976,
+        "lon": 85.246674,
+        "dist_to_center": 0.2926,
+        "vector_idx": 32
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_0_5.tif",
+        "date": "2021-06-01",
+        "lat": 23.406589,
+        "lon": 85.396995,
+        "dist_to_center": 0.2978,
+        "vector_idx": 65
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_4_3.tif",
+        "date": "2021-06-01",
+        "lat": 23.220614,
+        "lon": 85.299139,
+        "dist_to_center": 0.2985,
+        "vector_idx": 87
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_1_2.tif",
+        "date": "2020-06-01",
+        "lat": 23.358748,
+        "lon": 85.247283,
+        "dist_to_center": 0.2988,
+        "vector_idx": 38
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_2_4.tif",
+        "date": "2021-06-01",
+        "lat": 23.313608,
+        "lon": 85.348035,
+        "dist_to_center": 0.2994,
+        "vector_idx": 76
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_2_0.tif",
+        "date": "2020-06-01",
+        "lat": 23.31137,
+        "lon": 85.147755,
+        "dist_to_center": 0.3011,
+        "vector_idx": 42
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_1_1.tif",
+        "date": "2020-06-01",
+        "lat": 23.35818,
+        "lon": 85.197197,
+        "dist_to_center": 0.3015,
+        "vector_idx": 37
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_2_4.tif",
+        "date": "2020-06-01",
+        "lat": 23.313608,
+        "lon": 85.348035,
+        "dist_to_center": 0.3024,
+        "vector_idx": 46
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_3_5.tif",
+        "date": "2021-06-01",
+        "lat": 23.267896,
+        "lon": 85.398663,
+        "dist_to_center": 0.3037,
+        "vector_idx": 83
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_0_3.tif",
+        "date": "2021-06-01",
+        "lat": 23.40553,
+        "lon": 85.296779,
+        "dist_to_center": 0.3058,
+        "vector_idx": 63
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_1_4.tif",
+        "date": "2021-06-01",
+        "lat": 23.359838,
+        "lon": 85.347461,
+        "dist_to_center": 0.3075,
+        "vector_idx": 70
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_0_1.tif",
+        "date": "2020-06-01",
+        "lat": 23.404406,
+        "lon": 85.19657,
+        "dist_to_center": 0.3092,
+        "vector_idx": 31
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_0_3.tif",
+        "date": "2020-06-01",
+        "lat": 23.40553,
+        "lon": 85.296779,
+        "dist_to_center": 0.3093,
+        "vector_idx": 33
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_3_1.tif",
+        "date": "2021-06-01",
+        "lat": 23.265727,
+        "lon": 85.198446,
+        "dist_to_center": 0.3097,
+        "vector_idx": 79
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_4_0.tif",
+        "date": "2021-06-01",
+        "lat": 23.218919,
+        "lon": 85.149035,
+        "dist_to_center": 0.3102,
+        "vector_idx": 84
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_1_2.tif",
+        "date": "2021-06-01",
+        "lat": 23.358748,
+        "lon": 85.247283,
+        "dist_to_center": 0.3114,
+        "vector_idx": 68
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_3_5.tif",
+        "date": "2020-06-01",
+        "lat": 23.267896,
+        "lon": 85.398663,
+        "dist_to_center": 0.3236,
+        "vector_idx": 53
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_4_5.tif",
+        "date": "2020-06-01",
+        "lat": 23.221664,
+        "lon": 85.399216,
+        "dist_to_center": 0.3237,
+        "vector_idx": 59
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_2_5.tif",
+        "date": "2020-06-01",
+        "lat": 23.314127,
+        "lon": 85.398108,
+        "dist_to_center": 0.3308,
+        "vector_idx": 47
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_1_0.tif",
+        "date": "2020-06-01",
+        "lat": 23.357595,
+        "lon": 85.147112,
+        "dist_to_center": 0.3341,
+        "vector_idx": 36
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_3_3.tif",
+        "date": "2021-06-01",
+        "lat": 23.266843,
+        "lon": 85.298551,
+        "dist_to_center": 0.3491,
+        "vector_idx": 81
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_4_3.tif",
+        "date": "2020-06-01",
+        "lat": 23.220614,
+        "lon": 85.299139,
+        "dist_to_center": 0.3497,
+        "vector_idx": 57
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_3_4.tif",
+        "date": "2020-06-01",
+        "lat": 23.267378,
+        "lon": 85.348607,
+        "dist_to_center": 0.3499,
+        "vector_idx": 52
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_2_5.tif",
+        "date": "2021-06-01",
+        "lat": 23.314127,
+        "lon": 85.398108,
+        "dist_to_center": 0.35,
+        "vector_idx": 77
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_4_2.tif",
+        "date": "2021-06-01",
+        "lat": 23.220065,
+        "lon": 85.249103,
+        "dist_to_center": 0.3523,
+        "vector_idx": 86
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_4_0.tif",
+        "date": "2020-06-01",
+        "lat": 23.218919,
+        "lon": 85.149035,
+        "dist_to_center": 0.3528,
+        "vector_idx": 54
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_4_4.tif",
+        "date": "2020-06-01",
+        "lat": 23.221147,
+        "lon": 85.349177,
+        "dist_to_center": 0.3665,
+        "vector_idx": 58
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_1_5.tif",
+        "date": "2021-06-01",
+        "lat": 23.360358,
+        "lon": 85.397552,
+        "dist_to_center": 0.3692,
+        "vector_idx": 71
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_1_4.tif",
+        "date": "2020-06-01",
+        "lat": 23.359838,
+        "lon": 85.347461,
+        "dist_to_center": 0.3813,
+        "vector_idx": 40
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_3_1.tif",
+        "date": "2020-06-01",
+        "lat": 23.265727,
+        "lon": 85.198446,
+        "dist_to_center": 0.3844,
+        "vector_idx": 49
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_3_3.tif",
+        "date": "2020-06-01",
+        "lat": 23.266843,
+        "lon": 85.298551,
+        "dist_to_center": 0.3963,
+        "vector_idx": 51
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_0_0.tif",
+        "date": "2021-06-01",
+        "lat": 23.40382,
+        "lon": 85.146467,
+        "dist_to_center": 0.4072,
+        "vector_idx": 60
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_3_2.tif",
+        "date": "2021-06-01",
+        "lat": 23.266293,
+        "lon": 85.248498,
+        "dist_to_center": 0.4448,
+        "vector_idx": 80
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_0_4.tif",
+        "date": "2021-06-01",
+        "lat": 23.406067,
+        "lon": 85.346887,
+        "dist_to_center": 0.4624,
+        "vector_idx": 64
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_4_4.tif",
+        "date": "2021-06-01",
+        "lat": 23.221147,
+        "lon": 85.349177,
+        "dist_to_center": 0.5206,
+        "vector_idx": 88
+      }
+    ]
+  },
+  "2": {
+    "cluster_id": 2,
+    "total_tiles": 24,
+    "exemplar_tile": "ranchi_2023_06_tile_2_0.tif",
+    "members": [
+      {
+        "tile_file": "ranchi_2023_06_tile_2_0.tif",
+        "date": "2023-06-01",
+        "lat": 23.31137,
+        "lon": 85.147755,
+        "dist_to_center": 0.2421,
+        "vector_idx": 132
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_4_2.tif",
+        "date": "2020-06-01",
+        "lat": 23.220065,
+        "lon": 85.249103,
+        "dist_to_center": 0.2596,
+        "vector_idx": 56
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_0_4.tif",
+        "date": "2022-12-01",
+        "lat": 23.406067,
+        "lon": 85.346887,
+        "dist_to_center": 0.2743,
+        "vector_idx": 94
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_4_1.tif",
+        "date": "2023-06-01",
+        "lat": 23.2195,
+        "lon": 85.199068,
+        "dist_to_center": 0.276,
+        "vector_idx": 145
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_0_2.tif",
+        "date": "2022-12-01",
+        "lat": 23.404976,
+        "lon": 85.246674,
+        "dist_to_center": 0.2768,
+        "vector_idx": 92
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_2_5.tif",
+        "date": "2023-06-01",
+        "lat": 23.314127,
+        "lon": 85.398108,
+        "dist_to_center": 0.2851,
+        "vector_idx": 137
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_4_3.tif",
+        "date": "2023-06-01",
+        "lat": 23.220614,
+        "lon": 85.299139,
+        "dist_to_center": 0.2901,
+        "vector_idx": 147
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_0_4.tif",
+        "date": "2020-01-01",
+        "lat": 23.406067,
+        "lon": 85.346887,
+        "dist_to_center": 0.2966,
+        "vector_idx": 4
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_1_0.tif",
+        "date": "2023-06-01",
+        "lat": 23.357595,
+        "lon": 85.147112,
+        "dist_to_center": 0.3025,
+        "vector_idx": 126
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_1_2.tif",
+        "date": "2022-12-01",
+        "lat": 23.358748,
+        "lon": 85.247283,
+        "dist_to_center": 0.3046,
+        "vector_idx": 98
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_0_4.tif",
+        "date": "2024-12-01",
+        "lat": 23.406067,
+        "lon": 85.346887,
+        "dist_to_center": 0.306,
+        "vector_idx": 154
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_4_4.tif",
+        "date": "2023-06-01",
+        "lat": 23.221147,
+        "lon": 85.349177,
+        "dist_to_center": 0.3086,
+        "vector_idx": 148
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_3_0.tif",
+        "date": "2023-06-01",
+        "lat": 23.265145,
+        "lon": 85.148396,
+        "dist_to_center": 0.309,
+        "vector_idx": 138
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_4_5.tif",
+        "date": "2020-01-01",
+        "lat": 23.221664,
+        "lon": 85.399216,
+        "dist_to_center": 0.3125,
+        "vector_idx": 29
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_1_2.tif",
+        "date": "2023-06-01",
+        "lat": 23.358748,
+        "lon": 85.247283,
+        "dist_to_center": 0.3237,
+        "vector_idx": 128
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_0_0.tif",
+        "date": "2023-06-01",
+        "lat": 23.40382,
+        "lon": 85.146467,
+        "dist_to_center": 0.324,
+        "vector_idx": 120
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_0_4.tif",
+        "date": "2023-06-01",
+        "lat": 23.406067,
+        "lon": 85.346887,
+        "dist_to_center": 0.3316,
+        "vector_idx": 124
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_4_5.tif",
+        "date": "2024-12-01",
+        "lat": 23.221664,
+        "lon": 85.399216,
+        "dist_to_center": 0.332,
+        "vector_idx": 179
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_4_2.tif",
+        "date": "2020-01-01",
+        "lat": 23.220065,
+        "lon": 85.249103,
+        "dist_to_center": 0.3418,
+        "vector_idx": 26
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_4_5.tif",
+        "date": "2023-06-01",
+        "lat": 23.221664,
+        "lon": 85.399216,
+        "dist_to_center": 0.3682,
+        "vector_idx": 149
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_4_2.tif",
+        "date": "2023-06-01",
+        "lat": 23.220065,
+        "lon": 85.249103,
+        "dist_to_center": 0.3799,
+        "vector_idx": 146
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_4_1.tif",
+        "date": "2021-06-01",
+        "lat": 23.2195,
+        "lon": 85.199068,
+        "dist_to_center": 0.3971,
+        "vector_idx": 85
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_4_5.tif",
+        "date": "2022-12-01",
+        "lat": 23.221664,
+        "lon": 85.399216,
+        "dist_to_center": 0.4107,
+        "vector_idx": 119
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_4_5.tif",
+        "date": "2021-06-01",
+        "lat": 23.221664,
+        "lon": 85.399216,
+        "dist_to_center": 0.4478,
+        "vector_idx": 89
+      }
+    ]
+  },
+  "3": {
+    "cluster_id": 3,
+    "total_tiles": 14,
+    "exemplar_tile": "ranchi_2023_06_tile_0_3.tif",
+    "members": [
+      {
+        "tile_file": "ranchi_2023_06_tile_0_3.tif",
+        "date": "2023-06-01",
+        "lat": 23.40553,
+        "lon": 85.296779,
+        "dist_to_center": 0.2264,
+        "vector_idx": 123
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_3_4.tif",
+        "date": "2023-06-01",
+        "lat": 23.267378,
+        "lon": 85.348607,
+        "dist_to_center": 0.2321,
+        "vector_idx": 142
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_2_1.tif",
+        "date": "2023-06-01",
+        "lat": 23.311953,
+        "lon": 85.197822,
+        "dist_to_center": 0.2381,
+        "vector_idx": 133
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_1_1.tif",
+        "date": "2023-06-01",
+        "lat": 23.35818,
+        "lon": 85.197197,
+        "dist_to_center": 0.2733,
+        "vector_idx": 127
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_2_4.tif",
+        "date": "2023-06-01",
+        "lat": 23.313608,
+        "lon": 85.348035,
+        "dist_to_center": 0.2811,
+        "vector_idx": 136
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_0_1.tif",
+        "date": "2023-06-01",
+        "lat": 23.404406,
+        "lon": 85.19657,
+        "dist_to_center": 0.2898,
+        "vector_idx": 121
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_0_2.tif",
+        "date": "2023-06-01",
+        "lat": 23.404976,
+        "lon": 85.246674,
+        "dist_to_center": 0.3037,
+        "vector_idx": 122
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_1_4.tif",
+        "date": "2023-06-01",
+        "lat": 23.359838,
+        "lon": 85.347461,
+        "dist_to_center": 0.3177,
+        "vector_idx": 130
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_3_3.tif",
+        "date": "2023-06-01",
+        "lat": 23.266843,
+        "lon": 85.298551,
+        "dist_to_center": 0.3205,
+        "vector_idx": 141
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_3_5.tif",
+        "date": "2023-06-01",
+        "lat": 23.267896,
+        "lon": 85.398663,
+        "dist_to_center": 0.3255,
+        "vector_idx": 143
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_2_3.tif",
+        "date": "2021-06-01",
+        "lat": 23.313072,
+        "lon": 85.297962,
+        "dist_to_center": 0.359,
+        "vector_idx": 75
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_4_0.tif",
+        "date": "2023-06-01",
+        "lat": 23.218919,
+        "lon": 85.149035,
+        "dist_to_center": 0.3914,
+        "vector_idx": 144
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_0_5.tif",
+        "date": "2023-06-01",
+        "lat": 23.406589,
+        "lon": 85.396995,
+        "dist_to_center": 0.3954,
+        "vector_idx": 125
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_2_3.tif",
+        "date": "2023-06-01",
+        "lat": 23.313072,
+        "lon": 85.297962,
+        "dist_to_center": 0.413,
+        "vector_idx": 135
+      }
+    ]
+  },
+  "4": {
+    "cluster_id": 4,
+    "total_tiles": 8,
+    "exemplar_tile": "ranchi_2022_12_tile_1_3.tif",
+    "members": [
+      {
+        "tile_file": "ranchi_2022_12_tile_1_3.tif",
+        "date": "2022-12-01",
+        "lat": 23.359301,
+        "lon": 85.297372,
+        "dist_to_center": 0.2205,
+        "vector_idx": 99
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_1_3.tif",
+        "date": "2020-06-01",
+        "lat": 23.359301,
+        "lon": 85.297372,
+        "dist_to_center": 0.2498,
+        "vector_idx": 39
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_1_3.tif",
+        "date": "2020-01-01",
+        "lat": 23.359301,
+        "lon": 85.297372,
+        "dist_to_center": 0.2744,
+        "vector_idx": 9
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_1_4.tif",
+        "date": "2022-12-01",
+        "lat": 23.359838,
+        "lon": 85.347461,
+        "dist_to_center": 0.2877,
+        "vector_idx": 100
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_1_3.tif",
+        "date": "2021-06-01",
+        "lat": 23.359301,
+        "lon": 85.297372,
+        "dist_to_center": 0.2881,
+        "vector_idx": 69
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_1_3.tif",
+        "date": "2024-12-01",
+        "lat": 23.359301,
+        "lon": 85.297372,
+        "dist_to_center": 0.29,
+        "vector_idx": 159
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_1_3.tif",
+        "date": "2023-06-01",
+        "lat": 23.359301,
+        "lon": 85.297372,
+        "dist_to_center": 0.3045,
+        "vector_idx": 129
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_1_4.tif",
+        "date": "2024-12-01",
+        "lat": 23.359838,
+        "lon": 85.347461,
+        "dist_to_center": 0.3122,
+        "vector_idx": 160
+      }
+    ]
+  },
+  "5": {
+    "cluster_id": 5,
+    "total_tiles": 11,
+    "exemplar_tile": "ranchi_2022_12_tile_1_0.tif",
+    "members": [
+      {
+        "tile_file": "ranchi_2022_12_tile_1_0.tif",
+        "date": "2022-12-01",
+        "lat": 23.357595,
+        "lon": 85.147112,
+        "dist_to_center": 0.2647,
+        "vector_idx": 96
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_2_0.tif",
+        "date": "2024-12-01",
+        "lat": 23.31137,
+        "lon": 85.147755,
+        "dist_to_center": 0.2656,
+        "vector_idx": 162
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_2_0.tif",
+        "date": "2022-12-01",
+        "lat": 23.31137,
+        "lon": 85.147755,
+        "dist_to_center": 0.2713,
+        "vector_idx": 102
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_2_0.tif",
+        "date": "2020-01-01",
+        "lat": 23.31137,
+        "lon": 85.147755,
+        "dist_to_center": 0.2773,
+        "vector_idx": 12
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_1_0.tif",
+        "date": "2024-12-01",
+        "lat": 23.357595,
+        "lon": 85.147112,
+        "dist_to_center": 0.2785,
+        "vector_idx": 156
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_0_0.tif",
+        "date": "2022-12-01",
+        "lat": 23.40382,
+        "lon": 85.146467,
+        "dist_to_center": 0.2859,
+        "vector_idx": 90
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_1_0.tif",
+        "date": "2020-01-01",
+        "lat": 23.357595,
+        "lon": 85.147112,
+        "dist_to_center": 0.307,
+        "vector_idx": 6
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_1_1.tif",
+        "date": "2020-01-01",
+        "lat": 23.35818,
+        "lon": 85.197197,
+        "dist_to_center": 0.3388,
+        "vector_idx": 7
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_0_0.tif",
+        "date": "2020-01-01",
+        "lat": 23.40382,
+        "lon": 85.146467,
+        "dist_to_center": 0.3496,
+        "vector_idx": 0
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_0_1.tif",
+        "date": "2020-01-01",
+        "lat": 23.404406,
+        "lon": 85.19657,
+        "dist_to_center": 0.3809,
+        "vector_idx": 1
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_0_0.tif",
+        "date": "2024-12-01",
+        "lat": 23.40382,
+        "lon": 85.146467,
+        "dist_to_center": 0.3945,
+        "vector_idx": 150
+      }
+    ]
+  },
+  "6": {
+    "cluster_id": 6,
+    "total_tiles": 33,
+    "exemplar_tile": "ranchi_2024_12_tile_4_1.tif",
+    "members": [
+      {
+        "tile_file": "ranchi_2024_12_tile_4_1.tif",
+        "date": "2024-12-01",
+        "lat": 23.2195,
+        "lon": 85.199068,
+        "dist_to_center": 0.2537,
+        "vector_idx": 175
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_4_3.tif",
+        "date": "2020-01-01",
+        "lat": 23.220614,
+        "lon": 85.299139,
+        "dist_to_center": 0.2549,
+        "vector_idx": 27
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_3_0.tif",
+        "date": "2021-06-01",
+        "lat": 23.265145,
+        "lon": 85.148396,
+        "dist_to_center": 0.2583,
+        "vector_idx": 78
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_4_0.tif",
+        "date": "2022-12-01",
+        "lat": 23.218919,
+        "lon": 85.149035,
+        "dist_to_center": 0.2599,
+        "vector_idx": 114
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_3_0.tif",
+        "date": "2020-01-01",
+        "lat": 23.265145,
+        "lon": 85.148396,
+        "dist_to_center": 0.276,
+        "vector_idx": 18
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_4_1.tif",
+        "date": "2020-06-01",
+        "lat": 23.2195,
+        "lon": 85.199068,
+        "dist_to_center": 0.282,
+        "vector_idx": 55
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_0_2.tif",
+        "date": "2024-12-01",
+        "lat": 23.404976,
+        "lon": 85.246674,
+        "dist_to_center": 0.284,
+        "vector_idx": 152
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_2_5.tif",
+        "date": "2022-12-01",
+        "lat": 23.314127,
+        "lon": 85.398108,
+        "dist_to_center": 0.2858,
+        "vector_idx": 107
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_4_3.tif",
+        "date": "2022-12-01",
+        "lat": 23.220614,
+        "lon": 85.299139,
+        "dist_to_center": 0.2876,
+        "vector_idx": 117
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_3_1.tif",
+        "date": "2024-12-01",
+        "lat": 23.265727,
+        "lon": 85.198446,
+        "dist_to_center": 0.2984,
+        "vector_idx": 169
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_4_2.tif",
+        "date": "2022-12-01",
+        "lat": 23.220065,
+        "lon": 85.249103,
+        "dist_to_center": 0.2994,
+        "vector_idx": 116
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_2_5.tif",
+        "date": "2024-12-01",
+        "lat": 23.314127,
+        "lon": 85.398108,
+        "dist_to_center": 0.305,
+        "vector_idx": 167
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_4_1.tif",
+        "date": "2022-12-01",
+        "lat": 23.2195,
+        "lon": 85.199068,
+        "dist_to_center": 0.3056,
+        "vector_idx": 115
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_3_1.tif",
+        "date": "2020-01-01",
+        "lat": 23.265727,
+        "lon": 85.198446,
+        "dist_to_center": 0.3081,
+        "vector_idx": 19
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_4_0.tif",
+        "date": "2024-12-01",
+        "lat": 23.218919,
+        "lon": 85.149035,
+        "dist_to_center": 0.3096,
+        "vector_idx": 174
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_1_1.tif",
+        "date": "2024-12-01",
+        "lat": 23.35818,
+        "lon": 85.197197,
+        "dist_to_center": 0.3131,
+        "vector_idx": 157
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_3_4.tif",
+        "date": "2022-12-01",
+        "lat": 23.267378,
+        "lon": 85.348607,
+        "dist_to_center": 0.3148,
+        "vector_idx": 112
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_4_2.tif",
+        "date": "2024-12-01",
+        "lat": 23.220065,
+        "lon": 85.249103,
+        "dist_to_center": 0.3189,
+        "vector_idx": 176
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_2_2.tif",
+        "date": "2023-06-01",
+        "lat": 23.312521,
+        "lon": 85.247891,
+        "dist_to_center": 0.3193,
+        "vector_idx": 134
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_3_1.tif",
+        "date": "2022-12-01",
+        "lat": 23.265727,
+        "lon": 85.198446,
+        "dist_to_center": 0.3214,
+        "vector_idx": 109
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_3_0.tif",
+        "date": "2022-12-01",
+        "lat": 23.265145,
+        "lon": 85.148396,
+        "dist_to_center": 0.3228,
+        "vector_idx": 108
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_4_0.tif",
+        "date": "2020-01-01",
+        "lat": 23.218919,
+        "lon": 85.149035,
+        "dist_to_center": 0.3296,
+        "vector_idx": 24
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_0_2.tif",
+        "date": "2020-01-01",
+        "lat": 23.404976,
+        "lon": 85.246674,
+        "dist_to_center": 0.3305,
+        "vector_idx": 2
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_0_3.tif",
+        "date": "2022-12-01",
+        "lat": 23.40553,
+        "lon": 85.296779,
+        "dist_to_center": 0.3323,
+        "vector_idx": 93
+      },
+      {
+        "tile_file": "ranchi_2021_06_tile_2_2.tif",
+        "date": "2021-06-01",
+        "lat": 23.312521,
+        "lon": 85.247891,
+        "dist_to_center": 0.3326,
+        "vector_idx": 74
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_4_1.tif",
+        "date": "2020-01-01",
+        "lat": 23.2195,
+        "lon": 85.199068,
+        "dist_to_center": 0.3331,
+        "vector_idx": 25
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_1_1.tif",
+        "date": "2022-12-01",
+        "lat": 23.35818,
+        "lon": 85.197197,
+        "dist_to_center": 0.3435,
+        "vector_idx": 97
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_4_4.tif",
+        "date": "2020-01-01",
+        "lat": 23.221147,
+        "lon": 85.349177,
+        "dist_to_center": 0.3489,
+        "vector_idx": 28
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_3_0.tif",
+        "date": "2024-12-01",
+        "lat": 23.265145,
+        "lon": 85.148396,
+        "dist_to_center": 0.3541,
+        "vector_idx": 168
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_4_4.tif",
+        "date": "2024-12-01",
+        "lat": 23.221147,
+        "lon": 85.349177,
+        "dist_to_center": 0.3651,
+        "vector_idx": 178
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_4_4.tif",
+        "date": "2022-12-01",
+        "lat": 23.221147,
+        "lon": 85.349177,
+        "dist_to_center": 0.369,
+        "vector_idx": 118
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_3_1.tif",
+        "date": "2023-06-01",
+        "lat": 23.265727,
+        "lon": 85.198446,
+        "dist_to_center": 0.4304,
+        "vector_idx": 139
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_3_0.tif",
+        "date": "2020-06-01",
+        "lat": 23.265145,
+        "lon": 85.148396,
+        "dist_to_center": 0.4468,
+        "vector_idx": 48
+      }
+    ]
+  },
+  "7": {
+    "cluster_id": 7,
+    "total_tiles": 27,
+    "exemplar_tile": "ranchi_2020_01_tile_3_4.tif",
+    "members": [
+      {
+        "tile_file": "ranchi_2020_01_tile_3_4.tif",
+        "date": "2020-01-01",
+        "lat": 23.267378,
+        "lon": 85.348607,
+        "dist_to_center": 0.2538,
+        "vector_idx": 22
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_0_3.tif",
+        "date": "2024-12-01",
+        "lat": 23.40553,
+        "lon": 85.296779,
+        "dist_to_center": 0.2612,
+        "vector_idx": 153
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_1_5.tif",
+        "date": "2020-01-01",
+        "lat": 23.360358,
+        "lon": 85.397552,
+        "dist_to_center": 0.2688,
+        "vector_idx": 11
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_3_5.tif",
+        "date": "2022-12-01",
+        "lat": 23.267896,
+        "lon": 85.398663,
+        "dist_to_center": 0.2771,
+        "vector_idx": 113
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_0_1.tif",
+        "date": "2022-12-01",
+        "lat": 23.404406,
+        "lon": 85.19657,
+        "dist_to_center": 0.2793,
+        "vector_idx": 91
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_3_4.tif",
+        "date": "2024-12-01",
+        "lat": 23.267378,
+        "lon": 85.348607,
+        "dist_to_center": 0.2806,
+        "vector_idx": 172
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_2_2.tif",
+        "date": "2020-06-01",
+        "lat": 23.312521,
+        "lon": 85.247891,
+        "dist_to_center": 0.2813,
+        "vector_idx": 44
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_0_5.tif",
+        "date": "2020-01-01",
+        "lat": 23.406589,
+        "lon": 85.396995,
+        "dist_to_center": 0.2848,
+        "vector_idx": 5
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_3_5.tif",
+        "date": "2024-12-01",
+        "lat": 23.267896,
+        "lon": 85.398663,
+        "dist_to_center": 0.2917,
+        "vector_idx": 173
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_2_1.tif",
+        "date": "2020-01-01",
+        "lat": 23.311953,
+        "lon": 85.197822,
+        "dist_to_center": 0.3152,
+        "vector_idx": 13
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_0_5.tif",
+        "date": "2020-06-01",
+        "lat": 23.406589,
+        "lon": 85.396995,
+        "dist_to_center": 0.3164,
+        "vector_idx": 35
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_1_5.tif",
+        "date": "2022-12-01",
+        "lat": 23.360358,
+        "lon": 85.397552,
+        "dist_to_center": 0.323,
+        "vector_idx": 101
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_4_3.tif",
+        "date": "2024-12-01",
+        "lat": 23.220614,
+        "lon": 85.299139,
+        "dist_to_center": 0.3312,
+        "vector_idx": 177
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_2_4.tif",
+        "date": "2020-01-01",
+        "lat": 23.313608,
+        "lon": 85.348035,
+        "dist_to_center": 0.3373,
+        "vector_idx": 16
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_2_1.tif",
+        "date": "2022-12-01",
+        "lat": 23.311953,
+        "lon": 85.197822,
+        "dist_to_center": 0.3395,
+        "vector_idx": 103
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_2_5.tif",
+        "date": "2020-01-01",
+        "lat": 23.314127,
+        "lon": 85.398108,
+        "dist_to_center": 0.341,
+        "vector_idx": 17
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_3_5.tif",
+        "date": "2020-01-01",
+        "lat": 23.267896,
+        "lon": 85.398663,
+        "dist_to_center": 0.3412,
+        "vector_idx": 23
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_2_1.tif",
+        "date": "2024-12-01",
+        "lat": 23.311953,
+        "lon": 85.197822,
+        "dist_to_center": 0.3429,
+        "vector_idx": 163
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_0_5.tif",
+        "date": "2024-12-01",
+        "lat": 23.406589,
+        "lon": 85.396995,
+        "dist_to_center": 0.3468,
+        "vector_idx": 155
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_0_1.tif",
+        "date": "2024-12-01",
+        "lat": 23.404406,
+        "lon": 85.19657,
+        "dist_to_center": 0.3606,
+        "vector_idx": 151
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_1_5.tif",
+        "date": "2023-06-01",
+        "lat": 23.360358,
+        "lon": 85.397552,
+        "dist_to_center": 0.3738,
+        "vector_idx": 131
+      },
+      {
+        "tile_file": "ranchi_2022_12_tile_3_2.tif",
+        "date": "2022-12-01",
+        "lat": 23.266293,
+        "lon": 85.248498,
+        "dist_to_center": 0.3856,
+        "vector_idx": 110
+      },
+      {
+        "tile_file": "ranchi_2020_01_tile_3_2.tif",
+        "date": "2020-01-01",
+        "lat": 23.266293,
+        "lon": 85.248498,
+        "dist_to_center": 0.4017,
+        "vector_idx": 20
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_1_5.tif",
+        "date": "2024-12-01",
+        "lat": 23.360358,
+        "lon": 85.397552,
+        "dist_to_center": 0.4147,
+        "vector_idx": 161
+      },
+      {
+        "tile_file": "ranchi_2020_06_tile_3_2.tif",
+        "date": "2020-06-01",
+        "lat": 23.266293,
+        "lon": 85.248498,
+        "dist_to_center": 0.4246,
+        "vector_idx": 50
+      },
+      {
+        "tile_file": "ranchi_2024_12_tile_3_2.tif",
+        "date": "2024-12-01",
+        "lat": 23.266293,
+        "lon": 85.248498,
+        "dist_to_center": 0.4298,
+        "vector_idx": 170
+      },
+      {
+        "tile_file": "ranchi_2023_06_tile_3_2.tif",
+        "date": "2023-06-01",
+        "lat": 23.266293,
+        "lon": 85.248498,
+        "dist_to_center": 0.4427,
+        "vector_idx": 140
+      }
+    ]
+  }
+}

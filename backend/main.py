@@ -14,8 +14,14 @@ from pydantic import BaseModel, Field
 # ─── PATH SETUP ───────────────────────────────────────────────────────────────
 BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BACKEND_DIR)
-SIH_CODE_DIR = os.path.join(ROOT_DIR, "SIH-2PGITB&U2", "SIH-2026", "CODE")
-SIH_DATASET_DIR = os.path.join(ROOT_DIR, "SIH-2PGITB&U2", "SIH-2026", "Dataset")
+SIH_CODE_DIR = os.environ.get(
+    "ASTREVA_CODE_DIR",
+    os.path.join(ROOT_DIR, "SIH-2PGITB&U2", "SIH-2026", "CODE"),
+)
+SIH_DATASET_DIR = os.environ.get(
+    "ASTREVA_DATASET_DIR",
+    os.path.join(ROOT_DIR, "SIH-2PGITB&U2", "SIH-2026", "Dataset"),
+)
 SIH_TILES_DIR = os.path.join(SIH_DATASET_DIR, "Tiles")
 SIH_INDEX_DIR = os.path.join(SIH_DATASET_DIR, "Index")
 SIH_PREVIEWS_DIR = os.path.join(SIH_DATASET_DIR, "change_previews")
@@ -136,6 +142,7 @@ class IncrementalIngestRequest(BaseModel):
 
 # ─── HELPER FUNCTIONS ─────────────────────────────────────────────────────────
 DECISIONS_FILE = os.path.join(SIH_DATASET_DIR, "analyst_decisions.json")
+AUDIT_FILE = os.path.join(SIH_DATASET_DIR, "audit_trail.json")
 REVIEW_QUEUE_FILE = os.path.join(SIH_INDEX_DIR, "review_queue.json")
 AUDITED_CANDIDATES_FILE = os.path.join(SIH_INDEX_DIR, "change_candidates_audited.json")
 CATALOGUE_FILE = os.path.join(SIH_DATASET_DIR, "tile_catalogue.csv")
@@ -867,17 +874,23 @@ def get_candidate_backtracking(candidate_id: str):
 @app.post("/api/ingest/incremental")
 def post_incremental_ingest(payload: IncrementalIngestRequest):
     """SIH Feature 2: Incremental scene ingestion into FAISS + STAC without full rebuild"""
-    res = sih_features.perform_incremental_ingest(
-        scene_name=payload.scene_name,
-        sensor=payload.sensor,
-        acquisition_date=payload.acquisition_date,
-        lat=payload.lat,
-        lon=payload.lon,
-        catalogue_file=CATALOGUE_FILE,
-        tiles_dir=SIH_TILES_DIR,
-        index_dir=SIH_INDEX_DIR
-    )
-    return res
+    try:
+        return sih_features.perform_incremental_ingest(
+            scene_name=payload.scene_name,
+            sensor=payload.sensor,
+            acquisition_date=payload.acquisition_date,
+            lat=payload.lat,
+            lon=payload.lon,
+            catalogue_file=CATALOGUE_FILE,
+            tiles_dir=SIH_TILES_DIR,
+            index_dir=SIH_INDEX_DIR
+        )
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 @app.get("/api/candidates/{candidate_id}/false-alarm-explain")
 def get_false_alarm_explanation(candidate_id: str):
@@ -894,8 +907,7 @@ def get_dual_sensor_cross_validation(candidate_id: str):
 @app.get("/api/audit/verify")
 def verify_audit_trail_integrity():
     """SIH Feature 5: Cryptographic hash-chain non-repudiation audit trail verification API"""
-    audit_path = os.path.join(SIH_DATASET_DIR, "audit_trail.json")
-    logs = load_json_file(audit_path, [])
+    logs = load_json_file(AUDIT_FILE, [])
     chained_logs = sih_features.build_cryptographic_audit_chain(logs)
     return sih_features.verify_cryptographic_audit_chain(chained_logs)
 
@@ -945,8 +957,7 @@ def get_candidate_coregistration(candidate_id: str):
 @app.get("/api/audit")
 def get_audit_logs():
     """Returns enclave audit logs with cryptographic SHA-256 hash-chaining"""
-    audit_path = os.path.join(SIH_DATASET_DIR, "audit_trail.json")
-    logs = load_json_file(audit_path, [])
+    logs = load_json_file(AUDIT_FILE, [])
     if not logs:
         logs = [
             {
@@ -965,12 +976,11 @@ def get_audit_logs():
 @app.post("/api/audit")
 def create_audit_log(log_entry: dict = Body(...)):
     """Appends audit log entry to audit trail"""
-    audit_path = os.path.join(SIH_DATASET_DIR, "audit_trail.json")
-    logs = load_json_file(audit_path, [])
+    logs = load_json_file(AUDIT_FILE, [])
     log_entry["id"] = log_entry.get("id") or f"AUD-{int(time.time() * 1000) % 100000}"
     log_entry["timestamp"] = log_entry.get("timestamp") or time.strftime("%Y-%m-%d %H:%M:%S UTC")
     logs.insert(0, log_entry)
-    save_json_file(audit_path, logs[:200])
+    save_json_file(AUDIT_FILE, logs[:200])
     return {"status": "SUCCESS", "entry": log_entry}
 
 # Launch via Uvicorn if executed directly

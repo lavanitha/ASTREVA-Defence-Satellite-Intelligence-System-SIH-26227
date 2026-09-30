@@ -27,7 +27,7 @@ def test_feature_1_backtracking():
 
 def test_feature_2_incremental_ingest():
     payload = {
-        "scene_name": "Test_Incremental_Scene_2026.tif",
+        "scene_name": "ranchi_2023_06_tile_0_4.tif",
         "sensor": "Sentinel-2 Optical",
         "acquisition_date": "2026-03-24",
         "lat": 23.3441,
@@ -39,6 +39,14 @@ def test_feature_2_incremental_ingest():
     assert data["status"] == "SUCCESS"
     assert "ingestion_time_ms" in data
     assert data["ingestion_time_ms"] >= 0
+    assert data["index_updated_incrementally"] is True
+
+def test_incremental_ingest_rejects_missing_real_tile():
+    response = client.post(
+        "/api/ingest/incremental",
+        json={"scene_name": "missing-real-source-scene.tif"},
+    )
+    assert response.status_code == 404
 
 def test_feature_3_false_alarm_explanation():
     response = client.get("/api/candidates/CAND-2026-0004/false-alarm-explain")
@@ -102,3 +110,36 @@ def test_feature_10_coregistration():
     data = response.json()
     assert "subpixelShift" in data
     assert "radiometricNormalization" in data
+
+def test_real_tile_layers_and_change_mask():
+    before_tile = "ranchi_2021_06_tile_0_4.tif"
+    after_tile = "ranchi_2023_06_tile_0_4.tif"
+
+    for mode in ("rgb", "ndvi", "ndbi", "sar"):
+        response = client.get(f"/api/tiles/{after_tile}/image", params={"mode": mode})
+        assert response.status_code == 200
+        assert response.headers["content-type"].startswith("image/png")
+        assert response.content.startswith(b"\x89PNG\r\n\x1a\n")
+
+    mask_response = client.get(
+        "/api/tiles/mask",
+        params={"before": before_tile, "after": after_tile},
+    )
+    assert mask_response.status_code == 200
+    assert mask_response.headers["content-type"].startswith("image/png")
+    assert mask_response.content.startswith(b"\x89PNG\r\n\x1a\n")
+
+def test_ml_search_returns_indexed_tiles():
+    response = client.post(
+        "/api/search",
+        json={"query": "new construction near roads", "top_k": 3},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["results_count"] > 0
+    assert all(result["image_url"].startswith("/api/tiles/") for result in data["results"])
+
+def test_scenes_endpoint_tolerates_malformed_catalogue_coordinates():
+    response = client.get("/api/scenes")
+    assert response.status_code == 200
+    assert len(response.json()) >= 180

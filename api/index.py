@@ -294,16 +294,23 @@ def get_backtracking(candidate_id: str):
 @app.post("/api/ingest/incremental")
 def post_incremental_ingest(payload: IncrementalIngestRequest):
     """SIH Feature 2: Incremental scene ingestion"""
-    return sih_features.perform_incremental_ingest(
-        scene_name=payload.scene_name,
-        sensor=payload.sensor,
-        acquisition_date=payload.acquisition_date,
-        lat=payload.lat,
-        lon=payload.lon,
-        catalogue_file="/tmp/catalogue.csv",
-        tiles_dir="/tmp/tiles",
-        index_dir="/tmp/index",
-    )
+    try:
+        return sih_features.perform_incremental_ingest(
+            scene_name=payload.scene_name,
+            sensor=payload.sensor,
+            acquisition_date=payload.acquisition_date,
+            lat=payload.lat,
+            lon=payload.lon,
+            catalogue_file="/tmp/catalogue.csv",
+            tiles_dir="/tmp/tiles",
+            index_dir="/tmp/index",
+        )
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
 @app.get("/api/candidates/{candidate_id}/false-alarm-explain")

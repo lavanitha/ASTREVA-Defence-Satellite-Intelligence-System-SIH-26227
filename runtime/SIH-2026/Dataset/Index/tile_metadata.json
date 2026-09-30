@@ -1,0 +1,1802 @@
+[
+  {
+    "tile_file": "ranchi_2020_01_tile_0_0.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.146467,
+    "lat_min": 23.40382,
+    "lon_max": 85.197197,
+    "lat_max": 23.450631,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_0_1.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.19657,
+    "lat_min": 23.404406,
+    "lon_max": 85.247283,
+    "lat_max": 23.451203,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_0_2.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.246674,
+    "lat_min": 23.404976,
+    "lon_max": 85.297372,
+    "lat_max": 23.451758,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_0_3.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.296779,
+    "lat_min": 23.40553,
+    "lon_max": 85.347461,
+    "lat_max": 23.452297,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_0_4.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.346887,
+    "lat_min": 23.406067,
+    "lon_max": 85.397552,
+    "lat_max": 23.45282,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_0_5.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.396995,
+    "lat_min": 23.406589,
+    "lon_max": 85.447645,
+    "lat_max": 23.453327,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_1_0.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.147112,
+    "lat_min": 23.357595,
+    "lon_max": 85.197822,
+    "lat_max": 23.404406,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_1_1.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.197197,
+    "lat_min": 23.35818,
+    "lon_max": 85.247891,
+    "lat_max": 23.404976,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_1_2.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.247283,
+    "lat_min": 23.358748,
+    "lon_max": 85.297962,
+    "lat_max": 23.40553,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_1_3.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.297372,
+    "lat_min": 23.359301,
+    "lon_max": 85.348035,
+    "lat_max": 23.406067,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_1_4.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.347461,
+    "lat_min": 23.359838,
+    "lon_max": 85.398108,
+    "lat_max": 23.406589,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_1_5.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.397552,
+    "lat_min": 23.360358,
+    "lon_max": 85.448184,
+    "lat_max": 23.407095,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_2_0.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.147755,
+    "lat_min": 23.31137,
+    "lon_max": 85.198446,
+    "lat_max": 23.35818,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_2_1.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.197822,
+    "lat_min": 23.311953,
+    "lon_max": 85.248498,
+    "lat_max": 23.358748,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_2_2.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.247891,
+    "lat_min": 23.312521,
+    "lon_max": 85.298551,
+    "lat_max": 23.359301,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_2_3.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.297962,
+    "lat_min": 23.313072,
+    "lon_max": 85.348607,
+    "lat_max": 23.359838,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_2_4.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.348035,
+    "lat_min": 23.313608,
+    "lon_max": 85.398663,
+    "lat_max": 23.360358,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_2_5.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.398108,
+    "lat_min": 23.314127,
+    "lon_max": 85.448721,
+    "lat_max": 23.360863,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_3_0.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.148396,
+    "lat_min": 23.265145,
+    "lon_max": 85.199068,
+    "lat_max": 23.311953,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_3_1.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.198446,
+    "lat_min": 23.265727,
+    "lon_max": 85.249103,
+    "lat_max": 23.312521,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_3_2.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.248498,
+    "lat_min": 23.266293,
+    "lon_max": 85.299139,
+    "lat_max": 23.313072,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_3_3.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.298551,
+    "lat_min": 23.266843,
+    "lon_max": 85.349177,
+    "lat_max": 23.313608,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_3_4.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.348607,
+    "lat_min": 23.267378,
+    "lon_max": 85.399216,
+    "lat_max": 23.314127,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_3_5.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.398663,
+    "lat_min": 23.267896,
+    "lon_max": 85.449257,
+    "lat_max": 23.314631,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_4_0.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.149035,
+    "lat_min": 23.218919,
+    "lon_max": 85.199689,
+    "lat_max": 23.265727,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_4_1.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.199068,
+    "lat_min": 23.2195,
+    "lon_max": 85.249706,
+    "lat_max": 23.266293,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_4_2.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.249103,
+    "lat_min": 23.220065,
+    "lon_max": 85.299725,
+    "lat_max": 23.266843,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_4_3.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.299139,
+    "lat_min": 23.220614,
+    "lon_max": 85.349746,
+    "lat_max": 23.267378,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_4_4.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.349177,
+    "lat_min": 23.221147,
+    "lon_max": 85.399768,
+    "lat_max": 23.267896,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_01_tile_4_5.tif",
+    "source_file": "ranchi_2020_01.tif",
+    "acquisition_date": "2020-01-01",
+    "lon_min": 85.399216,
+    "lat_min": 23.221664,
+    "lon_max": 85.449791,
+    "lat_max": 23.268398,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_0_0.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.146467,
+    "lat_min": 23.40382,
+    "lon_max": 85.197197,
+    "lat_max": 23.450631,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_0_1.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.19657,
+    "lat_min": 23.404406,
+    "lon_max": 85.247283,
+    "lat_max": 23.451203,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_0_2.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.246674,
+    "lat_min": 23.404976,
+    "lon_max": 85.297372,
+    "lat_max": 23.451758,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_0_3.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.296779,
+    "lat_min": 23.40553,
+    "lon_max": 85.347461,
+    "lat_max": 23.452297,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_0_4.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.346887,
+    "lat_min": 23.406067,
+    "lon_max": 85.397552,
+    "lat_max": 23.45282,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_0_5.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.396995,
+    "lat_min": 23.406589,
+    "lon_max": 85.447645,
+    "lat_max": 23.453327,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_1_0.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.147112,
+    "lat_min": 23.357595,
+    "lon_max": 85.197822,
+    "lat_max": 23.404406,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_1_1.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.197197,
+    "lat_min": 23.35818,
+    "lon_max": 85.247891,
+    "lat_max": 23.404976,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_1_2.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.247283,
+    "lat_min": 23.358748,
+    "lon_max": 85.297962,
+    "lat_max": 23.40553,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_1_3.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.297372,
+    "lat_min": 23.359301,
+    "lon_max": 85.348035,
+    "lat_max": 23.406067,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_1_4.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.347461,
+    "lat_min": 23.359838,
+    "lon_max": 85.398108,
+    "lat_max": 23.406589,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_1_5.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.397552,
+    "lat_min": 23.360358,
+    "lon_max": 85.448184,
+    "lat_max": 23.407095,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_2_0.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.147755,
+    "lat_min": 23.31137,
+    "lon_max": 85.198446,
+    "lat_max": 23.35818,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_2_1.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.197822,
+    "lat_min": 23.311953,
+    "lon_max": 85.248498,
+    "lat_max": 23.358748,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_2_2.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.247891,
+    "lat_min": 23.312521,
+    "lon_max": 85.298551,
+    "lat_max": 23.359301,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_2_3.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.297962,
+    "lat_min": 23.313072,
+    "lon_max": 85.348607,
+    "lat_max": 23.359838,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_2_4.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.348035,
+    "lat_min": 23.313608,
+    "lon_max": 85.398663,
+    "lat_max": 23.360358,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_2_5.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.398108,
+    "lat_min": 23.314127,
+    "lon_max": 85.448721,
+    "lat_max": 23.360863,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_3_0.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.148396,
+    "lat_min": 23.265145,
+    "lon_max": 85.199068,
+    "lat_max": 23.311953,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_3_1.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.198446,
+    "lat_min": 23.265727,
+    "lon_max": 85.249103,
+    "lat_max": 23.312521,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_3_2.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.248498,
+    "lat_min": 23.266293,
+    "lon_max": 85.299139,
+    "lat_max": 23.313072,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_3_3.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.298551,
+    "lat_min": 23.266843,
+    "lon_max": 85.349177,
+    "lat_max": 23.313608,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_3_4.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.348607,
+    "lat_min": 23.267378,
+    "lon_max": 85.399216,
+    "lat_max": 23.314127,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_3_5.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.398663,
+    "lat_min": 23.267896,
+    "lon_max": 85.449257,
+    "lat_max": 23.314631,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_4_0.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.149035,
+    "lat_min": 23.218919,
+    "lon_max": 85.199689,
+    "lat_max": 23.265727,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_4_1.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.199068,
+    "lat_min": 23.2195,
+    "lon_max": 85.249706,
+    "lat_max": 23.266293,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_4_2.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.249103,
+    "lat_min": 23.220065,
+    "lon_max": 85.299725,
+    "lat_max": 23.266843,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_4_3.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.299139,
+    "lat_min": 23.220614,
+    "lon_max": 85.349746,
+    "lat_max": 23.267378,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_4_4.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.349177,
+    "lat_min": 23.221147,
+    "lon_max": 85.399768,
+    "lat_max": 23.267896,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2020_06_tile_4_5.tif",
+    "source_file": "ranchi_2020_06.tif",
+    "acquisition_date": "2020-06-01",
+    "lon_min": 85.399216,
+    "lat_min": 23.221664,
+    "lon_max": 85.449791,
+    "lat_max": 23.268398,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_0_0.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.146467,
+    "lat_min": 23.40382,
+    "lon_max": 85.197197,
+    "lat_max": 23.450631,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_0_1.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.19657,
+    "lat_min": 23.404406,
+    "lon_max": 85.247283,
+    "lat_max": 23.451203,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_0_2.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.246674,
+    "lat_min": 23.404976,
+    "lon_max": 85.297372,
+    "lat_max": 23.451758,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_0_3.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.296779,
+    "lat_min": 23.40553,
+    "lon_max": 85.347461,
+    "lat_max": 23.452297,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_0_4.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.346887,
+    "lat_min": 23.406067,
+    "lon_max": 85.397552,
+    "lat_max": 23.45282,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_0_5.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.396995,
+    "lat_min": 23.406589,
+    "lon_max": 85.447645,
+    "lat_max": 23.453327,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_1_0.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.147112,
+    "lat_min": 23.357595,
+    "lon_max": 85.197822,
+    "lat_max": 23.404406,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_1_1.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.197197,
+    "lat_min": 23.35818,
+    "lon_max": 85.247891,
+    "lat_max": 23.404976,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_1_2.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.247283,
+    "lat_min": 23.358748,
+    "lon_max": 85.297962,
+    "lat_max": 23.40553,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_1_3.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.297372,
+    "lat_min": 23.359301,
+    "lon_max": 85.348035,
+    "lat_max": 23.406067,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_1_4.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.347461,
+    "lat_min": 23.359838,
+    "lon_max": 85.398108,
+    "lat_max": 23.406589,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_1_5.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.397552,
+    "lat_min": 23.360358,
+    "lon_max": 85.448184,
+    "lat_max": 23.407095,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_2_0.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.147755,
+    "lat_min": 23.31137,
+    "lon_max": 85.198446,
+    "lat_max": 23.35818,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_2_1.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.197822,
+    "lat_min": 23.311953,
+    "lon_max": 85.248498,
+    "lat_max": 23.358748,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_2_2.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.247891,
+    "lat_min": 23.312521,
+    "lon_max": 85.298551,
+    "lat_max": 23.359301,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_2_3.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.297962,
+    "lat_min": 23.313072,
+    "lon_max": 85.348607,
+    "lat_max": 23.359838,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_2_4.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.348035,
+    "lat_min": 23.313608,
+    "lon_max": 85.398663,
+    "lat_max": 23.360358,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_2_5.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.398108,
+    "lat_min": 23.314127,
+    "lon_max": 85.448721,
+    "lat_max": 23.360863,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_3_0.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.148396,
+    "lat_min": 23.265145,
+    "lon_max": 85.199068,
+    "lat_max": 23.311953,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_3_1.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.198446,
+    "lat_min": 23.265727,
+    "lon_max": 85.249103,
+    "lat_max": 23.312521,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_3_2.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.248498,
+    "lat_min": 23.266293,
+    "lon_max": 85.299139,
+    "lat_max": 23.313072,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_3_3.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.298551,
+    "lat_min": 23.266843,
+    "lon_max": 85.349177,
+    "lat_max": 23.313608,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_3_4.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.348607,
+    "lat_min": 23.267378,
+    "lon_max": 85.399216,
+    "lat_max": 23.314127,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_3_5.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.398663,
+    "lat_min": 23.267896,
+    "lon_max": 85.449257,
+    "lat_max": 23.314631,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_4_0.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.149035,
+    "lat_min": 23.218919,
+    "lon_max": 85.199689,
+    "lat_max": 23.265727,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_4_1.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.199068,
+    "lat_min": 23.2195,
+    "lon_max": 85.249706,
+    "lat_max": 23.266293,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_4_2.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.249103,
+    "lat_min": 23.220065,
+    "lon_max": 85.299725,
+    "lat_max": 23.266843,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_4_3.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.299139,
+    "lat_min": 23.220614,
+    "lon_max": 85.349746,
+    "lat_max": 23.267378,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_4_4.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.349177,
+    "lat_min": 23.221147,
+    "lon_max": 85.399768,
+    "lat_max": 23.267896,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2021_06_tile_4_5.tif",
+    "source_file": "ranchi_2021_06.tif",
+    "acquisition_date": "2021-06-01",
+    "lon_min": 85.399216,
+    "lat_min": 23.221664,
+    "lon_max": 85.449791,
+    "lat_max": 23.268398,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_0_0.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.146467,
+    "lat_min": 23.40382,
+    "lon_max": 85.197197,
+    "lat_max": 23.450631,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_0_1.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.19657,
+    "lat_min": 23.404406,
+    "lon_max": 85.247283,
+    "lat_max": 23.451203,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_0_2.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.246674,
+    "lat_min": 23.404976,
+    "lon_max": 85.297372,
+    "lat_max": 23.451758,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_0_3.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.296779,
+    "lat_min": 23.40553,
+    "lon_max": 85.347461,
+    "lat_max": 23.452297,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_0_4.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.346887,
+    "lat_min": 23.406067,
+    "lon_max": 85.397552,
+    "lat_max": 23.45282,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_0_5.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.396995,
+    "lat_min": 23.406589,
+    "lon_max": 85.447645,
+    "lat_max": 23.453327,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_1_0.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.147112,
+    "lat_min": 23.357595,
+    "lon_max": 85.197822,
+    "lat_max": 23.404406,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_1_1.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.197197,
+    "lat_min": 23.35818,
+    "lon_max": 85.247891,
+    "lat_max": 23.404976,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_1_2.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.247283,
+    "lat_min": 23.358748,
+    "lon_max": 85.297962,
+    "lat_max": 23.40553,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_1_3.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.297372,
+    "lat_min": 23.359301,
+    "lon_max": 85.348035,
+    "lat_max": 23.406067,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_1_4.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.347461,
+    "lat_min": 23.359838,
+    "lon_max": 85.398108,
+    "lat_max": 23.406589,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_1_5.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.397552,
+    "lat_min": 23.360358,
+    "lon_max": 85.448184,
+    "lat_max": 23.407095,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_2_0.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.147755,
+    "lat_min": 23.31137,
+    "lon_max": 85.198446,
+    "lat_max": 23.35818,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_2_1.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.197822,
+    "lat_min": 23.311953,
+    "lon_max": 85.248498,
+    "lat_max": 23.358748,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_2_2.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.247891,
+    "lat_min": 23.312521,
+    "lon_max": 85.298551,
+    "lat_max": 23.359301,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_2_3.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.297962,
+    "lat_min": 23.313072,
+    "lon_max": 85.348607,
+    "lat_max": 23.359838,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_2_4.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.348035,
+    "lat_min": 23.313608,
+    "lon_max": 85.398663,
+    "lat_max": 23.360358,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_2_5.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.398108,
+    "lat_min": 23.314127,
+    "lon_max": 85.448721,
+    "lat_max": 23.360863,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_3_0.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.148396,
+    "lat_min": 23.265145,
+    "lon_max": 85.199068,
+    "lat_max": 23.311953,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_3_1.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.198446,
+    "lat_min": 23.265727,
+    "lon_max": 85.249103,
+    "lat_max": 23.312521,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_3_2.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.248498,
+    "lat_min": 23.266293,
+    "lon_max": 85.299139,
+    "lat_max": 23.313072,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_3_3.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.298551,
+    "lat_min": 23.266843,
+    "lon_max": 85.349177,
+    "lat_max": 23.313608,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_3_4.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.348607,
+    "lat_min": 23.267378,
+    "lon_max": 85.399216,
+    "lat_max": 23.314127,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_3_5.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.398663,
+    "lat_min": 23.267896,
+    "lon_max": 85.449257,
+    "lat_max": 23.314631,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_4_0.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.149035,
+    "lat_min": 23.218919,
+    "lon_max": 85.199689,
+    "lat_max": 23.265727,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_4_1.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.199068,
+    "lat_min": 23.2195,
+    "lon_max": 85.249706,
+    "lat_max": 23.266293,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_4_2.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.249103,
+    "lat_min": 23.220065,
+    "lon_max": 85.299725,
+    "lat_max": 23.266843,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_4_3.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.299139,
+    "lat_min": 23.220614,
+    "lon_max": 85.349746,
+    "lat_max": 23.267378,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_4_4.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.349177,
+    "lat_min": 23.221147,
+    "lon_max": 85.399768,
+    "lat_max": 23.267896,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2022_12_tile_4_5.tif",
+    "source_file": "ranchi_2022_12.tif",
+    "acquisition_date": "2022-12-01",
+    "lon_min": 85.399216,
+    "lat_min": 23.221664,
+    "lon_max": 85.449791,
+    "lat_max": 23.268398,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_0_0.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.146467,
+    "lat_min": 23.40382,
+    "lon_max": 85.197197,
+    "lat_max": 23.450631,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_0_1.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.19657,
+    "lat_min": 23.404406,
+    "lon_max": 85.247283,
+    "lat_max": 23.451203,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_0_2.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.246674,
+    "lat_min": 23.404976,
+    "lon_max": 85.297372,
+    "lat_max": 23.451758,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_0_3.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.296779,
+    "lat_min": 23.40553,
+    "lon_max": 85.347461,
+    "lat_max": 23.452297,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_0_4.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.346887,
+    "lat_min": 23.406067,
+    "lon_max": 85.397552,
+    "lat_max": 23.45282,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_0_5.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.396995,
+    "lat_min": 23.406589,
+    "lon_max": 85.447645,
+    "lat_max": 23.453327,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_1_0.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.147112,
+    "lat_min": 23.357595,
+    "lon_max": 85.197822,
+    "lat_max": 23.404406,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_1_1.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.197197,
+    "lat_min": 23.35818,
+    "lon_max": 85.247891,
+    "lat_max": 23.404976,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_1_2.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.247283,
+    "lat_min": 23.358748,
+    "lon_max": 85.297962,
+    "lat_max": 23.40553,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_1_3.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.297372,
+    "lat_min": 23.359301,
+    "lon_max": 85.348035,
+    "lat_max": 23.406067,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_1_4.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.347461,
+    "lat_min": 23.359838,
+    "lon_max": 85.398108,
+    "lat_max": 23.406589,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_1_5.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.397552,
+    "lat_min": 23.360358,
+    "lon_max": 85.448184,
+    "lat_max": 23.407095,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_2_0.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.147755,
+    "lat_min": 23.31137,
+    "lon_max": 85.198446,
+    "lat_max": 23.35818,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_2_1.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.197822,
+    "lat_min": 23.311953,
+    "lon_max": 85.248498,
+    "lat_max": 23.358748,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_2_2.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.247891,
+    "lat_min": 23.312521,
+    "lon_max": 85.298551,
+    "lat_max": 23.359301,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_2_3.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.297962,
+    "lat_min": 23.313072,
+    "lon_max": 85.348607,
+    "lat_max": 23.359838,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_2_4.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.348035,
+    "lat_min": 23.313608,
+    "lon_max": 85.398663,
+    "lat_max": 23.360358,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_2_5.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.398108,
+    "lat_min": 23.314127,
+    "lon_max": 85.448721,
+    "lat_max": 23.360863,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_3_0.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.148396,
+    "lat_min": 23.265145,
+    "lon_max": 85.199068,
+    "lat_max": 23.311953,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_3_1.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.198446,
+    "lat_min": 23.265727,
+    "lon_max": 85.249103,
+    "lat_max": 23.312521,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_3_2.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.248498,
+    "lat_min": 23.266293,
+    "lon_max": 85.299139,
+    "lat_max": 23.313072,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_3_3.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.298551,
+    "lat_min": 23.266843,
+    "lon_max": 85.349177,
+    "lat_max": 23.313608,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_3_4.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.348607,
+    "lat_min": 23.267378,
+    "lon_max": 85.399216,
+    "lat_max": 23.314127,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_3_5.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.398663,
+    "lat_min": 23.267896,
+    "lon_max": 85.449257,
+    "lat_max": 23.314631,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_4_0.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.149035,
+    "lat_min": 23.218919,
+    "lon_max": 85.199689,
+    "lat_max": 23.265727,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_4_1.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.199068,
+    "lat_min": 23.2195,
+    "lon_max": 85.249706,
+    "lat_max": 23.266293,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_4_2.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.249103,
+    "lat_min": 23.220065,
+    "lon_max": 85.299725,
+    "lat_max": 23.266843,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_4_3.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.299139,
+    "lat_min": 23.220614,
+    "lon_max": 85.349746,
+    "lat_max": 23.267378,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_4_4.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.349177,
+    "lat_min": 23.221147,
+    "lon_max": 85.399768,
+    "lat_max": 23.267896,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2023_06_tile_4_5.tif",
+    "source_file": "ranchi_2023_06.tif",
+    "acquisition_date": "2023-06-01",
+    "lon_min": 85.399216,
+    "lat_min": 23.221664,
+    "lon_max": 85.449791,
+    "lat_max": 23.268398,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_0_0.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.146467,
+    "lat_min": 23.40382,
+    "lon_max": 85.197197,
+    "lat_max": 23.450631,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_0_1.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.19657,
+    "lat_min": 23.404406,
+    "lon_max": 85.247283,
+    "lat_max": 23.451203,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_0_2.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.246674,
+    "lat_min": 23.404976,
+    "lon_max": 85.297372,
+    "lat_max": 23.451758,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_0_3.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.296779,
+    "lat_min": 23.40553,
+    "lon_max": 85.347461,
+    "lat_max": 23.452297,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_0_4.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.346887,
+    "lat_min": 23.406067,
+    "lon_max": 85.397552,
+    "lat_max": 23.45282,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_0_5.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.396995,
+    "lat_min": 23.406589,
+    "lon_max": 85.447645,
+    "lat_max": 23.453327,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_1_0.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.147112,
+    "lat_min": 23.357595,
+    "lon_max": 85.197822,
+    "lat_max": 23.404406,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_1_1.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.197197,
+    "lat_min": 23.35818,
+    "lon_max": 85.247891,
+    "lat_max": 23.404976,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_1_2.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.247283,
+    "lat_min": 23.358748,
+    "lon_max": 85.297962,
+    "lat_max": 23.40553,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_1_3.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.297372,
+    "lat_min": 23.359301,
+    "lon_max": 85.348035,
+    "lat_max": 23.406067,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_1_4.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.347461,
+    "lat_min": 23.359838,
+    "lon_max": 85.398108,
+    "lat_max": 23.406589,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_1_5.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.397552,
+    "lat_min": 23.360358,
+    "lon_max": 85.448184,
+    "lat_max": 23.407095,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_2_0.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.147755,
+    "lat_min": 23.31137,
+    "lon_max": 85.198446,
+    "lat_max": 23.35818,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_2_1.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.197822,
+    "lat_min": 23.311953,
+    "lon_max": 85.248498,
+    "lat_max": 23.358748,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_2_2.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.247891,
+    "lat_min": 23.312521,
+    "lon_max": 85.298551,
+    "lat_max": 23.359301,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_2_3.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.297962,
+    "lat_min": 23.313072,
+    "lon_max": 85.348607,
+    "lat_max": 23.359838,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_2_4.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.348035,
+    "lat_min": 23.313608,
+    "lon_max": 85.398663,
+    "lat_max": 23.360358,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_2_5.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.398108,
+    "lat_min": 23.314127,
+    "lon_max": 85.448721,
+    "lat_max": 23.360863,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_3_0.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.148396,
+    "lat_min": 23.265145,
+    "lon_max": 85.199068,
+    "lat_max": 23.311953,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_3_1.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.198446,
+    "lat_min": 23.265727,
+    "lon_max": 85.249103,
+    "lat_max": 23.312521,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_3_2.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.248498,
+    "lat_min": 23.266293,
+    "lon_max": 85.299139,
+    "lat_max": 23.313072,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_3_3.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.298551,
+    "lat_min": 23.266843,
+    "lon_max": 85.349177,
+    "lat_max": 23.313608,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_3_4.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.348607,
+    "lat_min": 23.267378,
+    "lon_max": 85.399216,
+    "lat_max": 23.314127,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_3_5.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.398663,
+    "lat_min": 23.267896,
+    "lon_max": 85.449257,
+    "lat_max": 23.314631,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_4_0.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.149035,
+    "lat_min": 23.218919,
+    "lon_max": 85.199689,
+    "lat_max": 23.265727,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_4_1.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.199068,
+    "lat_min": 23.2195,
+    "lon_max": 85.249706,
+    "lat_max": 23.266293,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_4_2.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.249103,
+    "lat_min": 23.220065,
+    "lon_max": 85.299725,
+    "lat_max": 23.266843,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_4_3.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.299139,
+    "lat_min": 23.220614,
+    "lon_max": 85.349746,
+    "lat_max": 23.267378,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_4_4.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.349177,
+    "lat_min": 23.221147,
+    "lon_max": 85.399768,
+    "lat_max": 23.267896,
+    "sensor": "Sentinel-2 L2A"
+  },
+  {
+    "tile_file": "ranchi_2024_12_tile_4_5.tif",
+    "source_file": "ranchi_2024_12.tif",
+    "acquisition_date": "2024-12-01",
+    "lon_min": 85.399216,
+    "lat_min": 23.221664,
+    "lon_max": 85.449791,
+    "lat_max": 23.268398,
+    "sensor": "Sentinel-2 L2A"
+  }
+]

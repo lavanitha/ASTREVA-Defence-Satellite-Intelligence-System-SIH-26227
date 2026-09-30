@@ -79,5 +79,10 @@ backend/.venv/
 frontend/node_modules/
 frontend/dist/
 
-# Other local project
+# The original SIH checkout is a separate, user-managed Git repository.
 SIH-2PGITB&U2/
+
+# Runtime imagery tracked with Git LFS.
+!runtime/SIH-2026/Dataset/Tiles/*.tif
+!runtime/SIH-2026/Dataset/*.png
+!runtime/SIH-2026/Dataset/change_previews/*.png

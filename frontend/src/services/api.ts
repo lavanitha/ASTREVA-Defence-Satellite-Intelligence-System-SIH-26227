@@ -15,7 +15,7 @@ import {
 } from '../types/geoint';
 
 const DEFAULT_API_BASE_URL = import.meta.env.PROD
-  ? 'https://astreva-defence-satellite-intelligence.onrender.com'
+  ? 'https://astreva-backend.onrender.com'
   : 'http://localhost:8000';
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL).replace(/\/+$/, '');
 

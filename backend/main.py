@@ -52,6 +52,7 @@ except Exception:
 
 # Import SIH-2026 functions if available
 HAS_SIH_ML = False
+SIH_ML_IMPORT_ERROR = None
 try:
     import torch
     import open_clip
@@ -66,6 +67,7 @@ try:
     HAS_SIH_ML = True
     print("Successfully loaded SIH-2026 ML & Geospatial modules!")
 except Exception as e:
+    SIH_ML_IMPORT_ERROR = f"{type(e).__name__}: {e}"
     print(f"Warning: Could not load full SIH-2026 ML dependencies directly: {e}")
 
 # ─── FASTAPI APP INITIALIZATION ───────────────────────────────────────────────
@@ -312,6 +314,7 @@ def get_health():
         "status": "OPERATIONAL",
         "enclave": "AIR-GAPPED DEFENCE SYSTEM (100% LOCAL)",
         "sih_ml_active": HAS_SIH_ML,
+        "sih_ml_import_error": SIH_ML_IMPORT_ERROR,
         "clip_model": "OpenCLIP ViT-B/32 (laion2b_s34b_b79k)",
         "faiss_index_tiles": ntotal,
         "mean_latency_ms": 88.28,

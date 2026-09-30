@@ -108,7 +108,7 @@ export const Header: React.FC = () => {
             <MapPin className="w-3.5 h-3.5 text-[#A3BF99]" />
             <span className="text-slate-400">AOI:</span>
             <span className="font-semibold text-[#A3BF99] max-w-[180px] truncate">
-              {currentAoi.name}
+              {currentAoi?.name ?? 'Loading AOI data...'}
             </span>
             <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
           </button>

@@ -76,11 +76,11 @@ export const WorkspaceScreen: React.FC = () => {
                 ACTIVE SECTOR
               </span>
               <span className="text-xs font-mono text-slate-400">
-                {currentAoi.region}
+                {currentAoi?.region ?? 'Loading sector data...'}
               </span>
             </div>
             <h1 className="text-base font-bold text-white tracking-wide mt-0.5">
-              {currentAoi.name}
+              {currentAoi?.name ?? 'Loading AOI data...'}
             </h1>
           </div>
         </div>
@@ -90,7 +90,7 @@ export const WorkspaceScreen: React.FC = () => {
           <div className="px-3 py-1.5 rounded-lg bg-[#0E172A]/80 border border-slate-800">
             <span className="text-[10px] font-mono text-slate-400 block">TOTAL AREA</span>
             <span className="text-xs font-mono font-bold text-cyan-300">
-              {currentAoi.areaSqKm} km²
+              {currentAoi ? `${currentAoi.areaSqKm} km²` : '-- km²'}
             </span>
           </div>
 

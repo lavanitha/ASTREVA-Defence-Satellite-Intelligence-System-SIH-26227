@@ -4,6 +4,10 @@ import io
 import json
 import time
 import csv
+
+for thread_variable in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS", "NUMEXPR_NUM_THREADS"):
+    os.environ.setdefault(thread_variable, "1")
+
 from typing import List, Optional, Dict, Any
 from fastapi import FastAPI, HTTPException, Query, Body, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
@@ -44,38 +48,39 @@ import services.sih_features as sih_features
 import numpy as np
 from PIL import Image
 
-try:
-    import rasterio
-    HAS_RASTERIO = True
-except Exception:
-    HAS_RASTERIO = False
+def load_rasterio():
+    try:
+        import rasterio
+        return rasterio
+    except Exception:
+        return None
 
-try:
-    import tifffile
-    HAS_TIFFFILE = True
-except Exception:
-    HAS_TIFFFILE = False
+
+def load_tifffile():
+    try:
+        import tifffile
+        return tifffile
+    except Exception:
+        return None
 
 # Import SIH-2026 functions if available
 HAS_SIH_ML = False
 SIH_ML_IMPORT_ERROR = None
 try:
     import torch
-    import torchvision
-    import open_clip
-    import faiss
+    torch.set_num_threads(1)
+    try:
+        torch.set_num_interop_threads(1)
+    except RuntimeError:
+        pass
 
-    if not HAS_RASTERIO:
-        raise ImportError("rasterio is required for the satellite imagery pipeline")
-
-    # Import specific helper functions from SIH-2026 CODE modules
+    # This is the only eager ML module; it owns the single OpenCLIP model and FAISS index.
     import semantic_search
-    import change_detection
-    import false_alarm_suppression
-    import clustering_discovery
+    if semantic_search.index.ntotal != len(semantic_search.metadata):
+        raise RuntimeError("FAISS index and semantic metadata are out of sync")
 
     HAS_SIH_ML = True
-    print("Successfully loaded SIH-2026 ML & Geospatial modules!")
+    print(f"Semantic search ready with {semantic_search.index.ntotal} indexed tiles")
 except Exception as e:
     SIH_ML_IMPORT_ERROR = f"{type(e).__name__}: {e}"
     print(f"Warning: Could not load full SIH-2026 ML dependencies directly: {e}")
@@ -556,6 +561,7 @@ def get_terrain_clusters():
     clusters_data = load_json_file(CLUSTERS_FILE, {})
     if not clusters_data and HAS_SIH_ML:
         try:
+            import clustering_discovery
             clusters_data = clustering_discovery.build_clusters(n_clusters=8)
         except Exception as e:
             print(f"Error building clusters: {e}")
@@ -615,9 +621,35 @@ def find_similar_sites(payload: DiscoverySimilarRequest):
         raise HTTPException(status_code=500, detail="SIH ML dependencies not initialized")
         
     try:
-        results = clustering_discovery.find_similar_sites(payload.tile_file, top_k=payload.top_k)
-        for r in results:
-            r["image_url"] = f"/api/tiles/{r['tile_file']}/image"
+        filename = os.path.basename(payload.tile_file)
+        target_index = next(
+            (idx for idx, item in enumerate(semantic_search.metadata) if item["tile_file"] == filename),
+            None,
+        )
+        results = []
+        if target_index is not None and payload.top_k > 0:
+            target_vector = semantic_search.index.reconstruct(target_index).reshape(1, -1)
+            matches = semantic_search.search(
+                target_vector,
+                top_k=min(payload.top_k + 1, semantic_search.index.ntotal),
+            )
+            rank = 1
+            for score, metadata in matches:
+                if metadata["tile_file"] == filename:
+                    continue
+                results.append({
+                    "rank": rank,
+                    "similarity_score": round(float(score), 4),
+                    "tile_file": metadata["tile_file"],
+                    "date": metadata["acquisition_date"],
+                    "lat": metadata["lat_min"],
+                    "lon": metadata["lon_min"],
+                    "sensor": metadata["sensor"],
+                    "image_url": f"/api/tiles/{metadata['tile_file']}/image",
+                })
+                rank += 1
+                if rank > payload.top_k:
+                    break
         return {
             "target_tile": payload.tile_file,
             "count": len(results),
@@ -694,17 +726,20 @@ def get_change_mask(before: str, after: str):
         b_data = None
         a_data = None
         nodata = 0
-        if HAS_RASTERIO:
-            with rasterio.open(before_path) as s1, rasterio.open(after_path) as s2:
+        rasterio_module = load_rasterio()
+        if rasterio_module is not None:
+            with rasterio_module.open(before_path) as s1, rasterio_module.open(after_path) as s2:
                 b_data = s1.read().astype(np.float32)
                 a_data = s2.read().astype(np.float32)
                 nodata = s1.nodata or 0
-        elif HAS_TIFFFILE:
-            b_raw = tifffile.imread(before_path).astype(np.float32)
-            a_raw = tifffile.imread(after_path).astype(np.float32)
-            b_data = np.transpose(b_raw, (2, 0, 1)) if (b_raw.ndim == 3 and b_raw.shape[2] in [1, 3, 4]) else b_raw
-            a_data = np.transpose(a_raw, (2, 0, 1)) if (a_raw.ndim == 3 and a_raw.shape[2] in [1, 3, 4]) else a_raw
-            nodata = 0
+        else:
+            tifffile_module = load_tifffile()
+            if tifffile_module is not None:
+                b_raw = tifffile_module.imread(before_path).astype(np.float32)
+                a_raw = tifffile_module.imread(after_path).astype(np.float32)
+                b_data = np.transpose(b_raw, (2, 0, 1)) if (b_raw.ndim == 3 and b_raw.shape[2] in [1, 3, 4]) else b_raw
+                a_data = np.transpose(a_raw, (2, 0, 1)) if (a_raw.ndim == 3 and a_raw.shape[2] in [1, 3, 4]) else a_raw
+                nodata = 0
 
         if b_data is not None and a_data is not None and b_data.shape[0] >= 3 and a_data.shape[0] >= 3:
             valid = (b_data[0] > nodata) & (a_data[0] > nodata) & (b_data[0] > 0) & (a_data[0] > 0)
@@ -761,24 +796,27 @@ def get_tile_image(tile_filename: str, mode: str = "rgb"):
 
     try:
         data = None
-        if HAS_RASTERIO:
-            with rasterio.open(tile_path) as src:
+        rasterio_module = load_rasterio()
+        if rasterio_module is not None:
+            with rasterio_module.open(tile_path) as src:
                 data = src.read()
-        elif HAS_TIFFFILE:
-            raw = tifffile.imread(tile_path)
-            if raw.ndim == 3 and raw.shape[2] in [1, 3, 4]:
-                data = np.transpose(raw, (2, 0, 1))
-            elif raw.ndim == 2:
-                data = np.expand_dims(raw, axis=0)
-            else:
-                data = raw
         else:
-            with Image.open(tile_path) as pil_img:
-                raw = np.array(pil_img)
-                if raw.ndim == 3:
+            tifffile_module = load_tifffile()
+            if tifffile_module is not None:
+                raw = tifffile_module.imread(tile_path)
+                if raw.ndim == 3 and raw.shape[2] in [1, 3, 4]:
                     data = np.transpose(raw, (2, 0, 1))
-                else:
+                elif raw.ndim == 2:
                     data = np.expand_dims(raw, axis=0)
+                else:
+                    data = raw
+            else:
+                with Image.open(tile_path) as pil_img:
+                    raw = np.array(pil_img)
+                    if raw.ndim == 3:
+                        data = np.transpose(raw, (2, 0, 1))
+                    else:
+                        data = np.expand_dims(raw, axis=0)
             
         p2, p98 = 200.0, 3000.0
         bounds_path = os.path.join(SIH_INDEX_DIR, "stretch_bounds.json")

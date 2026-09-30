@@ -25,7 +25,6 @@ import numpy as np
 import torch
 import open_clip
 import faiss
-import rasterio
 from PIL import Image, ImageDraw, ImageFont
 
 SCRIPT_DIR   = os.path.dirname(os.path.abspath(__file__))
@@ -41,15 +40,21 @@ RESULTS_DIR  = os.path.join(DATASET_DIR, "search_results")
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+torch.set_num_threads(1)
+try:
+    torch.set_num_interop_threads(1)
+except RuntimeError:
+    pass
 
 # ─── LOAD MODEL + INDEX ───────────────────────────────────────────────────────
 
 print("Loading CLIP model...")
-model, _, preprocess = open_clip.create_model_and_transforms(
-    "ViT-B-32", pretrained="laion2b_s34b_b79k"
-)
+with torch.no_grad():
+    model, _, preprocess = open_clip.create_model_and_transforms(
+        "ViT-B-32", pretrained="laion2b_s34b_b79k"
+    )
 tokenizer = open_clip.get_tokenizer("ViT-B-32")
-model = model.to(DEVICE).eval()
+model = model.to(DEVICE).eval().requires_grad_(False)
 
 print("Loading FAISS index...")
 index = faiss.read_index(INDEX_FILE)
@@ -68,6 +73,8 @@ print(f"Index ready — {index.ntotal} tiles loaded.\n")
 
 def tile_to_rgb(tile_path):
     """Convert 4-band tile to RGB PIL image using saved global stretch bounds."""
+    import rasterio
+
     with rasterio.open(tile_path) as src:
         data = src.read()
     blue, green, red = data[0], data[1], data[2]

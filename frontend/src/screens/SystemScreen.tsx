@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useGeointStore } from '../stores/geointStore';
-import { MOCK_SYSTEM_HEALTH } from '../mock/geointData';
 import { useNavigate } from 'react-router-dom';
 import {
   ShieldCheck,
@@ -29,9 +28,10 @@ export const SystemScreen: React.FC = () => {
   const navigate = useNavigate();
   const { user, auditLogs, addAuditLog } = useGeointStore();
   const [isRunningDiagnostic, setIsRunningDiagnostic] = useState(false);
-  const [lastDiagnosticTime, setLastDiagnosticTime] = useState('2026-03-24 12:00:00 UTC');
+  const [lastDiagnosticTime, setLastDiagnosticTime] = useState('Not yet checked');
   const [diagnosticMessage, setDiagnosticMessage] = useState<string | null>(null);
   const [diagnosticStatus, setDiagnosticStatus] = useState<'checking' | 'success' | 'warning' | 'error'>('checking');
+  const [healthComponents, setHealthComponents] = useState<any[]>([]);
 
   // Feature 2: Incremental Ingestion State
   const [isIngesting, setIsIngesting] = useState(false);
@@ -54,6 +54,7 @@ export const SystemScreen: React.FC = () => {
 
     apiService.getHealth().then((health) => {
       setIsRunningDiagnostic(false);
+      setHealthComponents(health.components || []);
       setLastDiagnosticTime(new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC');
       if (!health.sih_ml_active) {
         setDiagnosticStatus('warning');
@@ -68,7 +69,8 @@ export const SystemScreen: React.FC = () => {
     }).catch(() => {
       setIsRunningDiagnostic(false);
       setDiagnosticStatus('error');
-      setDiagnosticMessage('Backend health check failed. Local demonstration data remains available, but backend diagnostics could not be verified.');
+      setHealthComponents([]);
+      setDiagnosticMessage('Backend health check failed. Backend diagnostics could not be verified.');
       setLastDiagnosticTime(new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC');
       addAuditLog('SYSTEM_CHECK', 'System diagnostic could not reach the backend health endpoint.', 'WARN');
     });
@@ -459,22 +461,22 @@ export const SystemScreen: React.FC = () => {
       <div className="space-y-3">
         <div className="flex items-center justify-between text-xs font-mono text-slate-300 px-1">
           <span className="font-bold text-cyan-400">CORE ENCLAVE SUBSYSTEMS</span>
-          <span className="text-slate-500">5 COMPONENTS MONITORED</span>
+          <span className="text-slate-500">{healthComponents.length} COMPONENTS REPORTED BY BACKEND</span>
         </div>
 
         <div className="grid grid-cols-1 gap-3">
-          {MOCK_SYSTEM_HEALTH.map((item, idx) => (
+          {healthComponents.map((item, idx) => (
             <div
               key={idx}
               className="p-4 rounded-xl bg-[#0B1120]/95 border border-cyan-500/20 hover:border-cyan-400/30 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-panel"
             >
               <div className="space-y-1">
                 <div className="flex items-center space-x-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981]" />
+                  <span className={`w-2.5 h-2.5 rounded-full ${item.status === 'OPERATIONAL' ? 'bg-emerald-400 shadow-[0_0_8px_#10b981]' : 'bg-amber-400'}`} />
                   <h3 className="text-sm font-bold text-white">
                     {item.component}
                   </h3>
-                  <span className="px-2 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono font-bold">
+                  <span className={`px-2 py-0.2 rounded text-[10px] font-mono font-bold ${item.status === 'OPERATIONAL' ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' : 'bg-amber-950 text-amber-300 border border-amber-500/40'}`}>
                     {item.status}
                   </span>
                 </div>
@@ -507,6 +509,7 @@ export const SystemScreen: React.FC = () => {
               </div>
             </div>
           ))}
+          {healthComponents.length === 0 && <p className="text-xs text-slate-500">Run diagnostics to load component status from the live backend.</p>}
         </div>
       </div>
     </div>

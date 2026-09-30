@@ -7,13 +7,6 @@ import {
   AuditLog,
   CandidateStatus,
 } from '../types/geoint';
-import {
-  MOCK_AOIS,
-  MOCK_CANDIDATES,
-  MOCK_SCENES,
-  MOCK_EXPORTS,
-  MOCK_AUDIT_LOGS,
-} from '../mock/geointData';
 import { apiService } from '../services/api';
 
 export interface UserSession {
@@ -78,15 +71,15 @@ export const useGeointStore = create<GeointState>((set, get) => ({
     badgeNumber: 'DEF-GEO-8902',
     securityClearance: 'SECRET / NATIONAL ENCLAVE',
     isAuthenticated: true,
-    isOffline: true,
+    isOffline: false,
   },
   activeAoiId: 'AOI-IND-03',
-  selectedCandidateId: 'CAND-2026-0004',
-  candidates: MOCK_CANDIDATES,
-  aois: MOCK_AOIS,
-  scenes: MOCK_SCENES,
-  exports: MOCK_EXPORTS,
-  auditLogs: MOCK_AUDIT_LOGS,
+  selectedCandidateId: null,
+  candidates: [],
+  aois: [],
+  scenes: [],
+  exports: [],
+  auditLogs: [],
   isLoadingApi: false,
   apiError: null,
 
@@ -95,13 +88,7 @@ export const useGeointStore = create<GeointState>((set, get) => ({
   comparisonMode: 'swipe',
   opacityValue: 50,
   searchQuery: '',
-  searchHistory: [
-    'New construction near river embankment',
-    'Road expansion near urban areas',
-    'Large cleared land parcels',
-    'High altitude switchback road cutting',
-    'Agricultural land conversion to logistics hub',
-  ],
+  searchHistory: [],
   activeChangeTypeFilter: 'ALL',
   activeSensorFilter: 'ALL',
   minConfidenceFilter: 0,
@@ -111,25 +98,28 @@ export const useGeointStore = create<GeointState>((set, get) => ({
     try {
       // Fetch AOIs, candidates, scenes, and audit logs from real Python backend
       const [realAois, realCandidates, realScenes, realAuditLogs] = await Promise.all([
-        apiService.getAois().catch(() => MOCK_AOIS),
-        apiService.getCandidates().catch(() => MOCK_CANDIDATES),
-        apiService.getScenes().catch(() => MOCK_SCENES),
-        apiService.getAuditLogs().catch(() => MOCK_AUDIT_LOGS),
+        apiService.getAois(),
+        apiService.getCandidates(),
+        apiService.getScenes(),
+        apiService.getAuditLogs(),
       ]);
 
       const selectedId = realCandidates.length > 0 ? realCandidates[0].id : get().selectedCandidateId;
 
       set({
-        aois: realAois.length > 0 ? realAois : MOCK_AOIS,
-        candidates: realCandidates.length > 0 ? realCandidates : MOCK_CANDIDATES,
-        scenes: realScenes.length > 0 ? realScenes : MOCK_SCENES,
-        auditLogs: realAuditLogs.length > 0 ? realAuditLogs : MOCK_AUDIT_LOGS,
+        aois: realAois,
+        candidates: realCandidates,
+        scenes: realScenes,
+        auditLogs: realAuditLogs,
         selectedCandidateId: selectedId,
         isLoadingApi: false,
       });
     } catch (err: any) {
-      console.warn('API Initialization note: using local fallback state', err);
-      set({ isLoadingApi: false, apiError: err?.message || 'Offline Enclave Mode' });
+      console.error('Production API initialization failed', err);
+      set({
+        aois: [], candidates: [], scenes: [], auditLogs: [], selectedCandidateId: null,
+        isLoadingApi: false, apiError: err?.message || 'Backend API unavailable',
+      });
     }
   },
 

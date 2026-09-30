@@ -14,9 +14,15 @@ from pydantic import BaseModel, Field
 # ─── PATH SETUP ───────────────────────────────────────────────────────────────
 BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BACKEND_DIR)
-SIH_CODE_DIR = os.environ.get(
-    "ASTREVA_CODE_DIR",
-    os.path.join(ROOT_DIR, "runtime", "SIH-2026", "CODE"),
+DEFAULT_SIH_CODE_DIR = os.path.join(ROOT_DIR, "runtime", "SIH-2026", "CODE")
+CONFIGURED_SIH_CODE_DIR = os.environ.get("ASTREVA_CODE_DIR")
+SIH_CODE_DIR_CANDIDATES = [
+    path for path in (CONFIGURED_SIH_CODE_DIR, DEFAULT_SIH_CODE_DIR)
+    if path
+]
+SIH_CODE_DIR = next(
+    (path for path in SIH_CODE_DIR_CANDIDATES if os.path.isfile(os.path.join(path, "semantic_search.py"))),
+    CONFIGURED_SIH_CODE_DIR or DEFAULT_SIH_CODE_DIR,
 )
 SIH_DATASET_DIR = os.environ.get(
     "ASTREVA_DATASET_DIR",
@@ -55,8 +61,12 @@ HAS_SIH_ML = False
 SIH_ML_IMPORT_ERROR = None
 try:
     import torch
+    import torchvision
     import open_clip
     import faiss
+
+    if not HAS_RASTERIO:
+        raise ImportError("rasterio is required for the satellite imagery pipeline")
 
     # Import specific helper functions from SIH-2026 CODE modules
     import semantic_search
@@ -330,88 +340,46 @@ def get_health():
 
 @app.get("/api/aois")
 def get_aois():
-    """Returns Area of Interest surveillance sectors including Ranchi Mining Belt"""
-    return [
-        {
-            "id": "AOI-IND-03",
-            "name": "Ranchi Subarnarekha Mining & Excavation Belt",
-            "region": "Jharkhand / Chota Nagpur Plateau",
-            "center": [23.3441, 85.3096],
-            "zoom": 12,
-            "areaSqKm": 868.0,
-            "lastIngested": "2026-03-24 08:30 UTC",
-            "activeScenesCount": 180,
-            "candidateCount": 34,
-            "description": "SIH-2026 Primary Target Area (Ranchi, Jharkhand). 180 Sentinel-2 512x512 tile chips across 6 temporal epochs (2020-2024).",
-            "polygonCoords": [
-                [23.450, 85.150],
-                [23.450, 85.450],
-                [23.200, 85.450],
-                [23.200, 85.150],
-                [23.450, 85.150]
-            ]
-        },
-        {
-            "id": "AOI-IND-01",
-            "name": "Pune Ring Road & Hinjawadi Logistics Corridor",
-            "region": "Maharashtra / Western Ghats Foreland",
-            "center": [18.5204, 73.8567],
-            "zoom": 12,
-            "areaSqKm": 342.8,
-            "lastIngested": "2026-03-22 04:30 UTC",
-            "activeScenesCount": 38,
-            "candidateCount": 14,
-            "description": "High-density peri-urban infrastructure corridor monitoring dual-carriageway earthworks and industrial warehousing.",
-            "polygonCoords": [
-                [18.580, 73.750], [18.610, 73.910], [18.490, 73.950], [18.440, 73.780], [18.580, 73.750]
-            ]
-        },
-        {
-            "id": "AOI-IND-02",
-            "name": "Guwahati Brahmaputra Embankment & Fluvial Basin",
-            "region": "Assam / Lower Brahmaputra Valley",
-            "center": [26.1445, 91.7362],
-            "zoom": 12,
-            "areaSqKm": 512.4,
-            "lastIngested": "2026-03-21 16:45 UTC",
-            "activeScenesCount": 44,
-            "candidateCount": 19,
-            "description": "Critical riverine floodway monitoring braided sandbar erosion, geo-bag embankment breaches, and new bridge landing works.",
-            "polygonCoords": [
-                [26.220, 91.600], [26.250, 91.820], [26.100, 91.860], [26.060, 91.640], [26.220, 91.600]
-            ]
-        },
-        {
-            "id": "AOI-IND-04",
-            "name": "Nashik Dindori Agro-Industrial Expansion",
-            "region": "Maharashtra / Godavari Basin",
-            "center": [20.0059, 73.7898],
-            "zoom": 12,
-            "areaSqKm": 285.5,
-            "lastIngested": "2026-03-19 18:20 UTC",
-            "activeScenesCount": 26,
-            "candidateCount": 7,
-            "description": "Agricultural transition surveillance detecting conversion of vineyard canopy into steel-framed agro-processing plants.",
-            "polygonCoords": [
-                [20.080, 73.700], [20.090, 73.880], [19.930, 73.900], [19.920, 73.720], [20.080, 73.700]
-            ]
-        },
-        {
-            "id": "AOI-IND-05",
-            "name": "Arunachal Strategic Road & Logistics Corridor",
-            "region": "Arunachal Pradesh / Eastern Himalayas",
-            "center": [27.3243, 93.0234],
-            "zoom": 11,
-            "areaSqKm": 680.0,
-            "lastIngested": "2026-03-23 02:00 UTC",
-            "activeScenesCount": 52,
-            "candidateCount": 11,
-            "description": "High-altitude strategic border connectivity tracking switchback roadway cuts, reinforced culverts, and hardened helipads.",
-            "polygonCoords": [
-                [27.450, 92.850], [27.500, 93.200], [27.180, 93.240], [27.140, 92.880], [27.450, 92.850]
-            ]
-        }
-    ]
+    """Return AOIs backed by the deployed satellite catalogue."""
+    catalogue = load_catalogue()
+    if not catalogue:
+        return []
+
+    lons = [float(row["lon_min"]) for row in catalogue] + [float(row["lon_max"]) for row in catalogue]
+    lats = [float(row["lat_min"]) for row in catalogue] + [float(row["lat_max"]) for row in catalogue]
+    candidates = load_candidate_records()
+    west, east, south, north = min(lons), max(lons), min(lats), max(lats)
+    return [{
+        "id": "AOI-IND-03",
+        "name": "Ranchi Subarnarekha Mining & Excavation Belt",
+        "region": "Jharkhand / Chota Nagpur Plateau",
+        "center": [(south + north) / 2, (west + east) / 2],
+        "zoom": 12,
+        "areaSqKm": 868.0,
+        "lastIngested": max(row.get("acquisition_date", "") for row in catalogue),
+        "activeScenesCount": len(catalogue),
+        "candidateCount": len(candidates),
+        "description": f"Ranchi, Jharkhand; {len(catalogue)} catalogue-backed satellite tiles.",
+        "polygonCoords": [[south, west], [south, east], [north, east], [north, west], [south, west]],
+    }]
+
+
+def load_candidate_records():
+    """Load the complete audited result set, falling back only to the full pipeline output."""
+    candidates = load_json_file(AUDITED_CANDIDATES_FILE, None)
+    if not candidates:
+        candidates = load_json_file(os.path.join(SIH_INDEX_DIR, "change_candidates.json"), [])
+    return candidates if isinstance(candidates, list) else []
+
+
+def load_catalogue():
+    if not os.path.isfile(CATALOGUE_FILE):
+        return []
+    try:
+        with open(CATALOGUE_FILE, newline="", encoding="utf-8") as catalogue_file:
+            return list(csv.DictReader(catalogue_file))
+    except (OSError, csv.Error):
+        return []
 
 @app.get("/api/candidates")
 def get_candidates(
@@ -421,13 +389,13 @@ def get_candidates(
     min_confidence: Optional[int] = None
 ):
     """Returns change candidates generated by SIH-2026 change detection & false alarm suppression pipeline"""
-    raw_candidates = load_json_file(REVIEW_QUEUE_FILE)
-    if not raw_candidates:
-        raw_candidates = load_json_file(AUDITED_CANDIDATES_FILE)
+    raw_candidates = load_candidate_records()
 
     decisions_map = load_decisions_map()
     
     mapped_list = []
+    if aoi_id and aoi_id not in ("ALL", "AOI-IND-03"):
+        return []
     for idx, item in enumerate(raw_candidates):
         cand = map_sih_candidate_to_frontend(item, idx, decisions_map)
         
@@ -709,13 +677,8 @@ def get_change_mask(before: str, after: str):
     """
     before_path = os.path.join(SIH_TILES_DIR, before)
     after_path = os.path.join(SIH_TILES_DIR, after)
-    
     if not os.path.exists(before_path) or not os.path.exists(after_path):
-        black_mask = Image.new("L", (512, 512), 0)
-        buf = io.BytesIO()
-        black_mask.save(buf, format="PNG")
-        buf.seek(0)
-        return Response(content=buf.getvalue(), media_type="image/png")
+        raise HTTPException(status_code=404, detail="One or both source tiles are unavailable")
 
     try:
         b_data = None
@@ -757,28 +720,28 @@ def get_change_mask(before: str, after: str):
                 bw_data = (clean_mask.astype(np.uint8)) * 255
                 mask_img = Image.fromarray(bw_data, mode="L")
             else:
-                mask_img = Image.new("L", (512, 512), 0)
+                raise HTTPException(status_code=422, detail="Not enough valid pixels to compute a change mask")
         else:
-            mask_img = Image.new("L", (512, 512), 0)
+            raise HTTPException(status_code=422, detail="Source tiles do not contain supported multispectral bands")
 
         buf = io.BytesIO()
         mask_img.save(buf, format="PNG")
         buf.seek(0)
         return Response(content=buf.getvalue(), media_type="image/png")
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"Error computing change mask for {before} -> {after}: {e}")
-        black_mask = Image.new("L", (512, 512), 0)
-        buf = io.BytesIO()
-        black_mask.save(buf, format="PNG")
-        buf.seek(0)
-        return Response(content=buf.getvalue(), media_type="image/png")
+        raise HTTPException(status_code=500, detail=f"Could not compute change mask: {e}")
 
 @app.get("/api/tiles/{tile_filename}/image")
 def get_tile_image(tile_filename: str, mode: str = "rgb"):
     """
     Converts 4-band GeoTIFF satellite tile to RGB PNG image on the fly with stretch bounds.
     """
-    tile_path = os.path.join(SIH_TILES_DIR, tile_filename)
+    if mode == "sar":
+        raise HTTPException(status_code=501, detail="No SAR raster is present in the deployed catalogue")
+    tile_path = os.path.join(SIH_TILES_DIR, os.path.basename(tile_filename))
     if not os.path.exists(tile_path):
         # Fallback to preview directory if requested preview image
         preview_path = os.path.join(SIH_PREVIEWS_DIR, tile_filename)
@@ -837,21 +800,15 @@ def get_tile_image(tile_filename: str, mode: str = "rgb"):
                     np.clip((1.0 - ndbi) * 150, 0, 255).astype(np.uint8)
                 ], axis=-1)
                 img = Image.fromarray(ndbi_rgb)
-            elif mode == "sar":
-                # Convert optical to SAR radar visualization
-                gray = (red.astype(np.float32) * 0.3 + green.astype(np.float32) * 0.6).astype(np.uint8)
-                sar_img = np.stack([gray, gray, gray], axis=-1)
-                img = Image.fromarray(sar_img)
             else:
                 rgb = np.stack([red, green, blue], axis=-1).astype(np.float32)
                 rgb = np.clip(rgb, p2, p98)
                 rgb = ((rgb - p2) / (p98 - p2 + 1e-6) * 255).astype(np.uint8)
                 img = Image.fromarray(rgb)
         elif data is not None and data.shape[0] > 0:
-            # Fallback for single-channel
             img = Image.fromarray(data[0].astype(np.uint8))
         else:
-            img = Image.new("RGB", (512, 512), (30, 30, 30))
+            raise HTTPException(status_code=422, detail=f"Tile {tile_filename} contains no readable raster data")
 
         buf = io.BytesIO()
         img.save(buf, format="PNG")
@@ -859,12 +816,7 @@ def get_tile_image(tile_filename: str, mode: str = "rgb"):
         return Response(content=buf.getvalue(), media_type="image/png")
     except Exception as e:
         print(f"Error serving tile image {tile_filename}: {e}")
-        # Fallback to generating placeholder image rather than failing 500
-        fallback_img = Image.new("RGB", (512, 512), (20, 20, 30))
-        buf = io.BytesIO()
-        fallback_img.save(buf, format="PNG")
-        buf.seek(0)
-        return Response(content=buf.getvalue(), media_type="image/png")
+        raise HTTPException(status_code=500, detail=f"Could not render tile {tile_filename}: {e}")
 
 # ─── 10 SIH PRIORITY FEATURE ENDPOINTS ───────────────────────────────────────
 

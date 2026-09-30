@@ -16,11 +16,11 @@ BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BACKEND_DIR)
 SIH_CODE_DIR = os.environ.get(
     "ASTREVA_CODE_DIR",
-    os.path.join(ROOT_DIR, "SIH-2PGITB&U2", "SIH-2026", "CODE"),
+    os.path.join(ROOT_DIR, "runtime", "SIH-2026", "CODE"),
 )
 SIH_DATASET_DIR = os.environ.get(
     "ASTREVA_DATASET_DIR",
-    os.path.join(ROOT_DIR, "SIH-2PGITB&U2", "SIH-2026", "Dataset"),
+    os.path.join(ROOT_DIR, "runtime", "SIH-2026", "Dataset"),
 )
 SIH_TILES_DIR = os.path.join(SIH_DATASET_DIR, "Tiles")
 SIH_INDEX_DIR = os.path.join(SIH_DATASET_DIR, "Index")

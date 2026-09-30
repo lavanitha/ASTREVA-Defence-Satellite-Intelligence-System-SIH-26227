@@ -81,6 +81,7 @@ export const apiService = {
     return fetchJson<{
       status: string;
       sih_ml_active: boolean;
+      sih_ml_import_error?: string | null;
       faiss_index_tiles: number;
       mean_latency_ms: number;
       components: any[];

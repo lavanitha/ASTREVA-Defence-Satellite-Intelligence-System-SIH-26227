@@ -31,6 +31,7 @@ export const SystemScreen: React.FC = () => {
   const [isRunningDiagnostic, setIsRunningDiagnostic] = useState(false);
   const [lastDiagnosticTime, setLastDiagnosticTime] = useState('2026-03-24 12:00:00 UTC');
   const [diagnosticMessage, setDiagnosticMessage] = useState<string | null>(null);
+  const [diagnosticStatus, setDiagnosticStatus] = useState<'checking' | 'success' | 'warning' | 'error'>('checking');
 
   // Feature 2: Incremental Ingestion State
   const [isIngesting, setIsIngesting] = useState(false);
@@ -47,19 +48,29 @@ export const SystemScreen: React.FC = () => {
 
   const runDiagnostics = () => {
     setIsRunningDiagnostic(true);
+    setDiagnosticStatus('checking');
     setDiagnosticMessage('Pinging local FAISS vector index & testing OpenCLIP ViT-B/32 latency...');
     addAuditLog('SYSTEM_CHECK', 'Initiated full air-gapped system hardware and model self-diagnostic benchmark.', 'SUCCESS');
 
     apiService.getHealth().then((health) => {
       setIsRunningDiagnostic(false);
-      setDiagnosticMessage(`All 5 core enclave subsystems verified OPERATIONAL. OpenCLIP ViT-B/32 active (${health.faiss_index_tiles} tiles indexed, mean query latency: ${health.mean_latency_ms}ms).`);
       setLastDiagnosticTime(new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC');
+      if (!health.sih_ml_active) {
+        setDiagnosticStatus('warning');
+        setDiagnosticMessage(`Backend API is reachable, but SIH ML dependencies are not initialized.${health.sih_ml_import_error ? ` ${health.sih_ml_import_error}` : ''}`);
+        addAuditLog('SYSTEM_CHECK', 'System diagnostic found the backend API online but ML retrieval unavailable.', 'WARN');
+        return;
+      }
+
+      setDiagnosticStatus('success');
+      setDiagnosticMessage(`All 5 core enclave subsystems verified OPERATIONAL. OpenCLIP ViT-B/32 active (${health.faiss_index_tiles} tiles indexed, mean query latency: ${health.mean_latency_ms}ms).`);
       addAuditLog('SYSTEM_CHECK', `System diagnostic completed: All 5 enclave components verified OPERATIONAL (${health.faiss_index_tiles} tiles).`, 'SUCCESS');
     }).catch(() => {
       setIsRunningDiagnostic(false);
-      setDiagnosticMessage('All 5 core enclave subsystems passed with 0 warnings. Latency within SLA (< 150ms).');
+      setDiagnosticStatus('error');
+      setDiagnosticMessage('Backend health check failed. Local demonstration data remains available, but backend diagnostics could not be verified.');
       setLastDiagnosticTime(new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC');
-      addAuditLog('SYSTEM_CHECK', 'System diagnostic completed: All 5 enclave components verified OPERATIONAL.', 'SUCCESS');
+      addAuditLog('SYSTEM_CHECK', 'System diagnostic could not reach the backend health endpoint.', 'WARN');
     });
   };
 
@@ -179,12 +190,12 @@ export const SystemScreen: React.FC = () => {
 
       {/* Diagnostics Status Banner */}
       {diagnosticMessage && (
-        <div className="p-3.5 rounded-lg bg-cyan-950/80 border border-cyan-400/40 text-xs font-mono text-cyan-200 flex items-center justify-between">
+        <div className={`p-3.5 rounded-lg border text-xs font-mono flex items-center justify-between ${diagnosticStatus === 'success' ? 'bg-emerald-950/80 border-emerald-400/40 text-emerald-200' : diagnosticStatus === 'checking' ? 'bg-cyan-950/80 border-cyan-400/40 text-cyan-200' : diagnosticStatus === 'warning' ? 'bg-amber-950/80 border-amber-400/40 text-amber-200' : 'bg-rose-950/80 border-rose-400/40 text-rose-200'}`}>
           <div className="flex items-center space-x-2">
-            <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
+            <Activity className={`w-4 h-4 ${diagnosticStatus === 'success' ? 'text-emerald-400' : diagnosticStatus === 'warning' ? 'text-amber-400' : diagnosticStatus === 'error' ? 'text-rose-400' : 'text-cyan-400 animate-pulse'}`} />
             <span>{diagnosticMessage}</span>
           </div>
-          <span className="text-[10px] text-cyan-300">BENCHMARK ACTIVE</span>
+          <span className="text-[10px] uppercase">{diagnosticStatus === 'checking' ? 'CHECKING' : diagnosticStatus === 'success' ? 'HEALTHY' : diagnosticStatus === 'warning' ? 'PARTIAL' : 'UNAVAILABLE'}</span>
         </div>
       )}
 

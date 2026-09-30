@@ -69,9 +69,20 @@ app = FastAPI(
     version="1.0.0"
 )
 
+allowed_origins = [
+    "https://astreva-defence-satellite-intellige.vercel.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+allowed_origins.extend(
+    origin.strip().rstrip("/")
+    for origin in os.getenv("ASTREVA_ALLOWED_ORIGINS", "").split(",")
+    if origin.strip()
+)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -645,15 +656,21 @@ def get_scene_records():
     if not os.path.exists(CATALOGUE_FILE):
         return []
 
+    def parse_float(value: Optional[str], default: float) -> float:
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return default
+
     scenes = []
     with open(CATALOGUE_FILE, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for i, row in enumerate(reader):
             tile_file = row.get("tile_file", "")
             date = row.get("acquisition_date", "2024-01-01")
-            lat = float(row.get("lat_min", 23.30))
-            lon = float(row.get("lon_min", 85.30))
-            nodata = float(row.get("nodata_fraction", 0.0))
+            lat = parse_float(row.get("lat_min"), 23.30)
+            lon = parse_float(row.get("lon_min"), 85.30)
+            nodata = parse_float(row.get("nodata_fraction"), 0.0)
             
             scenes.append({
                 "id": f"SCENE-S2-{i+1:04d}",

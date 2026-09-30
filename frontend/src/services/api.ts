@@ -14,16 +14,53 @@ import {
   CoRegistrationRadiometricValidation,
 } from '../types/geoint';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const DEFAULT_API_BASE_URL = import.meta.env.PROD
+  ? 'https://astreva-defence-satellite-intelligence.onrender.com'
+  : 'http://localhost:8000';
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL).replace(/\/+$/, '');
+
+function normalizeApiUrls<T>(value: T): T {
+  if (typeof value === 'string') {
+    if (value.startsWith('/api/') || value.startsWith('/static/')) {
+      return `${API_BASE_URL}${value}` as T;
+    }
+
+    try {
+      const url = new URL(value);
+      if (
+        (url.hostname === 'localhost' || url.hostname === '127.0.0.1') &&
+        (url.pathname.startsWith('/api/') || url.pathname.startsWith('/static/'))
+      ) {
+        return `${API_BASE_URL}${url.pathname}${url.search}${url.hash}` as T;
+      }
+    } catch {
+      return value;
+    }
+
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(normalizeApiUrls) as T;
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, nestedValue]) => [key, normalizeApiUrls(nestedValue)])
+    ) as T;
+  }
+
+  return value;
+}
 
 async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
   const response = await fetch(url, {
+    ...options,
     headers: {
-      'Content-Type': 'application/json',
+      ...(options?.body ? { 'Content-Type': 'application/json' } : {}),
       ...options?.headers,
     },
-    ...options,
   });
 
   if (!response.ok) {
@@ -31,7 +68,7 @@ async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T>
     throw new Error(`API error ${response.status}: ${errorText}`);
   }
 
-  return response.json();
+  return normalizeApiUrls(await response.json());
 }
 
 export const apiService = {

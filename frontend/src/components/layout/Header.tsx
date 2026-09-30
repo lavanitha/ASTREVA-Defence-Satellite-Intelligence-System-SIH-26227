@@ -11,8 +11,10 @@ import {
   MapPin,
   Bell,
   CheckCircle2,
+  Wifi,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { apiService } from '../../services/api';
 
 export const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ export const Header: React.FC = () => {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [aoiDropdownOpen, setAoiDropdownOpen] = useState(false);
   const [utcTime, setUtcTime] = useState('');
+  const [apiStatus, setApiStatus] = useState<'checking' | 'connected' | 'offline'>('checking');
 
   const currentAoi = aois.find((a) => a.id === activeAoiId) || aois[0];
 
@@ -33,6 +36,24 @@ export const Header: React.FC = () => {
     updateTime();
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    let isActive = true;
+    const checkHealth = () => {
+      apiService.getHealth().then(() => {
+        if (isActive) setApiStatus('connected');
+      }).catch(() => {
+        if (isActive) setApiStatus('offline');
+      });
+    };
+
+    checkHealth();
+    const interval = window.setInterval(checkHealth, 30_000);
+    return () => {
+      isActive = false;
+      window.clearInterval(interval);
+    };
   }, []);
 
   return (
@@ -127,10 +148,26 @@ export const Header: React.FC = () => {
 
       {/* Right side: Offline Mode, Version, User & Role */}
       <div className="flex items-center space-x-3">
-        {/* Offline Mode Badge */}
-        <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-medium shadow-sm">
-          <WifiOff className="w-3 h-3 text-emerald-400" />
-          <span className="hidden sm:inline">Offline Mode</span>
+        {/* Backend Connection Status */}
+        <div
+          title={apiStatus === 'connected' ? 'Backend API is reachable' : apiStatus === 'offline' ? 'Backend API is unavailable' : 'Checking backend API'}
+          aria-live="polite"
+          className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full border text-xs font-mono font-medium shadow-sm ${
+            apiStatus === 'connected'
+              ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'
+              : apiStatus === 'offline'
+              ? 'bg-rose-950/40 border-rose-500/40 text-rose-300'
+              : 'bg-slate-900/60 border-slate-600/40 text-slate-300'
+          }`}
+        >
+          {apiStatus === 'connected' ? (
+            <Wifi className="w-3 h-3 text-emerald-400" />
+          ) : (
+            <WifiOff className={`w-3 h-3 ${apiStatus === 'offline' ? 'text-rose-400' : 'text-slate-400'}`} />
+          )}
+          <span className="hidden sm:inline">
+            {apiStatus === 'connected' ? 'API CONNECTED' : apiStatus === 'offline' ? 'OFFLINE MODE' : 'CHECKING API'}
+          </span>
         </div>
 
         {/* Version Badge */}

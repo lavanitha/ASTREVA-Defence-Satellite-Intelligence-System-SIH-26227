@@ -21,9 +21,9 @@ import os
 import csv
 import json
 import argparse
+import importlib.util
 import numpy as np
 import torch
-import open_clip
 import faiss
 from PIL import Image, ImageDraw, ImageFont
 
@@ -39,22 +39,30 @@ RESULTS_DIR  = os.path.join(DATASET_DIR, "search_results")
 
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 torch.set_num_threads(1)
 try:
     torch.set_num_interop_threads(1)
 except RuntimeError:
     pass
 
-# ─── LOAD MODEL + INDEX ───────────────────────────────────────────────────────
+# ─── LOAD TEXT TOWER + EXISTING IMAGE INDEX ───────────────────────────────────
 
-print("Loading CLIP model...")
-with torch.no_grad():
-    model, _, preprocess = open_clip.create_model_and_transforms(
-        "ViT-B-32", pretrained="laion2b_s34b_b79k"
-    )
-tokenizer = open_clip.get_tokenizer("ViT-B-32")
-model = model.to(DEVICE).eval().requires_grad_(False)
+TEXT_MODEL_FILE = os.path.join(SCRIPT_DIR, "openclip_text_fp16.pt")
+if not os.path.isfile(TEXT_MODEL_FILE):
+    raise FileNotFoundError(f"Prebuilt OpenCLIP text tower is missing: {TEXT_MODEL_FILE}")
+
+print("Loading FP16 OpenCLIP text tower...")
+model = torch.jit.load(TEXT_MODEL_FILE, map_location="cpu").eval()
+open_clip_spec = importlib.util.find_spec("open_clip")
+if open_clip_spec is None or not open_clip_spec.submodule_search_locations:
+    raise ImportError("OpenCLIP tokenizer package is unavailable")
+tokenizer_path = os.path.join(next(iter(open_clip_spec.submodule_search_locations)), "tokenizer.py")
+tokenizer_spec = importlib.util.spec_from_file_location("astreva_open_clip_tokenizer", tokenizer_path)
+if tokenizer_spec is None or tokenizer_spec.loader is None:
+    raise ImportError(f"Could not load OpenCLIP tokenizer from {tokenizer_path}")
+tokenizer_module = importlib.util.module_from_spec(tokenizer_spec)
+tokenizer_spec.loader.exec_module(tokenizer_module)
+tokenizer = tokenizer_module.SimpleTokenizer()
 
 print("Loading FAISS index...")
 index = faiss.read_index(INDEX_FILE)
@@ -85,20 +93,21 @@ def tile_to_rgb(tile_path):
 
 
 def embed_text(query: str) -> np.ndarray:
-    tokens = tokenizer([query]).to(DEVICE)
+    tokens = tokenizer([query])
     with torch.no_grad():
-        emb = model.encode_text(tokens)
-        emb = emb / emb.norm(dim=-1, keepdim=True)
-    return emb.cpu().numpy().astype("float32")
+        embedding = model(tokens)
+    return embedding.float().numpy().astype("float32")
 
 
 def embed_image_tile(tile_path: str) -> np.ndarray:
-    img = tile_to_rgb(tile_path)
-    tensor = preprocess(img).unsqueeze(0).to(DEVICE)
-    with torch.no_grad():
-        emb = model.encode_image(tensor)
-        emb = emb / emb.norm(dim=-1, keepdim=True)
-    return emb.cpu().numpy().astype("float32")
+    filename = os.path.basename(tile_path)
+    target_index = next(
+        (idx for idx, item in enumerate(metadata) if item.get("tile_file") == filename),
+        None,
+    )
+    if target_index is None:
+        raise FileNotFoundError(f"Tile is not present in the existing FAISS image index: {filename}")
+    return index.reconstruct(target_index).reshape(1, -1).astype("float32")
 
 
 def apply_filters(results, date_from=None, date_to=None,

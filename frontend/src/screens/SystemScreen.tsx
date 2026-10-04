@@ -41,10 +41,12 @@ export const SystemScreen: React.FC = () => {
   // Feature 7: Zero-Egress Proof State
   const [zeroEgressProof, setZeroEgressProof] = useState<ZeroEgressProofResponse | null>(null);
   const [isVerifyingEgress, setIsVerifyingEgress] = useState(false);
+  const [zeroEgressError, setZeroEgressError] = useState<string | null>(null);
 
   // Feature 8: Held-Out Evaluation Metrics State
   const [evalMetrics, setEvalMetrics] = useState<HeldoutEvaluationMetricsResponse | null>(null);
   const [isLoadingMetrics, setIsLoadingMetrics] = useState(false);
+  const [evaluationError, setEvaluationError] = useState<string | null>(null);
 
   const runDiagnostics = () => {
     setIsRunningDiagnostic(true);
@@ -101,26 +103,13 @@ export const SystemScreen: React.FC = () => {
 
   const handleVerifyZeroEgress = async () => {
     setIsVerifyingEgress(true);
+    setZeroEgressError(null);
     try {
       const proof = await apiService.getZeroEgressProof();
       setZeroEgressProof(proof);
-      addAuditLog('SYSTEM_CHECK', 'Air-Gapped Zero-Egress network audit verified: 0 outbound connections.', 'SUCCESS');
     } catch (err) {
-      setZeroEgressProof({
-        airgapStatus: '100% AIR-GAPPED & ZERO OUTBOUND EGRESS VERIFIED',
-        complianceStandard: 'MoD Air-Gapped Defence System Standard Level-3',
-        externalRequestsCount: 0,
-        networkInterfaces: [
-          { interface: 'loopback', bindAddress: '127.0.0.1:8000', state: 'ALLOWED_LOCAL' },
-        ],
-        outboundSocketsAudit: [
-          { destination: '0.0.0.0/0 (Internet)', status: 'DENIED_BY_FIREWALL', packetsSent: 0 },
-        ],
-        evidenceHash: '9a72f08e4d1c6b3a2e5847190382dcf7193b04859a1e4c7b2019485720193857',
-        signature: 'HMAC-SHA256:7b41e92d',
-        verifiedAt: new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC',
-        verdict: 'PASSED — Zero external network egress guaranteed.',
-      });
+      setZeroEgressProof(null);
+      setZeroEgressError(err instanceof Error ? err.message : 'Egress audit is unavailable.');
     } finally {
       setIsVerifyingEgress(false);
     }
@@ -128,27 +117,13 @@ export const SystemScreen: React.FC = () => {
 
   const handleFetchEvaluationMetrics = async () => {
     setIsLoadingMetrics(true);
+    setEvaluationError(null);
     try {
       const metrics = await apiService.getEvaluationMetrics();
       setEvalMetrics(metrics);
     } catch (err) {
-      setEvalMetrics({
-        heldoutDataset: 'Ranchi Subarnarekha Mining Belt Test Ground Truth',
-        precision: 94.2,
-        recall: 91.8,
-        f1Score: 93.0,
-        falsePositiveRate: 3.8,
-        queryLatency: { p50_ms: 12.4, p95_ms: 42.8, p99_ms: 78.5, mean_ms: 18.2 },
-        buildAndUpdateTime: { fullIndexBuildTimeSec: 14.2, incrementalUpdateBatchMs: 41.5, stacIngestLatencyMs: 12.8 },
-        storageGrowth: { tilesImageryMb: 340.2, vectorIndexMb: 4.8, totalStorageMb: 420.5, growthPerSceneMb: 1.2 },
-        hardwareSpecs: {
-          processor: 'Multi-Core x86_64 CPU (AVX2 / AVX-512 SIMD)',
-          operatingSystem: 'Windows 11 / Air-Gapped Linux Enclave',
-          systemMemory: '16 GB DDR4/DDR5 RAM',
-          storagePartition: 'Air-Gapped NVMe High-Speed SSD',
-          acceleration: 'PyTorch CPU SIMD Vector Acceleration (OpenCLIP + FAISS)',
-        },
-      });
+      setEvalMetrics(null);
+      setEvaluationError(err instanceof Error ? err.message : 'Evaluation metrics are unavailable.');
     } finally {
       setIsLoadingMetrics(false);
     }
@@ -394,6 +369,11 @@ export const SystemScreen: React.FC = () => {
             </div>
           </div>
         )}
+        {!evalMetrics && evaluationError && (
+          <p role="alert" className="text-xs text-amber-300">
+            Evaluation report unavailable: {evaluationError}
+          </p>
+        )}
       </div>
 
       {/* ─── SIH FEATURE 7: AIR-GAPPED ZERO-EGRESS PROOF ─── */}
@@ -419,17 +399,21 @@ export const SystemScreen: React.FC = () => {
 
         {zeroEgressProof && (
           <div className="space-y-3">
-            <div className="p-3 rounded-lg bg-[#070B14] border border-emerald-500/30 flex items-center justify-between text-xs font-mono">
+            <div className={`p-3 rounded-lg flex items-center justify-between text-xs font-mono ${zeroEgressProof.airgapStatus === 'NOT VERIFIED' ? 'bg-amber-950/30 border border-amber-500/30' : 'bg-[#070B14] border border-emerald-500/30'}`}>
               <div className="flex items-center space-x-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="text-emerald-300 font-bold">{zeroEgressProof.airgapStatus}</span>
+                {zeroEgressProof.airgapStatus === 'NOT VERIFIED'
+                  ? <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                  : <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
+                <span className={zeroEgressProof.airgapStatus === 'NOT VERIFIED' ? 'text-amber-300 font-bold' : 'text-emerald-300 font-bold'}>{zeroEgressProof.airgapStatus}</span>
               </div>
-              <span className="text-[10px] text-slate-400">OUTBOUND PACKETS: 0</span>
+              <span className="text-[10px] text-slate-400">OUTBOUND REQUESTS: {zeroEgressProof.externalRequestsCount ?? 'NOT MEASURED'}</span>
             </div>
+            <p className="text-[11px] text-slate-400">{zeroEgressProof.verdict}</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
               <div className="p-2.5 rounded bg-[#070B14] border border-slate-800 space-y-1">
                 <span className="text-[10px] text-slate-500 block">BOUND LOCAL INTERFACES</span>
+                {zeroEgressProof.networkInterfaces.length === 0 && <span className="text-slate-500">Host interface telemetry unavailable.</span>}
                 {zeroEgressProof.networkInterfaces.map((iface, i) => (
                   <div key={i} className="flex justify-between text-[11px]">
                     <span className="text-slate-300">{iface.interface} ({iface.bindAddress})</span>
@@ -440,6 +424,7 @@ export const SystemScreen: React.FC = () => {
 
               <div className="p-2.5 rounded bg-[#070B14] border border-slate-800 space-y-1">
                 <span className="text-[10px] text-slate-500 block">OUTBOUND EGRESS AUDIT</span>
+                {zeroEgressProof.outboundSocketsAudit.length === 0 && <span className="text-slate-500">Outbound socket telemetry unavailable.</span>}
                 {zeroEgressProof.outboundSocketsAudit.map((sock, i) => (
                   <div key={i} className="flex justify-between text-[11px]">
                     <span className="text-slate-300">{sock.destination}</span>
@@ -449,11 +434,18 @@ export const SystemScreen: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-2 border-t border-slate-800">
-              <span className="truncate">PROOF HASH: {zeroEgressProof.evidenceHash}</span>
-              <span className="text-cyan-300">{zeroEgressProof.signature}</span>
-            </div>
+            {zeroEgressProof.evidenceHash && (
+              <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-2 border-t border-slate-800">
+                <span className="truncate">PROOF HASH: {zeroEgressProof.evidenceHash}</span>
+                <span className="text-cyan-300">{zeroEgressProof.signature}</span>
+              </div>
+            )}
           </div>
+        )}
+        {!zeroEgressProof && zeroEgressError && (
+          <p role="alert" className="text-xs text-amber-300">
+            Egress audit unavailable: {zeroEgressError}
+          </p>
         )}
       </div>
 

@@ -309,7 +309,7 @@ export const TacticalMap: React.FC<TacticalMapProps> = ({
             <div class="text-[10px] text-slate-400 font-mono">${cand.locationName}</div>
             <div class="grid grid-cols-2 gap-1 pt-1 text-[10px] font-mono border-t border-slate-800">
               <div><span class="text-slate-500">TYPE:</span> <span class="text-slate-200">${cand.changeType}</span></div>
-              <div><span class="text-slate-500">AREA:</span> <span class="text-slate-200">${cand.areaHectares} ha</span></div>
+              <div><span class="text-slate-500">AREA:</span> <span class="text-slate-200">${cand.areaHectares == null ? 'Not measured' : `${cand.areaHectares} ha`}</span></div>
             </div>
           </div>
         `;

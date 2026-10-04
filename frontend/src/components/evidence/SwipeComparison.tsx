@@ -106,7 +106,7 @@ export const SwipeComparison: React.FC<SwipeComparisonProps> = ({
           </button>
         </div>
 
-        {/* Center: Multispectral Layer Controls (RGB, NDVI, NDBI, SAR, Change Mask) */}
+        {/* Center: Multispectral Layer Controls (RGB, NDVI, NDBI, Change Mask) */}
         {showLayerControls && (
           <div className="flex items-center space-x-1">
             <span className="text-[11px] font-mono text-slate-400 mr-1 hidden sm:inline">LAYER:</span>
@@ -114,7 +114,6 @@ export const SwipeComparison: React.FC<SwipeComparisonProps> = ({
               { id: 'rgb', label: 'RGB True Color' },
               { id: 'ndvi', label: 'NDVI Vegetation' },
               { id: 'ndbi', label: 'NDBI Built-Up' },
-              { id: 'sar', label: 'Sentinel-1 SAR' },
               { id: 'mask', label: 'Change Mask' },
             ].map((layer) => (
               <button
@@ -276,12 +275,12 @@ export const SwipeComparison: React.FC<SwipeComparisonProps> = ({
           <span className="text-slate-500">|</span>
           <span>{candidate.locationName}</span>
           <span className="text-slate-500">|</span>
-          <span className="text-amber-400">Δ AREA: {candidate.areaHectares} ha</span>
+          <span className="text-amber-400">AREA: {candidate.areaHectares === null ? 'Not measured' : `${candidate.areaHectares} ha`}</span>
         </div>
 
         <div className="flex items-center space-x-2">
           <span className="px-2 py-0.5 rounded bg-cyan-950/60 text-cyan-300 border border-cyan-500/30 text-[10px]">
-            10m Ground Sample Distance
+            Source resolution: not provided in the candidate dataset
           </span>
         </div>
       </div>

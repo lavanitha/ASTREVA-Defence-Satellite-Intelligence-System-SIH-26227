@@ -1,0 +1,52 @@
+[
+  {
+    "id": "AUD-96643",
+    "timestamp": "2026-09-30 16:23:34 UTC",
+    "eventType": "SEMANTIC_SEARCH",
+    "user": "Cmdr. R. K. Sharma",
+    "role": "Senior GEOINT Officer (Level-3)",
+    "ipAddress": "10.24.120.4 (Local Enclave)",
+    "details": "Executed OpenCLIP vector search: \"Step terraced open cast pit excavation\"",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "AUD-90234",
+    "timestamp": "2026-09-30 16:23:30 UTC",
+    "eventType": "SEMANTIC_SEARCH",
+    "user": "Cmdr. R. K. Sharma",
+    "role": "Senior GEOINT Officer (Level-3)",
+    "ipAddress": "10.24.120.4 (Local Enclave)",
+    "details": "Executed OpenCLIP vector search: \"Dense urban buildings and paved roads\"",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "AUD-97224",
+    "timestamp": "2026-09-30 16:23:28 UTC",
+    "eventType": "SEMANTIC_SEARCH",
+    "user": "Cmdr. R. K. Sharma",
+    "role": "Senior GEOINT Officer (Level-3)",
+    "ipAddress": "10.24.120.4 (Local Enclave)",
+    "details": "Executed OpenCLIP vector search: \"New construction near river embankment\"",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "AUD-93805",
+    "timestamp": "2026-09-30 16:23:20 UTC",
+    "eventType": "SYSTEM_CHECK",
+    "user": "Cmdr. R. K. Sharma",
+    "role": "Senior GEOINT Officer (Level-3)",
+    "ipAddress": "10.24.120.4 (Local Enclave)",
+    "details": "Air-Gapped Zero-Egress network audit verified: 0 outbound connections.",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "AUD-95177",
+    "timestamp": "2026-09-30 16:23:20 UTC",
+    "eventType": "SYSTEM_CHECK",
+    "user": "Cmdr. R. K. Sharma",
+    "role": "Senior GEOINT Officer (Level-3)",
+    "ipAddress": "10.24.120.4 (Local Enclave)",
+    "details": "Air-Gapped Zero-Egress network audit verified: 0 outbound connections.",
+    "status": "SUCCESS"
+  }
+]

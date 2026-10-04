@@ -11,6 +11,7 @@ import faiss
 ROOT_DIR = Path(__file__).resolve().parents[1]
 DATASET_LINK = ROOT_DIR / "runtime" / "SIH-2026" / "Dataset"
 DATASET_BUNDLE = DATASET_LINK.with_name("Dataset.bundle")
+OPENCLIP_TEXT_MODEL = ROOT_DIR / "runtime" / "SIH-2026" / "CODE" / "openclip_text_fp16.pt"
 REQUIRED_FILES = (
     "tile_catalogue.csv",
     "Index/tiles.faiss",
@@ -74,6 +75,12 @@ def write_indexed_catalogue(source_path: Path, target_path: Path, indexed_tile_n
 
 
 def verify_source_dataset(source_dir: Path) -> int:
+    if not OPENCLIP_TEXT_MODEL.is_file():
+        raise RuntimeError(f"Required FP16 OpenCLIP text model is missing: {OPENCLIP_TEXT_MODEL}")
+    with OPENCLIP_TEXT_MODEL.open("rb") as model_file:
+        if model_file.read(80).startswith(b"version https://git-lfs.github.com/spec/v1"):
+            raise RuntimeError("OpenCLIP text model Git LFS pointer was not materialized")
+
     for relative_path in REQUIRED_FILES:
         if not (source_dir / relative_path).is_file():
             raise RuntimeError(f"Required runtime data is missing: {relative_path}")

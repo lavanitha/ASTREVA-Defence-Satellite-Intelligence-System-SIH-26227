@@ -40,6 +40,9 @@ export const WorkspaceScreen: React.FC = () => {
 
   const currentAoi = aois.find((a) => a.id === activeAoiId) || aois[0];
   const aoiCandidates = candidates.filter((c) => c.aoiId === activeAoiId);
+  const averageConfidence = aoiCandidates.length
+    ? aoiCandidates.reduce((total, candidate) => total + candidate.confidence, 0) / aoiCandidates.length
+    : null;
 
   // Filtered candidate list
   const filteredCandidates = aoiCandidates.filter((cand) => {
@@ -111,7 +114,7 @@ export const WorkspaceScreen: React.FC = () => {
           <div className="px-3 py-1.5 rounded-lg bg-[#0E172A]/80 border border-slate-800">
             <span className="text-[10px] font-mono text-slate-400 block">AVG CONFIDENCE</span>
             <span className="text-xs font-mono font-bold text-emerald-400">
-              93.4% AI Match
+              {averageConfidence === null ? 'N/A' : `${averageConfidence.toFixed(1)}%`}
             </span>
           </div>
         </div>

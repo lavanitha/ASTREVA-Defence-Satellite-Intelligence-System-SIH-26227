@@ -26,6 +26,7 @@ export const AuditScreen: React.FC = () => {
   const [downloadSuccess, setDownloadSuccess] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationResult, setVerificationResult] = useState<AuditVerificationResponse | null>(null);
+  const [verificationError, setVerificationError] = useState<string | null>(null);
 
   // Filter logs
   const filteredLogs = auditLogs.filter((log) => {
@@ -44,26 +45,26 @@ export const AuditScreen: React.FC = () => {
   });
 
   const handleExportAudit = () => {
+    const blob = new Blob([JSON.stringify(auditLogs, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'astreva-audit-records.json';
+    link.click();
+    URL.revokeObjectURL(url);
     setDownloadSuccess(true);
     setTimeout(() => setDownloadSuccess(false), 3000);
   };
 
   const handleVerifyChain = async () => {
     setIsVerifying(true);
+    setVerificationError(null);
     try {
       const res = await apiService.verifyAuditTrail();
       setVerificationResult(res);
     } catch (err) {
-      setVerificationResult({
-        chainValid: true,
-        totalBlocksVerified: auditLogs.length,
-        failedBlockIndex: null,
-        genesisHash: 'GENESIS_BLOCK_ASTREVA_ENCLAVE_2026_0000000000000000',
-        latestHash: '8f3a9e2d41b0c9e7a82910385720193857291038475920184759201847592018',
-        signatureAlgorithm: 'HMAC-SHA256 / SHA-256 Hash Chain',
-        verificationTimestamp: new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC',
-        statusMessage: 'CRYPTOGRAPHIC INTEGRITY VERIFIED: All blocks non-repudiable and tamper-proof.',
-      });
+      setVerificationResult(null);
+      setVerificationError(err instanceof Error ? err.message : 'Audit verification is unavailable.');
     } finally {
       setIsVerifying(false);
     }
@@ -128,6 +129,11 @@ export const AuditScreen: React.FC = () => {
             <div className="truncate">Genesis Hash: <span className="text-slate-400">{verificationResult.genesisHash}</span></div>
             <div className="truncate">Latest Head Hash: <span className="text-cyan-400">{verificationResult.latestHash}</span></div>
           </div>
+        </div>
+      )}
+      {verificationError && (
+        <div role="alert" className="rounded-lg border border-amber-500/30 bg-amber-950/30 p-3 text-xs font-mono text-amber-200">
+          Audit verification unavailable: {verificationError}
         </div>
       )}
 

@@ -14,10 +14,10 @@ import {
   ArrowRight,
 } from 'lucide-react';
 
-type IndexTab = 'NDVI' | 'NDBI' | 'SAR Radar' | 'Change Mask';
+type IndexTab = 'NDVI' | 'NDBI' | 'Change Mask';
 
 export const AnalysisPanels: React.FC = () => {
-  const { candidates, selectedCandidateId, selectCandidate } = useGeointStore();
+  const { candidates, selectedCandidateId } = useGeointStore();
   const [activeIndex, setActiveIndex] = useState<IndexTab>('NDVI');
 
   const selectedCandidate =
@@ -27,49 +27,14 @@ export const AnalysisPanels: React.FC = () => {
 
   const [lat, lon] = selectedCandidate.coordinates;
 
-  // Derived index values from candidate ML data
-  const getIndexStats = () => {
-    switch (activeIndex) {
-      case 'NDVI':
-        return {
-          title: 'NDVI Vegetation Index',
-          baseline: '0.64 (Vegetative Canopy)',
-          latest: '0.21 (Canopy Reduction)',
-          delta: '-0.43 Delta Drop',
-          color: '#10b981',
-          description: 'Multispectral Red (B04) & NIR (B08) band ratio tracking greenery loss.',
-        };
-      case 'NDBI':
-        return {
-          title: 'NDBI Built-Up Index',
-          baseline: '0.12 (Bare Soil / Scrub)',
-          latest: '0.58 (Built Structure)',
-          delta: '+0.46 Index Rise',
-          color: '#f97316',
-          description: 'Normalized Difference Built-Up Index highlighting concrete/impervious surfaces.',
-        };
-      case 'SAR Radar':
-        return {
-          title: 'Sentinel-1 C-Band SAR Backscatter',
-          baseline: '-14.2 dB (Smooth Terrain)',
-          latest: '-6.8 dB (Double-Bounce Scattering)',
-          delta: '+7.4 dB Reflectance',
-          color: '#38bdf8',
-          description: 'Synthetic Aperture Radar backscatter tracking structural surface roughness.',
-        };
-      case 'Change Mask':
-        return {
-          title: 'Binary Spectral Change Mask',
-          baseline: 'Black (0 = Baseline)',
-          latest: 'White (255 = Detected Change)',
-          delta: `${selectedCandidate.areaHectares} ha Total Area`,
-          color: '#f43f5e',
-          description: 'Morphological binary mask isolating top 7% high-confidence spectral deltas.',
-        };
-    }
+  const currentStats = {
+    title: activeIndex === 'NDVI'
+      ? 'NDVI source-raster visualization'
+      : activeIndex === 'NDBI'
+        ? 'NDBI source-raster visualization'
+        : 'Computed spectral change mask',
+    color: activeIndex === 'NDVI' ? '#10b981' : activeIndex === 'NDBI' ? '#f97316' : '#f43f5e',
   };
-
-  const currentStats = getIndexStats();
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -140,9 +105,9 @@ export const AnalysisPanels: React.FC = () => {
           <div className="p-3 rounded-lg bg-[#070B14] border border-slate-800 space-y-1">
             <span className="text-[10px] text-slate-500 uppercase block">{currentStats.title}</span>
             <div className="font-bold text-xs" style={{ color: currentStats.color }}>
-              {currentStats.latest}
+              {currentStats.title}
             </div>
-            <div className="text-[10px] text-slate-400">Baseline: {currentStats.baseline}</div>
+            <div className="text-[10px] text-slate-400">No numeric index statistics are stored for this candidate.</div>
           </div>
 
           {/* Tile 4: Change Summary */}
@@ -216,10 +181,8 @@ export const AnalysisPanels: React.FC = () => {
                     activeIndex === 'NDVI'
                       ? selectedCandidate.thumbnails.ndvi
                       : activeIndex === 'NDBI'
-                      ? selectedCandidate.thumbnails.ndbi
-                      : activeIndex === 'SAR Radar'
-                      ? selectedCandidate.thumbnails.sar
-                      : selectedCandidate.thumbnails.changeMask
+                        ? selectedCandidate.thumbnails.ndbi
+                        : selectedCandidate.thumbnails.changeMask
                   }
                   alt={activeIndex}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform"

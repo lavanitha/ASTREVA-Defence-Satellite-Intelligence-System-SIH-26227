@@ -89,13 +89,12 @@ export const ReviewQueueScreen: React.FC = () => {
 
   const handleBatchExport = () => {
     if (selectedIds.length === 0) return;
-    createExport(
+    void createExport(
       `Batch Verified Candidates Export (${selectedIds.length} Items)`,
       'GeoJSON',
-      'Multi-Sector Batch',
-      selectedIds.length
-    );
-    navigate('/exports');
+      'All Active AOIs (National)',
+      selectedIds
+    ).then(() => navigate('/exports'));
   };
 
   const executeQuickTriage = (status: CandidateStatus) => {
@@ -338,7 +337,7 @@ export const ReviewQueueScreen: React.FC = () => {
 
                       {/* Area */}
                       <td className="p-3 font-mono text-amber-300 font-semibold">
-                        {cand.areaHectares} ha
+                        {cand.areaHectares === null ? 'Not measured' : `${cand.areaHectares} ha`}
                       </td>
 
                       {/* Confidence Meter */}
@@ -465,7 +464,7 @@ export const ReviewQueueScreen: React.FC = () => {
             {/* Key factors */}
             <div className="p-2.5 rounded bg-[#070B14] border border-slate-800 text-xs font-mono space-y-1">
               <div><span className="text-slate-400">Sector:</span> {quickInspectCandidate.aoiName}</div>
-              <div><span className="text-slate-400">Area:</span> {quickInspectCandidate.areaHectares} ha | <span className="text-slate-400">Confidence:</span> {quickInspectCandidate.confidence}%</div>
+              <div><span className="text-slate-400">Area:</span> {quickInspectCandidate.areaHectares === null ? 'Not measured' : `${quickInspectCandidate.areaHectares} ha`} | <span className="text-slate-400">Confidence:</span> {quickInspectCandidate.confidence}%</div>
               <div><span className="text-slate-400">False Alarm Risk:</span> {quickInspectCandidate.falseAlarmRisk.riskLevel} (Seasonality: {quickInspectCandidate.falseAlarmRisk.seasonalAnomaly ? 'Yes' : 'No'})</div>
             </div>
 

@@ -138,7 +138,7 @@ export interface ChangeCandidate {
   earliestEvidenceDate: string;
   beforeDate: string;
   afterDate: string;
-  areaHectares: number;
+  areaHectares: number | null;
   sensors: SensorType[];
   status: CandidateStatus;
   analystNotes: string[];
@@ -183,8 +183,8 @@ export interface SceneRecord {
   sensor: SensorType;
   acquisitionDate: string;
   aoiName: string;
-  cloudCover: number;
-  resolutionMeters: number;
+  cloudCover: number | null;
+  resolutionMeters: number | null;
   processingState: 'Processed (L2A)' | 'Calibrated (GRD)' | 'Indexing' | 'Archived';
   sunElevation?: number;
   orbitDirection?: 'Ascending' | 'Descending';
@@ -283,7 +283,7 @@ export interface AuditVerificationResponse {
 export interface ZeroEgressProofResponse {
   airgapStatus: string;
   complianceStandard: string;
-  externalRequestsCount: number;
+  externalRequestsCount: number | null;
   networkInterfaces: Array<{
     interface: string;
     bindAddress: string;

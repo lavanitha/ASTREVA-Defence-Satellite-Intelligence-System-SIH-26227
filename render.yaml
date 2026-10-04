@@ -3,7 +3,7 @@ services:
     name: astreva-backend
     env: python
     region: oregon
-    plan: standard
+    plan: starter
     autoDeployTrigger: commit
     buildCommand: "bash scripts/render_build.sh"
     startCommand: "bash scripts/render_start.sh"
@@ -13,6 +13,12 @@ services:
         value: 3.11.9
       - key: PORT
         value: 10000
+      - key: OMP_NUM_THREADS
+        value: "1"
+      - key: MKL_NUM_THREADS
+        value: "1"
+      - key: OPENBLAS_NUM_THREADS
+        value: "1"
       - key: ASTREVA_DATASET_DIR
         value: /var/data/SIH-2026/Dataset
       - key: ASTREVA_CODE_DIR
@@ -23,6 +29,8 @@ services:
         value: /var/data/huggingface
       - key: TORCH_HOME
         value: /var/data/torch
+      - key: ASTREVA_ALLOWED_ORIGINS
+        value: https://astreva-defence-satellite-intellige.vercel.app
     disk:
       name: astreva-runtime-data
       mountPath: /var/data

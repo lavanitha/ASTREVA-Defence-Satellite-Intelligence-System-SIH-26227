@@ -14,31 +14,16 @@ import {
   CoRegistrationRadiometricValidation,
 } from '../types/geoint';
 
-const DEFAULT_API_BASE_URL = import.meta.env.PROD
-  ? 'https://astreva-defence-satellite-intelligence.onrender.com'
-  : 'http://localhost:8000';
-const API_BASE_URL = (
-  import.meta.env.PROD
-    ? DEFAULT_API_BASE_URL
-    : import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL
-).replace(/\/+$/, '');
+const DEFAULT_API_BASE_URL = 'https://astreva-defence-satellite-intelligence.onrender.com';
+const configuredApiBaseUrl = (import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL).replace(/\/+$/, '');
+const API_BASE_URL = configuredApiBaseUrl === DEFAULT_API_BASE_URL
+  ? configuredApiBaseUrl
+  : DEFAULT_API_BASE_URL;
 
 function normalizeApiUrls<T>(value: T): T {
   if (typeof value === 'string') {
     if (value.startsWith('/api/') || value.startsWith('/static/')) {
       return `${API_BASE_URL}${value}` as T;
-    }
-
-    try {
-      const url = new URL(value);
-      if (
-        (url.hostname === 'localhost' || url.hostname === '127.0.0.1') &&
-        (url.pathname.startsWith('/api/') || url.pathname.startsWith('/static/'))
-      ) {
-        return `${API_BASE_URL}${url.pathname}${url.search}${url.hash}` as T;
-      }
-    } catch {
-      return value;
     }
 
     return value;
@@ -59,20 +44,38 @@ function normalizeApiUrls<T>(value: T): T {
 
 async function fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      ...(options?.body ? { 'Content-Type': 'application/json' } : {}),
-      ...options?.headers,
-    },
-  });
+  const retryDelays = [5000, 10000, 15000, 20000];
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`API error ${response.status}: ${errorText}`);
+  for (let attempt = 0; attempt <= retryDelays.length; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          ...(options?.body ? { 'Content-Type': 'application/json' } : {}),
+          ...options?.headers,
+        },
+      });
+
+      if (response.ok) {
+        return normalizeApiUrls(await response.json());
+      }
+
+      const errorText = await response.text();
+      const error = new Error(`API error ${response.status}: ${errorText}`);
+      if (![502, 503, 504].includes(response.status) || attempt === retryDelays.length) {
+        throw error;
+      }
+    } catch (error) {
+      const transientHttpError = error instanceof Error && /^API error 50[234]:/.test(error.message);
+      if ((!transientHttpError && !(error instanceof TypeError)) || attempt === retryDelays.length) {
+        throw error;
+      }
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, retryDelays[attempt]));
   }
 
-  return normalizeApiUrls(await response.json());
+  throw new Error(`API request failed: ${url}`);
 }
 
 export const apiService = {
@@ -280,6 +283,31 @@ export const apiService = {
   // Audit Logs
   async getAuditLogs(): Promise<AuditLog[]> {
     return fetchJson<AuditLog[]>('/api/audit');
+  },
+
+  async getExports(): Promise<ExportPackage[]> {
+    return fetchJson<ExportPackage[]>('/api/exports');
+  },
+
+  async createExportPackage(payload: {
+    title: string;
+    format: ExportPackage['format'];
+    aoi: string;
+    exportedBy: string;
+    candidate_ids?: string[];
+  }): Promise<ExportPackage> {
+    return fetchJson<ExportPackage>('/api/exports', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
+
+  getExportDownloadUrl(id: string): string {
+    return `${API_BASE_URL}/api/exports/${encodeURIComponent(id)}/download`;
+  },
+
+  getTileDownloadUrl(filename: string): string {
+    return `${API_BASE_URL}/static/tiles_raw/${encodeURIComponent(filename)}`;
   },
 
   async addAuditLog(entry: Partial<AuditLog>) {

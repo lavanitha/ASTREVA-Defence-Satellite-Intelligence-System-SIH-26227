@@ -14,6 +14,7 @@ import {
   MapPin,
   FileText,
   Sparkles,
+  RefreshCw,
 } from 'lucide-react';
 
 export const ChangeAnalysisScreen: React.FC = () => {
@@ -25,12 +26,33 @@ export const ChangeAnalysisScreen: React.FC = () => {
     setCandidateStatus,
     addAnalystNote,
     createExport,
+    initApiData,
+    isLoadingApi,
   } = useGeointStore();
 
   const [newNote, setNewNote] = useState('');
 
   const candidate =
     candidates.find((c) => c.id === selectedCandidateId) || candidates[0];
+
+  if (!candidate) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
+        <h1 className="text-lg font-bold text-white">No change candidates available</h1>
+        <p className="max-w-md text-sm text-slate-400">
+          Candidate data is unavailable while the backend starts or when no changes have been indexed.
+        </p>
+        <button
+          onClick={() => void initApiData()}
+          disabled={isLoadingApi}
+          className="flex items-center gap-2 rounded-md border border-cyan-500/40 bg-cyan-950/50 px-3 py-2 text-sm text-cyan-200 disabled:opacity-50"
+        >
+          <RefreshCw className={`h-4 w-4 ${isLoadingApi ? 'animate-spin' : ''}`} />
+          Retry data load
+        </button>
+      </div>
+    );
+  }
 
   const handleAddNote = () => {
     if (!newNote.trim()) return;
@@ -39,13 +61,11 @@ export const ChangeAnalysisScreen: React.FC = () => {
   };
 
   const handleExportDossier = () => {
-    createExport(
+    void createExport(
       `Intelligence Dossier - ${candidate.id} (${candidate.title})`,
       'Intelligence Dossier (PDF/HTML)',
-      candidate.aoiName,
-      1
-    );
-    navigate('/exports');
+      candidate.aoiName
+    ).then(() => navigate('/exports'));
   };
 
   return (
@@ -160,7 +180,7 @@ export const ChangeAnalysisScreen: React.FC = () => {
                 </div>
                 <div className="p-2 rounded bg-[#070B14] border border-slate-800">
                   <div className="text-[10px] text-slate-400 uppercase">Affected Area</div>
-                  <div className="text-xs text-cyan-300 font-bold mt-0.5">{candidate.areaHectares} ha</div>
+                  <div className="text-xs text-cyan-300 font-bold mt-0.5">{candidate.areaHectares ?? 'Not measured'} ha</div>
                 </div>
               </div>
 
@@ -173,7 +193,7 @@ export const ChangeAnalysisScreen: React.FC = () => {
               <div className="p-2.5 rounded bg-[#070B14] border border-slate-800/80">
                 <div className="text-[10px] text-slate-400 uppercase mb-1">Visual Comparison Summary</div>
                 <p className="text-xs text-slate-300 font-sans leading-relaxed">
-                  Comparing the baseline pass ({candidate.beforeDate}) against current satellite acquisition ({candidate.afterDate}) confirms {candidate.areaHectares} hectares of new {candidate.changeType.toLowerCase()} across this sector.
+                  Source candidate classified as {candidate.changeType.toLowerCase()} between {candidate.beforeDate || 'N/A'} and {candidate.afterDate || 'N/A'}; area {candidate.areaHectares === null ? 'not measured' : `${candidate.areaHectares} hectares`}.
                 </p>
               </div>
             </div>

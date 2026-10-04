@@ -23,6 +23,7 @@ import {
   Check,
   Copy,
   ExternalLink,
+  RefreshCw,
 } from 'lucide-react';
 
 export const CandidateDetailScreen: React.FC = () => {
@@ -33,6 +34,8 @@ export const CandidateDetailScreen: React.FC = () => {
     setCandidateStatus,
     addAnalystNote,
     createExport,
+    initApiData,
+    isLoadingApi,
   } = useGeointStore();
 
   const [newNote, setNewNote] = useState('');
@@ -41,6 +44,25 @@ export const CandidateDetailScreen: React.FC = () => {
 
   const candidate =
     candidates.find((c) => c.id === id) || candidates[0];
+
+  if (!candidate) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
+        <h1 className="text-lg font-bold text-white">Candidate data unavailable</h1>
+        <p className="max-w-md text-sm text-slate-400">
+          This dossier requires a candidate returned by the live backend.
+        </p>
+        <button
+          onClick={() => void initApiData()}
+          disabled={isLoadingApi}
+          className="flex items-center gap-2 rounded-md border border-cyan-500/40 bg-cyan-950/50 px-3 py-2 text-sm text-cyan-200 disabled:opacity-50"
+        >
+          <RefreshCw className={`h-4 w-4 ${isLoadingApi ? 'animate-spin' : ''}`} />
+          Retry data load
+        </button>
+      </div>
+    );
+  }
 
   const handleStatusChange = (status: 'confirmed' | 'rejected') => {
     setCandidateStatus(candidate.id, status, `Updated via Intelligence Dossier view.`);
@@ -60,10 +82,13 @@ export const CandidateDetailScreen: React.FC = () => {
     createExport(
       `Intelligence Dossier - ${candidate.id}`,
       'Intelligence Dossier (PDF/HTML)',
-      candidate.aoiName,
-      1
+      candidate.aoiName
     );
-    navigate('/exports');
+    void createExport(
+      `Intelligence Dossier - ${candidate.id}`,
+      'Intelligence Dossier (PDF/HTML)',
+      candidate.aoiName
+    ).then(() => navigate('/exports'));
   };
 
   const handleCopyStac = () => {
@@ -74,75 +99,10 @@ export const CandidateDetailScreen: React.FC = () => {
     }
   };
 
-  // Safe feature fallbacks
-  const backtracking = candidate.backtracking || {
-    earliest_change_date: candidate.earliestEvidenceDate || '2021-06-01',
-    earliest_scene_id: `S2B_MSIL2A_20210601_${candidate.id}`,
-    backtracking_confidence: 94.2,
-    baseline_date: candidate.beforeDate || '2020-01-01',
-    detection_date: candidate.afterDate || '2024-12-01',
-    time_series_observations: [
-      {
-        date: candidate.beforeDate || '2020-01-01',
-        scene_id: `S2A_MSIL2A_20200101_${candidate.id}`,
-        sensor: 'Sentinel-2A Optical',
-        anomaly_score: 0.04,
-        status: 'BASELINE_STABLE',
-        description: 'Baseline undisturbed ground cover (Pre-Change Reference)',
-        thumbnail_url: candidate.thumbnails?.beforeRGB || '',
-      },
-      {
-        date: candidate.earliestEvidenceDate || '2021-06-01',
-        scene_id: `S2B_MSIL2A_20210601_${candidate.id}`,
-        sensor: 'Sentinel-2B Optical',
-        anomaly_score: 0.68,
-        status: 'EARLIEST_ANOMALY_ONSET',
-        description: 'Earliest statistically significant surface reflectance change detected',
-        thumbnail_url: candidate.thumbnails?.afterRGB || '',
-      },
-      {
-        date: candidate.afterDate || '2024-12-01',
-        scene_id: `S2B_MSIL2A_20241201_${candidate.id}`,
-        sensor: 'Sentinel-2B Optical',
-        anomaly_score: 0.94,
-        status: 'CURRENT_DETECTION',
-        description: 'Confirmed multi-temporal change anomaly',
-        thumbnail_url: candidate.thumbnails?.afterRGB || '',
-      },
-    ],
-  };
-
-  const falseAlarm6Factor = candidate.falseAlarm6Factor || {
-    riskLevel: candidate.falseAlarmRisk?.riskLevel || 'Low',
-    overallSuppressionScore: 92.4,
-    factors: {
-      cloudShadow: { score: 98.0, flagged: false, explanation: 'Cloud & Shadow Coverage: 2.0% obscuration detected (Clear-sky pass confidence high).' },
-      seasonalPhenology: { score: 100.0, flagged: false, explanation: 'Same-Season Pair Verified — Consistent vegetation canopy cycle.' },
-      radiometricGain: { score: 95.8, flagged: false, explanation: 'Solar elevation shift normalized via TOA top-of-atmosphere reflectance scaling.' },
-      nodataBorder: { score: 100.0, flagged: false, explanation: 'No NoData border pixel distortion.' },
-      registrationShift: { score: 86.0, flagged: false, explanation: 'Co-registration shift 0.14px is within 0.5px sub-pixel tolerance.' },
-    },
-    explanations: candidate.falseAlarmRisk?.factors || ['No Confounders Detected — High Confidence Same-Season Pair'],
-  };
-
-  const crossVal = candidate.crossValidation || {
-    optical_confidence: candidate.confidence || 85,
-    sar_confidence: Math.min(98, (candidate.confidence || 85) + 4),
-    fused_confidence: Math.min(96, (candidate.confidence || 85) + 2),
-    agreement_status: 'AGREED_HIGH_CONFIDENCE',
-    agreement_description: 'Optical (Sentinel-2) NIR/Red spectral delta and SAR (Sentinel-1) VV/VH C-band backscatter increase mutually confirm structural ground alteration.',
-    optical_metrics: { sensor: 'Sentinel-2A/B MSI', bands: 'B02, B03, B04, B08', ndvi_delta: 0.42, ndbi_delta: 0.38, cloud_obscuration: '0.0%' },
-    sar_metrics: { sensor: 'Sentinel-1A/B C-SAR', mode: 'IW GRDH', polarization: 'VV + VH Dual-Pol', vv_backscatter_delta_db: 3.84, vh_backscatter_delta_db: 4.12, coherence_loss: 0.76, cloud_penetration_verified: true },
-  };
-
-  const coReg = candidate.coRegistration || {
-    subpixelShift: { xShiftPx: 0.08, yShiftPx: 0.06, totalShiftPx: 0.10, tolerancePx: 0.50, withinTolerance: true },
-    radiometricNormalization: { gainFactor: 0.98, biasOffset: 0.012, histogramMatchMethod: 'Relative Top-of-Atmosphere (TOA) Band Matching', normalizedReflectanceDelta: 0.032 },
-    alignmentQualityScore: 90.0,
-    validationStatus: 'VALIDATED_SUBPIXEL_ALIGNED',
-    penaltyApplied: 0.0,
-    explanation: 'Sub-pixel shift (0.10px) and radiometric gain ratio (0.98) verified within SIH tolerance.',
-  };
+  const backtracking = candidate.backtracking;
+  const falseAlarm6Factor = candidate.falseAlarm6Factor;
+  const crossVal = candidate.crossValidation;
+  const coReg = candidate.coRegistration;
 
   return (
     <div className="flex flex-col h-full p-4 lg:p-6 space-y-5 overflow-y-auto">
@@ -236,17 +196,17 @@ export const CandidateDetailScreen: React.FC = () => {
 
         <div className="p-3 rounded-lg bg-[#0B1120]/95 border border-cyan-500/20 text-xs font-mono">
           <span className="text-[10px] text-slate-500 block">DELTA AREA</span>
-          <span className="text-amber-400 font-bold block">{candidate.areaHectares} Hectares</span>
+          <span className="text-amber-400 font-bold block">{candidate.areaHectares ?? 'Not measured'} Hectares</span>
         </div>
 
         <div className="p-3 rounded-lg bg-[#0B1120]/95 border border-cyan-500/20 text-xs font-mono">
           <span className="text-[10px] text-slate-500 block">FUSED CONFIDENCE</span>
-          <span className="text-emerald-400 font-bold block">{crossVal.fused_confidence}% (S2+S1)</span>
+          <span className="text-emerald-400 font-bold block">{crossVal ? `${crossVal.fused_confidence}% (S2+S1)` : 'Not recorded'}</span>
         </div>
 
         <div className="p-3 rounded-lg bg-[#0B1120]/95 border border-cyan-500/20 text-xs font-mono">
           <span className="text-[10px] text-slate-500 block">EARLIEST ONSET</span>
-          <span className="text-amber-300 font-bold block">{backtracking.earliest_change_date}</span>
+          <span className="text-amber-300 font-bold block">{backtracking?.earliest_change_date ?? 'Not recorded'}</span>
         </div>
       </div>
 
@@ -254,7 +214,7 @@ export const CandidateDetailScreen: React.FC = () => {
       <div className="space-y-3">
         <div className="flex items-center justify-between text-xs font-mono text-slate-300 px-1">
           <span className="font-bold text-cyan-400">MULTISPECTRAL & SAR CO-REGISTERED EVIDENCE</span>
-          <span className="text-slate-500">10m GROUND SAMPLE DISTANCE</span>
+          <span className="text-slate-500">SOURCE RESOLUTION: NOT PROVIDED</span>
         </div>
 
         <SwipeComparison
@@ -341,16 +301,16 @@ export const CandidateDetailScreen: React.FC = () => {
                     <span>EARLIEST-CHANGE BACKTRACKING & TIME-SERIES</span>
                   </span>
                   <div className="text-[11px] text-slate-400 font-mono mt-0.5">
-                    Earliest confirmed anomaly onset: <span className="text-amber-400 font-bold">{backtracking.earliest_change_date}</span> ({backtracking.backtracking_confidence}% Confidence)
+                    Earliest recorded observation: <span className="text-amber-400 font-bold">{backtracking?.earliest_change_date ?? 'Not available'}</span>{backtracking && ` (${backtracking.backtracking_confidence}% confidence)`}
                   </div>
                 </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/40 font-bold">
-                  {backtracking.time_series_observations.length} EPOCHS ANALYZED
+                  {backtracking?.time_series_observations.length ?? 0} SOURCE OBSERVATIONS
                 </span>
               </div>
 
               <div className="space-y-2.5">
-                {backtracking.time_series_observations.map((obs, i) => (
+                {backtracking?.time_series_observations.map((obs, i) => (
                   <div
                     key={i}
                     className={`p-3 rounded-lg border text-xs font-mono transition-all ${
@@ -383,7 +343,7 @@ export const CandidateDetailScreen: React.FC = () => {
                       <span className="text-amber-400 font-bold">Anomaly Metric: {Math.round(obs.anomaly_score * 100)}%</span>
                     </div>
                   </div>
-                ))}
+                )) ?? <p className="text-xs text-slate-400">No time-series observations are stored for this candidate.</p>}
               </div>
             </div>
           )}
@@ -398,16 +358,16 @@ export const CandidateDetailScreen: React.FC = () => {
                     <span>EXPLAINABLE 6-FACTOR FALSE-ALARM DIAGNOSTIC</span>
                   </span>
                   <div className="text-[11px] text-slate-400 font-mono mt-0.5">
-                    Overall Change Validity: <span className="text-emerald-400 font-bold">{falseAlarm6Factor.overallSuppressionScore}%</span> ({falseAlarm6Factor.riskLevel} Confounder Risk)
+                    Source risk: <span className="text-amber-300 font-bold">{candidate.falseAlarmRisk.riskLevel}</span>{falseAlarm6Factor && <>; suppression score: <span className="text-emerald-400 font-bold">{falseAlarm6Factor.overallSuppressionScore}%</span></>}
                   </div>
                 </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-bold">
-                  VERIFIED GENUINE
+                  {candidate.falseAlarmRisk.riskLevel.toUpperCase()} SOURCE RISK
                 </span>
               </div>
 
               <div className="space-y-2 text-xs font-mono">
-                {Object.entries(falseAlarm6Factor.factors).map(([key, factor]) => {
+                {falseAlarm6Factor ? Object.entries(falseAlarm6Factor.factors).map(([key, factor]) => {
                   const titles: Record<string, string> = {
                     cloudShadow: '1. Cloud & Shadow Confounder Suppression',
                     seasonalPhenology: '2. Seasonal Vegetation Phenology Mismatch',
@@ -432,7 +392,7 @@ export const CandidateDetailScreen: React.FC = () => {
                       <p className="text-[11px] text-slate-400 font-sans">{factor.explanation}</p>
                     </div>
                   );
-                })}
+                }) : <p className="text-xs text-slate-400">No six-factor report is stored for this candidate.</p>}
               </div>
             </div>
           )}
@@ -447,42 +407,42 @@ export const CandidateDetailScreen: React.FC = () => {
                     <span>OPTICAL (S2) + SAR (S1) DUAL-SENSOR CROSS-VALIDATION</span>
                   </span>
                   <div className="text-[11px] text-slate-400 font-mono mt-0.5">
-                    Cross-Sensor Status: <span className="text-emerald-400 font-bold">{crossVal.agreement_status}</span>
+                    Cross-Sensor Status: <span className="text-slate-300 font-bold">{crossVal?.agreement_status ?? 'Not available'}</span>
                   </div>
                 </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40 font-bold">
-                  FUSED CONFIDENCE: {crossVal.fused_confidence}%
+                  FUSED CONFIDENCE: {crossVal?.fused_confidence ?? 'Not available'}{crossVal && '%'}
                 </span>
               </div>
 
               <div className="p-2.5 rounded bg-[#070B14] border border-slate-800 text-[11px] text-slate-300 font-sans">
-                {crossVal.agreement_description}
+                {crossVal?.agreement_description ?? 'No cross-sensor validation is stored for this candidate.'}
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-xs font-mono">
                 <div className="p-3 rounded-lg bg-[#070B14] border border-cyan-500/30 space-y-1.5">
                   <div className="flex items-center justify-between border-b border-slate-800 pb-1 text-cyan-300 font-bold">
                     <span>SENTINEL-2 OPTICAL</span>
-                    <span>{crossVal.optical_confidence}%</span>
+                    <span>{crossVal?.optical_confidence ?? 'N/A'}{crossVal && '%'}</span>
                   </div>
                   <div className="text-[11px] text-slate-400 space-y-0.5">
-                    <div>Bands: {crossVal.optical_metrics.bands}</div>
-                    <div>NDVI Delta: {crossVal.optical_metrics.ndvi_delta}</div>
-                    <div>NDBI Delta: {crossVal.optical_metrics.ndbi_delta}</div>
-                    <div>Cloud Obscuration: {crossVal.optical_metrics.cloud_obscuration}</div>
+                    <div>Bands: {crossVal?.optical_metrics?.bands ?? 'N/A'}</div>
+                    <div>NDVI Delta: {crossVal?.optical_metrics?.ndvi_delta ?? 'N/A'}</div>
+                    <div>NDBI Delta: {crossVal?.optical_metrics?.ndbi_delta ?? 'N/A'}</div>
+                    <div>Cloud Obscuration: {crossVal?.optical_metrics?.cloud_obscuration ?? 'N/A'}</div>
                   </div>
                 </div>
 
                 <div className="p-3 rounded-lg bg-[#070B14] border border-purple-500/30 space-y-1.5">
                   <div className="flex items-center justify-between border-b border-slate-800 pb-1 text-purple-300 font-bold">
                     <span>SENTINEL-1 SAR (RADAR)</span>
-                    <span>{crossVal.sar_confidence}%</span>
+                    <span>{crossVal?.sar_confidence ?? 'N/A'}{crossVal && '%'}</span>
                   </div>
                   <div className="text-[11px] text-slate-400 space-y-0.5">
-                    <div>Polarization: {crossVal.sar_metrics.polarization}</div>
-                    <div>VV Delta: +{crossVal.sar_metrics.vv_backscatter_delta_db} dB</div>
-                    <div>VH Delta: +{crossVal.sar_metrics.vh_backscatter_delta_db} dB</div>
-                    <div>Cloud Penetration: Verified True</div>
+                    <div>Polarization: {crossVal?.sar_metrics?.polarization ?? 'N/A'}</div>
+                    <div>VV Delta: {crossVal?.sar_metrics?.vv_backscatter_delta_db ?? 'N/A'} dB</div>
+                    <div>VH Delta: {crossVal?.sar_metrics?.vh_backscatter_delta_db ?? 'N/A'} dB</div>
+                    <div>Cloud Penetration: {crossVal?.sar_metrics?.cloud_penetration_verified == null ? 'N/A' : crossVal.sar_metrics.cloud_penetration_verified ? 'Verified' : 'Not verified'}</div>
                   </div>
                 </div>
               </div>
@@ -499,11 +459,11 @@ export const CandidateDetailScreen: React.FC = () => {
                     <span>RADIOMETRIC & SUB-PIXEL CO-REGISTRATION QUALITY</span>
                   </span>
                   <div className="text-[11px] text-slate-400 font-mono mt-0.5">
-                    Alignment Status: <span className="text-emerald-400 font-bold">{coReg.validationStatus}</span>
+                    Alignment Status: <span className="text-slate-300 font-bold">{coReg?.validationStatus ?? 'Not available'}</span>
                   </div>
                 </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/40 font-bold">
-                  QUALITY SCORE: {coReg.alignmentQualityScore}%
+                  QUALITY SCORE: {coReg?.alignmentQualityScore ?? 'Not available'}{coReg && '%'}
                 </span>
               </div>
 
@@ -511,20 +471,20 @@ export const CandidateDetailScreen: React.FC = () => {
                 <div className="p-3 rounded bg-[#070B14] border border-slate-800 space-y-1">
                   <div className="text-slate-400 text-[10px]">SUB-PIXEL SHIFT (PHASE CORRELATION)</div>
                   <div className="text-cyan-300 font-bold text-sm">
-                    {coReg.subpixelShift.totalShiftPx} px (X: {coReg.subpixelShift.xShiftPx}px, Y: {coReg.subpixelShift.yShiftPx}px)
+                    {coReg?.subpixelShift.totalShiftPx ?? 'N/A'} px (X: {coReg?.subpixelShift.xShiftPx ?? 'N/A'}px, Y: {coReg?.subpixelShift.yShiftPx ?? 'N/A'}px)
                   </div>
-                  <div className="text-[10px] text-slate-500">Tolerance Bar: &lt; {coReg.subpixelShift.tolerancePx} px</div>
+                  <div className="text-[10px] text-slate-500">Tolerance: {coReg?.subpixelShift.tolerancePx ?? 'N/A'} px</div>
                 </div>
 
                 <div className="p-3 rounded bg-[#070B14] border border-slate-800 space-y-1">
                   <div className="text-slate-400 text-[10px]">RADIOMETRIC GAIN RATIO</div>
-                  <div className="text-emerald-400 font-bold text-sm">{coReg.radiometricNormalization.gainFactor}x TOA Matching</div>
-                  <div className="text-[10px] text-slate-500">Reflectance Delta: {coReg.radiometricNormalization.normalizedReflectanceDelta}</div>
+                  <div className="text-emerald-400 font-bold text-sm">{coReg?.radiometricNormalization.gainFactor ?? 'N/A'}x TOA Matching</div>
+                  <div className="text-[10px] text-slate-500">Reflectance Delta: {coReg?.radiometricNormalization.normalizedReflectanceDelta ?? 'N/A'}</div>
                 </div>
               </div>
 
               <div className="p-2.5 rounded bg-[#070B14] border border-slate-800 text-[11px] font-sans text-slate-300">
-                {coReg.explanation}
+                {coReg?.explanation ?? 'No co-registration result is stored for this candidate.'}
               </div>
             </div>
           )}
@@ -545,6 +505,7 @@ export const CandidateDetailScreen: React.FC = () => {
 
                 <button
                   onClick={handleCopyStac}
+                  disabled={!candidate.stacItem}
                   className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs font-mono text-cyan-300 flex items-center space-x-1 transition-colors"
                 >
                   {copiedStac ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
@@ -553,7 +514,7 @@ export const CandidateDetailScreen: React.FC = () => {
               </div>
 
               <pre className="p-3 rounded-lg bg-[#070B14] border border-slate-800 text-[10px] font-mono text-cyan-300 max-h-56 overflow-y-auto">
-                {JSON.stringify(candidate.stacItem || { stac_version: '1.0.0', id: candidate.id, type: 'Feature' }, null, 2)}
+                {candidate.stacItem ? JSON.stringify(candidate.stacItem, null, 2) : 'No STAC provenance item is stored for this candidate.'}
               </pre>
             </div>
           )}

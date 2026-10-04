@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+export PIP_NO_CACHE_DIR=1
+export OMP_NUM_THREADS=1
+export MKL_NUM_THREADS=1
+export OPENBLAS_NUM_THREADS=1
+
 python -m pip install --upgrade pip
-python -m pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision
-python -m pip install -r requirements-full.txt
+python -m pip install --index-url https://download.pytorch.org/whl/cpu "torch==2.4.1" "torchvision==0.19.1"
+python -m pip install --no-cache-dir -r requirements.txt
 
 if ! git lfs version >/dev/null 2>&1; then
   version=3.7.1

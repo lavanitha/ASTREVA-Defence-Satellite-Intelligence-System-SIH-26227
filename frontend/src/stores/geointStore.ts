@@ -59,8 +59,8 @@ interface GeointState {
   setFilterChangeType: (type: string) => void;
   setFilterSensor: (sensor: string) => void;
   setFilterConfidence: (confidence: number) => void;
-  createExport: (title: string, format: ExportPackage['format'], aoi: string, candidateCount: number) => void;
-  addAuditLog: (eventType: AuditLog['eventType'], details: string, status?: AuditLog['status']) => void;
+  createExport: (title: string, format: ExportPackage['format'], aoi: string, candidateIds?: string[]) => Promise<void>;
+  addAuditLog: (eventType: AuditLog['eventType'], details: string, status?: AuditLog['status']) => Promise<void>;
 }
 
 export const useGeointStore = create<GeointState>((set, get) => ({
@@ -95,32 +95,40 @@ export const useGeointStore = create<GeointState>((set, get) => ({
 
   initApiData: async () => {
     set({ isLoadingApi: true, apiError: null });
-    try {
-      // Fetch AOIs, candidates, scenes, and audit logs from real Python backend
-      const [realAois, realCandidates, realScenes, realAuditLogs] = await Promise.all([
-        apiService.getAois(),
-        apiService.getCandidates(),
-        apiService.getScenes(),
-        apiService.getAuditLogs(),
-      ]);
+    const results = await Promise.allSettled([
+      apiService.getAois(),
+      apiService.getCandidates(),
+      apiService.getScenes(),
+      apiService.getAuditLogs(),
+      apiService.getExports(),
+    ]);
+    const [aoiResult, candidateResult, sceneResult, auditResult, exportResult] = results;
+    const currentState = get();
+    const aois = aoiResult.status === 'fulfilled' ? aoiResult.value : currentState.aois;
+    const candidates = candidateResult.status === 'fulfilled' ? candidateResult.value : currentState.candidates;
+    const scenes = sceneResult.status === 'fulfilled' ? sceneResult.value : currentState.scenes;
+    const auditLogs = auditResult.status === 'fulfilled' ? auditResult.value : currentState.auditLogs;
+    const exports = exportResult.status === 'fulfilled' ? exportResult.value : currentState.exports;
+    const failedResults = results.filter((result) => result.status === 'rejected');
+    const selectedCandidateId =
+      candidates.find((candidate) => candidate.id === currentState.selectedCandidateId)?.id ??
+      candidates[0]?.id ??
+      null;
 
-      const selectedId = realCandidates.length > 0 ? realCandidates[0].id : get().selectedCandidateId;
+    failedResults.forEach((result) => {
+      if (result.status === 'rejected') console.error('Backend data request failed', result.reason);
+    });
 
-      set({
-        aois: realAois,
-        candidates: realCandidates,
-        scenes: realScenes,
-        auditLogs: realAuditLogs,
-        selectedCandidateId: selectedId,
-        isLoadingApi: false,
-      });
-    } catch (err: any) {
-      console.error('Production API initialization failed', err);
-      set({
-        aois: [], candidates: [], scenes: [], auditLogs: [], selectedCandidateId: null,
-        isLoadingApi: false, apiError: err?.message || 'Backend API unavailable',
-      });
-    }
+    set({
+      aois,
+      candidates,
+      scenes,
+      auditLogs,
+      exports,
+      selectedCandidateId,
+      isLoadingApi: false,
+      apiError: failedResults.length ? `${failedResults.length} backend data request(s) failed` : null,
+    });
   },
 
   login: (username: string, role = 'Senior GEOINT Officer (Level-3)') => {
@@ -177,81 +185,28 @@ export const useGeointStore = create<GeointState>((set, get) => ({
   },
 
   setCandidateStatus: async (candidateId: string, status: CandidateStatus, note?: string) => {
-    const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
     const userRole = get().user.name;
-
-    // Optimistic UI update
+    await apiService.updateCandidateStatus(candidateId, status, note);
+    const updatedCandidate = await apiService.getCandidateById(candidateId);
     set((state) => ({
-      candidates: state.candidates.map((cand) => {
-        if (cand.id === candidateId) {
-          const updatedHistory = [
-            ...cand.reviewHistory,
-            {
-              user: userRole,
-              action: status === 'confirmed' ? 'CONFIRMED_ANOMALY' : status === 'rejected' ? 'REJECTED_ANOMALY' : 'STATUS_RESET_PENDING',
-              timestamp,
-              note: note || undefined,
-            },
-          ];
-          const updatedNotes = note ? [...cand.analystNotes, `[${status.toUpperCase()}] ${note}`] : cand.analystNotes;
-          return {
-            ...cand,
-            status,
-            reviewHistory: updatedHistory,
-            analystNotes: updatedNotes,
-          };
-        }
-        return cand;
-      }),
+      candidates: state.candidates.map((candidate) => candidate.id === candidateId ? updatedCandidate : candidate),
     }));
-
     const event = status === 'confirmed' ? 'CONFIRM_CANDIDATE' : status === 'rejected' ? 'REJECT_CANDIDATE' : 'CONFIRM_CANDIDATE';
-    get().addAuditLog(
+    await get().addAuditLog(
       event,
       `Candidate ${candidateId} transitioned to ${status.toUpperCase()} by ${userRole}.${note ? ` Note: "${note}"` : ''}`,
       'SUCCESS'
     );
-
-    // Sync with backend API
-    try {
-      await apiService.updateCandidateStatus(candidateId, status, note);
-    } catch (err) {
-      console.warn('Backend status update warning:', err);
-    }
   },
 
   addAnalystNote: async (candidateId: string, note: string) => {
-    const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
     const userRole = get().user.name;
-
+    await apiService.addAnalystNote(candidateId, note);
+    const updatedCandidate = await apiService.getCandidateById(candidateId);
     set((state) => ({
-      candidates: state.candidates.map((cand) => {
-        if (cand.id === candidateId) {
-          return {
-            ...cand,
-            analystNotes: [...cand.analystNotes, `[${timestamp} by ${userRole}] ${note}`],
-            reviewHistory: [
-              ...cand.reviewHistory,
-              {
-                user: userRole,
-                action: 'ADDED_ANALYST_NOTE',
-                timestamp,
-                note,
-              },
-            ],
-          };
-        }
-        return cand;
-      }),
+      candidates: state.candidates.map((candidate) => candidate.id === candidateId ? updatedCandidate : candidate),
     }));
-
-    get().addAuditLog('ADD_NOTE', `Note appended to ${candidateId} by ${userRole}.`, 'SUCCESS');
-
-    try {
-      await apiService.addAnalystNote(candidateId, note);
-    } catch (err) {
-      console.warn('Backend note add warning:', err);
-    }
+    await get().addAuditLog('ADD_NOTE', `Note appended to ${candidateId} by ${userRole}.`, 'SUCCESS');
   },
 
   setMapLayer: (layer) => set({ mapLayer: layer }),
@@ -271,47 +226,38 @@ export const useGeointStore = create<GeointState>((set, get) => ({
   setFilterSensor: (sensor: string) => set({ activeSensorFilter: sensor }),
   setFilterConfidence: (confidence: number) => set({ minConfidenceFilter: confidence }),
 
-  createExport: (title, format, aoi, candidateCount) => {
-    const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
-    const newExport: ExportPackage = {
-      id: `EXP-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+  createExport: async (title, format, aoi, candidateIds) => {
+    const newExport = await apiService.createExportPackage({
       title,
       format,
       aoi,
-      candidateCount,
-      fileSize: `${(Math.random() * 12 + 2).toFixed(1)} MB`,
-      createdDate: timestamp,
-      status: 'Ready',
-      downloadUrl: '#',
       exportedBy: get().user.name,
-    };
-
-    set((state) => ({
-      exports: [newExport, ...state.exports],
-    }));
-
-    get().addAuditLog('EXPORT_DATASET', `Export package created: "${title}" (${format}) containing ${candidateCount} candidates.`, 'SUCCESS');
+      candidate_ids: candidateIds,
+    });
+    set((state) => ({ exports: [newExport, ...state.exports.filter((item) => item.id !== newExport.id)] }));
   },
 
-  addAuditLog: (eventType, details, status = 'SUCCESS') => {
+  addAuditLog: async (eventType, details, status = 'SUCCESS') => {
     const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
     const user = get().user;
     const newLog: AuditLog = {
-      id: `AUD-${Math.floor(90000 + Math.random() * 9999)}`,
+      id: `AUD-${crypto.randomUUID()}`,
       timestamp,
       eventType,
       user: user.name,
       role: user.role,
-      ipAddress: '10.24.120.4 (Local Enclave)',
+      ipAddress: 'Not recorded',
       details,
       status,
     };
 
-    set((state) => ({
-      auditLogs: [newLog, ...state.auditLogs].slice(0, 100),
-    }));
-
-    apiService.addAuditLog(newLog).catch(() => {});
+    try {
+      const response = await apiService.addAuditLog(newLog);
+      set((state) => ({ auditLogs: [response.entry, ...state.auditLogs].slice(0, 100) }));
+    } catch (error) {
+      console.error('Backend audit write failed:', error);
+      set({ apiError: error instanceof Error ? error.message : 'Backend audit write failed' });
+    }
   },
 }));
 

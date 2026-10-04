@@ -36,7 +36,7 @@ export const DiscoveryScreen: React.FC = () => {
 
   const totalAnomalies = candidates.length;
   const highConfidenceCount = candidates.filter((c) => c.confidence >= 80).length;
-  const totalTiles = realClusters.reduce((acc, c) => acc + (c.total_tiles || 0), 0) || 180;
+  const totalTiles = realClusters.reduce((acc, c) => acc + (c.total_tiles || 0), 0);
 
   const handleFindSimilar = async (tileFile: string) => {
     if (!tileFile) return;
@@ -76,7 +76,7 @@ export const DiscoveryScreen: React.FC = () => {
 
         <div className="flex items-center space-x-2">
           <div className="px-3 py-1.5 rounded-lg bg-[#0B1120] border border-cyan-500/30 text-xs font-mono text-slate-300">
-            CLUSTER MODEL: <span className="text-cyan-300 font-bold">KMeans (K=8, 768-dim OpenCLIP)</span>
+            CLUSTER MODEL: <span className="text-cyan-300 font-bold">KMeans (K=8, 512-dim FAISS vectors)</span>
           </div>
         </div>
       </div>

@@ -86,3 +86,4 @@ SIH-2PGITB&U2/
 !runtime/SIH-2026/Dataset/Tiles/*.tif
 !runtime/SIH-2026/Dataset/*.png
 !runtime/SIH-2026/Dataset/change_previews/*.png
+!runtime/SIH-2026/CODE/openclip_text_fp16.pt

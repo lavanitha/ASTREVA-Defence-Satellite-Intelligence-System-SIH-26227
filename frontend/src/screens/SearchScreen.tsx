@@ -31,6 +31,7 @@ export const SearchScreen: React.FC = () => {
   const {
     candidates,
     aois,
+    scenes,
     searchHistory,
     addSearchHistory,
     selectCandidate,
@@ -46,10 +47,12 @@ export const SearchScreen: React.FC = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [lastSearchedQuery, setLastSearchedQuery] = useState('');
   const [vectorSearchResults, setVectorSearchResults] = useState<any[] | null>(null);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   const executeSearch = async (searchStr: string) => {
     if (!searchStr && searchMode === 'text') return;
     setIsSearching(true);
+    setSearchError(null);
     setVectorSearchResults([]); // Clear previous results immediately
     setLastSearchedQuery(searchStr);
     addSearchHistory(searchStr || (searchMode === 'image' ? `Patch: ${selectedImagePatch}` : 'Archive Search'));
@@ -66,6 +69,8 @@ export const SearchScreen: React.FC = () => {
         image_tile: searchMode === 'image' ? patchTile : undefined,
         top_k: 12,
         change_type: selectedChangeType !== 'ALL' ? selectedChangeType : undefined,
+        sensor: selectedSensor !== 'ALL' ? selectedSensor : undefined,
+        aoi_id: selectedAoi !== 'ALL' ? selectedAoi : undefined,
       });
 
       // Filter only relevant vector search hits (top matches above relevance threshold)
@@ -78,6 +83,7 @@ export const SearchScreen: React.FC = () => {
     } catch (err) {
       console.warn('Vector search error:', err);
       setVectorSearchResults([]);
+      setSearchError(err instanceof Error ? err.message : 'Semantic search failed.');
     } finally {
       setIsSearching(false);
     }
@@ -108,14 +114,14 @@ export const SearchScreen: React.FC = () => {
               <Sparkles className="w-4 h-4" />
             </span>
             <span className="text-xs font-mono text-[#A3BF99] tracking-wider font-semibold">
-              GEO-EMBEDDING INFERENCE (768-DIM OPENCLIP VIT-B/32 + FAISS)
+              OPENCLIP VIT-B/32 TEXT EMBEDDING (512-DIM) + EXISTING FAISS INDEX
             </span>
           </div>
           <h1 className="text-xl font-bold text-white tracking-wide mt-1">
             Semantic Satellite Imagery Retrieval
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
-            Query satellite archives using natural language prompts or multi-spectral image patch embeddings across 180 indexed granules.
+            Query satellite archives using natural language prompts or multi-spectral image patch embeddings across {scenes.length} indexed granules.
           </p>
         </div>
 
@@ -287,7 +293,7 @@ export const SearchScreen: React.FC = () => {
           </div>
 
           <div className="text-slate-500 hidden sm:block">
-            OPENCLIP VIT-B/32 • FAISS FLATIP (180 TILES)
+            OPENCLIP VIT-B/32 • FAISS FLATIP ({scenes.length} TILES)
           </div>
         </div>
       )}
@@ -298,8 +304,12 @@ export const SearchScreen: React.FC = () => {
           <RefreshCw className="w-8 h-8 text-[#A3BF99] mx-auto animate-spin" />
           <div className="text-sm font-bold text-slate-200">Executing OpenCLIP Semantic Inference...</div>
           <p className="text-xs text-slate-500 max-w-md mx-auto">
-            Computing 768-dimensional text embedding and querying FAISS FlatIP index across 180 satellite granules.
+            Computing a 512-dimensional OpenCLIP text embedding and querying the existing FAISS FlatIP index across 180 satellite granules.
           </p>
+        </div>
+      ) : searchError ? (
+        <div role="alert" className="rounded-xl border border-rose-500/30 bg-rose-950/30 p-8 text-center text-sm text-rose-200">
+          Semantic search unavailable: {searchError}
         </div>
       ) : vectorSearchResults !== null ? (
         vectorSearchResults.length > 0 ? (
@@ -320,7 +330,7 @@ export const SearchScreen: React.FC = () => {
                     RANK #{res.rank || idx + 1}
                   </div>
                   <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-[#24331F]/90 border border-[#7E9F71]/50 text-[10px] font-mono text-[#A3BF99] font-bold">
-                    COSINE: {res.score ? res.score.toFixed(4) : ''}
+                    COSINE: {typeof res.score === 'number' ? res.score.toFixed(4) : 'N/A'}
                   </div>
                   <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/80 text-[10px] font-mono text-slate-300">
                     DATE: {res.acquisition_date}
@@ -335,7 +345,7 @@ export const SearchScreen: React.FC = () => {
                         {res.tile_file}
                       </span>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
-                        {res.sensor || 'Sentinel-2 L2A'}
+                        {res.sensor || 'Sensor not recorded'}
                       </span>
                     </div>
 
@@ -383,7 +393,7 @@ export const SearchScreen: React.FC = () => {
           <Sparkles className="w-8 h-8 text-[#A3BF99]/60 mx-auto" />
           <div className="text-sm font-bold text-slate-300">Ready for Satellite Vector Retrieval</div>
           <p className="text-xs text-slate-400 max-w-md mx-auto">
-            Type a natural-language anomaly query or select one of the tested prompt suggestions above to search 180 indexed satellite tiles.
+            Type a natural-language anomaly query or select one of the tested prompt suggestions above to search {scenes.length} indexed satellite tiles.
           </p>
         </div>
       )}

@@ -27,14 +27,22 @@ export const ScenesScreen: React.FC = () => {
   const [maxCloudCover, setMaxCloudCover] = useState<number>(20);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedStacScene, setSelectedStacScene] = useState<SceneRecord | null>(null);
+  const [stacRecord, setStacRecord] = useState<unknown>(null);
+  const [stacError, setStacError] = useState<string | null>(null);
+  const [isLoadingStac, setIsLoadingStac] = useState(false);
   const [isIngestModalOpen, setIsIngestModalOpen] = useState(false);
-  const [ingestSuccess, setIngestSuccess] = useState(false);
+  const [ingestSceneName, setIngestSceneName] = useState('');
+  const [ingestAcquisitionDate, setIngestAcquisitionDate] = useState('');
+  const [ingestLatitude, setIngestLatitude] = useState('');
+  const [ingestLongitude, setIngestLongitude] = useState('');
+  const [isIngesting, setIsIngesting] = useState(false);
+  const [ingestError, setIngestError] = useState<string | null>(null);
 
   // Filter scenes
   const filteredScenes = scenes.filter((scene) => {
     if (selectedSensor !== 'ALL' && !scene.sensor.includes(selectedSensor)) return false;
     if (selectedAoi !== 'ALL' && !scene.aoiName.includes(selectedAoi)) return false;
-    if (scene.cloudCover > maxCloudCover) return false;
+    if (scene.cloudCover !== null && scene.cloudCover > maxCloudCover) return false;
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       return (
@@ -48,30 +56,46 @@ export const ScenesScreen: React.FC = () => {
 
   const [measuredLatency, setMeasuredLatency] = useState<number | null>(null);
 
-  const handleSimulateIngest = async () => {
+  const handleIngest = async () => {
+    if (!ingestSceneName.trim() || !ingestAcquisitionDate || !ingestLatitude || !ingestLongitude) {
+      setIngestError('Enter a source TIFF filename, acquisition date, and scene coordinates.');
+      return;
+    }
+    setIsIngesting(true);
+    setIngestError(null);
     try {
       const res = await apiService.ingestSceneIncremental({
-        scene_name: 'ranchi_2026_03_tile_incremental.tif',
+        scene_name: ingestSceneName.trim(),
         sensor: 'Sentinel-2 Optical',
-        acquisition_date: '2026-03-24',
-        lat: 23.3441,
-        lon: 85.3096,
+        acquisition_date: ingestAcquisitionDate,
+        lat: Number(ingestLatitude),
+        lon: Number(ingestLongitude),
       });
       setMeasuredLatency(res.ingestion_time_ms);
-      setIngestSuccess(true);
-      setTimeout(() => {
-        setIngestSuccess(false);
-        setIsIngestModalOpen(false);
-      }, 2500);
-    } catch {
-      setMeasuredLatency(41.5);
-      setIngestSuccess(true);
-      setTimeout(() => {
-        setIngestSuccess(false);
-        setIsIngestModalOpen(false);
-      }, 2500);
+      setIsIngestModalOpen(false);
+    } catch (error) {
+      setIngestError(error instanceof Error ? error.message : 'Scene ingestion failed.');
+    } finally {
+      setIsIngesting(false);
     }
   };
+
+  const handleOpenStac = async (scene: SceneRecord) => {
+    setSelectedStacScene(scene);
+    setStacRecord(null);
+    setStacError(null);
+    setIsLoadingStac(true);
+    try {
+      setStacRecord(await apiService.getStacItem(scene.stacItemId));
+    } catch (error) {
+      setStacError(error instanceof Error ? error.message : 'STAC record is unavailable.');
+    } finally {
+      setIsLoadingStac(false);
+    }
+  };
+
+  const acquisitionDates = [...new Set(scenes.map((scene) => scene.acquisitionDate))].sort();
+  const checksumCount = scenes.filter((scene) => scene.checksum).length;
 
   return (
     <div className="flex flex-col h-full p-4 lg:p-6 space-y-5 overflow-y-auto">
@@ -120,15 +144,17 @@ export const ScenesScreen: React.FC = () => {
         </div>
 
         <div className="p-4 rounded-xl bg-[#0B1120]/95 border border-cyan-500/20 space-y-1">
-          <span className="text-[10px] font-mono text-slate-400 uppercase">CHECKSUM INTEGRITY</span>
-          <div className="text-2xl font-bold font-mono text-emerald-400">100% SHA-256</div>
-          <p className="text-[11px] text-slate-400 font-mono">Zero Bitrot / Air-gap Validated</p>
+          <span className="text-[10px] font-mono text-slate-400 uppercase">CHECKSUM METADATA</span>
+          <div className="text-2xl font-bold font-mono text-cyan-300">{checksumCount} / {scenes.length}</div>
+          <p className="text-[11px] text-slate-400 font-mono">Catalogue records with stored checksums</p>
         </div>
 
         <div className="p-4 rounded-xl bg-[#0B1120]/95 border border-cyan-500/20 space-y-1">
           <span className="text-[10px] font-mono text-slate-400 uppercase">OPTICAL CLOUD / NODATA</span>
           <div className="text-2xl font-bold font-mono text-amber-400">
-            {scenes.length > 0 ? (scenes.reduce((acc, s) => acc + (s.cloudCover || 0), 0) / scenes.length).toFixed(1) : '0.0'}% Avg
+            {scenes.some((scene) => scene.cloudCover !== null)
+              ? `${(scenes.reduce((total, scene) => total + (scene.cloudCover ?? 0), 0) / scenes.filter((scene) => scene.cloudCover !== null).length).toFixed(1)}% Avg`
+              : 'N/A'}
           </div>
           <p className="text-[11px] text-slate-400 font-mono">Real Catalogue Quality Metric</p>
         </div>
@@ -231,7 +257,7 @@ export const ScenesScreen: React.FC = () => {
                   </span>
 
                   <span className="text-xs font-mono text-slate-400">
-                    GSD: {scene.resolutionMeters}m
+                    GSD: {scene.resolutionMeters === null ? 'N/A' : `${scene.resolutionMeters}m`}
                   </span>
                 </div>
 
@@ -242,7 +268,7 @@ export const ScenesScreen: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-mono text-slate-400">
                   <span>SECTOR: <span className="text-slate-200">{scene.aoiName}</span></span>
                   <span>ACQUISITION: <span className="text-cyan-300">{scene.acquisitionDate}</span></span>
-                  <span>CLOUD COVER: <span className={scene.cloudCover > 10 ? 'text-amber-400' : 'text-emerald-400'}>{scene.cloudCover}%</span></span>
+                  <span>CLOUD COVER: <span className={scene.cloudCover === null ? 'text-slate-400' : scene.cloudCover > 10 ? 'text-amber-400' : 'text-emerald-400'}>{scene.cloudCover === null ? 'N/A' : `${scene.cloudCover}%`}</span></span>
                 </div>
 
                 <div className="text-[10px] font-mono text-slate-500 truncate max-w-xl">
@@ -260,24 +286,23 @@ export const ScenesScreen: React.FC = () => {
                 </div>
 
                 <button
-                  onClick={() => setSelectedStacScene(scene)}
+                  onClick={() => void handleOpenStac(scene)}
                   className="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-mono font-medium flex items-center space-x-1.5 transition-colors"
                 >
                   <FileCode className="w-3.5 h-3.5" />
                   <span>STAC JSON</span>
                 </button>
 
-                <a
-                  href={`#download-${scene.id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert(`Simulating local extraction of Cloud-Optimized GeoTIFF: ${scene.id}.cog`);
-                  }}
-                  className="px-3 py-1.5 rounded-lg bg-[#0E172A] hover:bg-[#162238] text-slate-200 border border-slate-700 text-xs font-mono font-medium flex items-center space-x-1.5 transition-colors"
-                >
-                  <Download className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Download COG</span>
-                </a>
+                {scene.tile_file && (
+                  <a
+                    href={apiService.getTileDownloadUrl(scene.tile_file)}
+                    download={scene.tile_file}
+                    className="px-3 py-1.5 rounded-lg bg-[#0E172A] hover:bg-[#162238] text-slate-200 border border-slate-700 text-xs font-mono font-medium flex items-center space-x-1.5 transition-colors"
+                  >
+                    <Download className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Download Source TIFF</span>
+                  </a>
+                )}
               </div>
             </div>
           ))}
@@ -307,39 +332,11 @@ export const ScenesScreen: React.FC = () => {
 
             {/* Formatted Code View */}
             <pre className="flex-1 bg-[#070B14] p-4 rounded-lg border border-slate-800 text-[11px] font-mono text-cyan-300 overflow-y-auto leading-relaxed">
-              {JSON.stringify(
-                {
-                  type: 'Feature',
-                  stac_version: '1.0.0',
-                  id: selectedStacScene.stacItemId,
-                  properties: {
-                    datetime: selectedStacScene.acquisitionDate,
-                    platform: selectedStacScene.sensor,
-                    'eo:cloud_cover': selectedStacScene.cloudCover,
-                    'proj:epsg': 32643,
-                    sun_elevation: selectedStacScene.sunElevation || 59.4,
-                    checksum: selectedStacScene.checksum,
-                  },
-                  geometry: {
-                    type: 'Polygon',
-                    coordinates: [selectedStacScene.footprintCoords],
-                  },
-                  assets: {
-                    visual_rgb: {
-                      href: `local://cache/cog/${selectedStacScene.id}_RGB.tif`,
-                      type: 'image/tiff; application=geotiff; profile=cloud-optimized',
-                      roles: ['overview', 'visual'],
-                    },
-                    sar_backscatter: {
-                      href: `local://cache/cog/${selectedStacScene.id}_VH.tif`,
-                      type: 'image/tiff; application=geotiff; profile=cloud-optimized',
-                      roles: ['data', 'radar'],
-                    },
-                  },
-                },
-                null,
-                2
-              )}
+              {isLoadingStac
+                ? 'Loading STAC item from backend...'
+                : stacError
+                  ? `STAC item unavailable: ${stacError}`
+                  : JSON.stringify(stacRecord, null, 2)}
             </pre>
 
             <div className="flex items-center justify-end pt-2 border-t border-slate-800">
@@ -375,43 +372,36 @@ export const ScenesScreen: React.FC = () => {
                 <label className="text-[10px] font-mono text-slate-400 block mb-1">
                   Target Surveillance Sector:
                 </label>
-                <select className="w-full bg-[#070B14] border border-slate-800 rounded-lg p-2 text-xs text-slate-200">
-                  {aois.map((a) => (
-                    <option key={a.id} value={a.id}>{a.name}</option>
-                  ))}
-                </select>
+                <input
+                  type="text"
+                  value={ingestSceneName}
+                  onChange={(event) => setIngestSceneName(event.target.value)}
+                  placeholder="Existing TIFF filename on the backend"
+                  className="w-full bg-[#070B14] border border-slate-800 rounded-lg p-2 text-xs text-slate-200"
+                />
               </div>
 
               <div>
-                <label className="text-[10px] font-mono text-slate-400 block mb-1">
-                  Granule Format:
+                <label className="text-[10px] font-mono text-slate-400 block mb-1">Acquisition date:</label>
+                <input type="date" value={ingestAcquisitionDate} onChange={(event) => setIngestAcquisitionDate(event.target.value)} className="w-full bg-[#070B14] border border-slate-800 rounded-lg p-2 text-xs text-slate-200" />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <label className="text-[10px] font-mono text-slate-400">Latitude
+                  <input type="number" value={ingestLatitude} onChange={(event) => setIngestLatitude(event.target.value)} className="mt-1 w-full bg-[#070B14] border border-slate-800 rounded-lg p-2 text-xs text-slate-200" />
                 </label>
-                <select className="w-full bg-[#070B14] border border-slate-800 rounded-lg p-2 text-xs text-slate-200">
-                  <option>Sentinel-2 SAFE Archive (L2A Bottom-Of-Atmosphere)</option>
-                  <option>Sentinel-1 GRD SAR ZIP (Cross-Polarized)</option>
-                  <option>Cloud-Optimized GeoTIFF (COG Stack)</option>
-                </select>
+                <label className="text-[10px] font-mono text-slate-400">Longitude
+                  <input type="number" value={ingestLongitude} onChange={(event) => setIngestLongitude(event.target.value)} className="mt-1 w-full bg-[#070B14] border border-slate-800 rounded-lg p-2 text-xs text-slate-200" />
+                </label>
               </div>
 
-              {/* Drag & drop simulated box */}
-              <div className="border-2 border-dashed border-cyan-500/30 rounded-xl p-6 text-center bg-[#070B14]/50 cursor-pointer hover:border-cyan-400 transition-colors">
-                <UploadCloud className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
-                <div className="text-xs text-slate-200 font-semibold">
-                  Drag & Drop Satellite Granule Archive
-                </div>
-                <div className="text-[10px] font-mono text-slate-500 mt-1">
-                  Supports .SAFE, .ZIP, .TIF (Up to 2.5 GB)
-                </div>
-              </div>
-
-              {ingestSuccess && (
+              {measuredLatency !== null && (
                 <div className="p-3 rounded-lg bg-emerald-950/80 border border-emerald-500/50 text-xs font-mono text-emerald-300 flex items-center space-x-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>
-                    Scene incrementally ingested into FAISS + STAC in <strong>{measuredLatency || 41.5} ms</strong> (Zero rebuild required)!
-                  </span>
+                  <span>Backend ingestion completed in <strong>{measuredLatency} ms</strong>.</span>
                 </div>
               )}
+              {ingestError && <p role="alert" className="text-xs text-rose-300">Ingestion failed: {ingestError}</p>}
             </div>
 
             <div className="flex items-center justify-end space-x-2 pt-2 border-t border-slate-800">
@@ -422,10 +412,11 @@ export const ScenesScreen: React.FC = () => {
                 Cancel
               </button>
               <button
-                onClick={handleSimulateIngest}
+                onClick={() => void handleIngest()}
+                disabled={isIngesting}
                 className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-teal-400 text-slate-950 font-bold text-xs font-mono"
               >
-                Run Ingest Pipeline
+                {isIngesting ? 'Ingesting...' : 'Run Backend Ingest'}
               </button>
             </div>
           </div>

@@ -16,9 +16,7 @@ import {
 
 const DEFAULT_API_BASE_URL = 'https://astreva-defence-satellite-intelligence.onrender.com';
 const configuredApiBaseUrl = (import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL).replace(/\/+$/, '');
-const API_BASE_URL = configuredApiBaseUrl === DEFAULT_API_BASE_URL
-  ? configuredApiBaseUrl
-  : DEFAULT_API_BASE_URL;
+const API_BASE_URL = configuredApiBaseUrl || DEFAULT_API_BASE_URL;
 
 function normalizeApiUrls<T>(value: T): T {
   if (typeof value === 'string') {

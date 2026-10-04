@@ -106,6 +106,10 @@ app = FastAPI(
 
 allowed_origins = [
     "https://astreva-defence-satellite-intellige.vercel.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
 allowed_origins.extend(
     origin.strip().rstrip("/")
@@ -331,7 +335,7 @@ def map_sih_candidate_to_frontend(item: dict, index_num: int, decisions_map: dic
 def get_health():
     """Lightweight liveness check that does not initialize the ML stack."""
     return {
-        "status": "healthy",
+        "status": "OPERATIONAL",
         "service": "astreva-backend",
         "enclave": "AIR-GAPPED DEFENCE SYSTEM (100% LOCAL)",
         "python_version": sys.version.split()[0],
@@ -342,7 +346,7 @@ def get_health():
         "catalogue_tiles": len(load_catalogue()),
         "candidate_count": len(load_candidate_records()),
         "components": [
-            {"component": "api", "status": "ready"},
+            {"component": "api", "status": "OPERATIONAL"},
             {"component": "dataset", "status": "ready" if os.path.exists(CATALOGUE_FILE) else "not_ready"},
             {"component": "model", "status": "loaded" if semantic_search is not None else "not_loaded"},
             {"component": "faiss", "status": "ready" if semantic_search is not None and hasattr(semantic_search, "index") else "not_ready"},

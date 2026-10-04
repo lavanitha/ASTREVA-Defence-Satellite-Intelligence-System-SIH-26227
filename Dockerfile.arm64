@@ -1,0 +1,62 @@
+# Multi-stage production container for ASTREVA Full Enclave on ARM64 (aarch64)
+# Stage 1: Build Frontend
+FROM node:20-slim AS frontend-builder
+WORKDIR /frontend
+COPY frontend/package*.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Backend & Runtime Environment
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install system dependencies for GDAL/rasterio, OpenMP, curl, git
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libgomp1 \
+    curl \
+    git \
+    git-lfs \
+    && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip and install ARM64-compatible wheels
+COPY requirements-full.txt ./requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir \
+      fastapi \
+      uvicorn[standard] \
+      numpy \
+      pillow \
+      tifffile \
+      scipy \
+      scikit-learn \
+      pandas \
+      pydantic \
+      pydantic-settings \
+      python-multipart \
+      open-clip-torch \
+      torch \
+      torchvision \
+      faiss-cpu==1.15.1
+
+# Copy backend code, configuration, scripts, and runtime data
+COPY backend/ ./backend/
+COPY configs/ ./configs/
+COPY scripts/ ./scripts/
+COPY runtime/ ./runtime/
+
+# Copy built frontend assets to serve directly or via reverse proxy
+COPY --from=frontend-builder /frontend/dist ./frontend/dist
+
+ENV PORT=8000
+ENV HOST=0.0.0.0
+ENV PYTHONUNBUFFERED=1
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:8000/api/health || exit 1
+
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]

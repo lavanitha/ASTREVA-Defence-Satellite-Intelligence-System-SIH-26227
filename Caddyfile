@@ -1,0 +1,27 @@
+{
+    email admin@astreva-defence.int
+    admin off
+}
+
+# Replace {$DOMAIN} with either your custom domain or {$PUBLIC_IP}.nip.io / {$PUBLIC_IP}.sslip.io
+{$DOMAIN:localhost} {
+    # Encode responses with zstd or gzip
+    encode zstd gzip
+
+    # Reverse proxy backend API calls
+    handle /api/* {
+        reverse_proxy astreva-backend:8000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
+
+    # Serve built frontend static files
+    handle {
+        root * /srv/frontend
+        try_files {path} /index.html
+        file_server
+    }
+}

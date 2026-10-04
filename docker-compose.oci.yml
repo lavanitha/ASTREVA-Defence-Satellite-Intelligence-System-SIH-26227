@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  astreva-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.arm64
+    container_name: astreva-backend
+    restart: always
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./runtime:/app/runtime
+    networks:
+      - astreva-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  astreva-proxy:
+    image: caddy:2-alpine
+    container_name: astreva-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN:-localhost}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./frontend/dist:/srv/frontend:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - astreva-backend
+    networks:
+      - astreva-net
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  astreva-net:
+    driver: bridge

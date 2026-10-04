@@ -1020,11 +1020,11 @@ def get_change_mask(before: str, after: str):
 @app.get("/api/tiles/{tile_filename}/image")
 def get_tile_image(tile_filename: str, mode: str = "rgb"):
     """
-    Converts 4-band GeoTIFF satellite tile to RGB PNG image on the fly with stretch bounds.
+    Converts Sentinel-2 GeoTIFF tiles to displayable PNGs using the dataset's actual band order:
+    B02 (Blue), B03 (Green), B04 (Red), B08 (NIR). Additional bands are only used when present.
     """
     tile_path = os.path.join(SIH_TILES_DIR, os.path.basename(tile_filename))
     if not os.path.exists(tile_path):
-        # Fallback to preview directory if requested preview image
         preview_path = os.path.join(SIH_PREVIEWS_DIR, tile_filename)
         if os.path.exists(preview_path):
             return FileResponse(preview_path, media_type="image/png")
@@ -1034,53 +1034,87 @@ def get_tile_image(tile_filename: str, mode: str = "rgb"):
         data = None
         if HAS_RASTERIO:
             with rasterio.open(tile_path) as src:
-                data = src.read()
+                data = src.read().astype(np.float32)
         elif HAS_TIFFFILE:
             raw = tifffile.imread(tile_path)
             if raw.ndim == 3 and raw.shape[2] in [1, 3, 4]:
-                data = np.transpose(raw, (2, 0, 1))
+                data = np.transpose(raw, (2, 0, 1)).astype(np.float32)
             elif raw.ndim == 2:
-                data = np.expand_dims(raw, axis=0)
+                data = np.expand_dims(raw, axis=0).astype(np.float32)
             else:
-                data = raw
+                data = np.asarray(raw, dtype=np.float32)
         else:
             with Image.open(tile_path) as pil_img:
                 raw = np.array(pil_img)
                 if raw.ndim == 3:
-                    data = np.transpose(raw, (2, 0, 1))
+                    data = np.transpose(raw, (2, 0, 1)).astype(np.float32)
                 else:
-                    data = np.expand_dims(raw, axis=0)
-            
+                    data = np.expand_dims(raw, axis=0).astype(np.float32)
+
+        if data is None or data.size == 0:
+            raise HTTPException(status_code=422, detail=f"Tile {tile_filename} contains no readable raster data")
+
+        if data.ndim == 2:
+            data = np.expand_dims(data, axis=0)
+
+        # Dataset-wide robust stretch bounds keep the imagery consistent across scenes.
         p2, p98 = 200.0, 3000.0
         bounds_path = os.path.join(SIH_INDEX_DIR, "stretch_bounds.json")
         if os.path.exists(bounds_path):
-            with open(bounds_path) as f:
-                b = json.load(f)
-                p2, p98 = b.get("p2", 200.0), b.get("p98", 3000.0)
+            with open(bounds_path, "r", encoding="utf-8") as f:
+                bounds = json.load(f)
+                p2, p98 = float(bounds.get("p2", p2)), float(bounds.get("p98", p98))
 
-        # Bands: B02=blue, B03=green, B04=red, B08=NIR
-        if data is not None and data.shape[0] >= 3:
-            blue, green, red = data[0], data[1], data[2]
+        def normalize_rgb_array(rgb_array: np.ndarray) -> np.ndarray:
+            rgb_flat = rgb_array[np.isfinite(rgb_array)]
+            if rgb_flat.size == 0:
+                return np.zeros_like(rgb_array, dtype=np.float32)
+            lo = np.percentile(rgb_flat, 2)
+            hi = np.percentile(rgb_flat, 98)
+            if not np.isfinite(lo) or not np.isfinite(hi) or hi <= lo:
+                lo, hi = max(np.min(rgb_flat), 0.0), max(np.max(rgb_flat), 1.0)
+            lo = max(float(lo), float(p2))
+            hi = max(float(hi), float(lo + 1.0))
+            rgb = np.clip((rgb_array - lo) / (hi - lo + 1e-6), 0.0, 1.0)
+            return rgb
+
+        if data.shape[0] >= 3:
+            blue = data[0].astype(np.float32)
+            green = data[1].astype(np.float32)
+            red = data[2].astype(np.float32)
+
+            nodata_mask = (~np.isfinite(blue)) | (~np.isfinite(green)) | (~np.isfinite(red)) | (blue <= 0) | (green <= 0) | (red <= 0)
+            blue = np.where(nodata_mask, 0.0, blue)
+            green = np.where(nodata_mask, 0.0, green)
+            red = np.where(nodata_mask, 0.0, red)
+
             if mode == "ndvi" and data.shape[0] >= 4:
                 nir = data[3].astype(np.float32)
                 red_f = red.astype(np.float32)
                 ndvi = (nir - red_f) / (nir + red_f + 1e-6)
+                ndvi = np.nan_to_num(ndvi, nan=0.0, posinf=1.0, neginf=-1.0)
+                ndvi_norm = np.clip((ndvi + 1.0) / 2.0, 0.0, 1.0)
                 ndvi_rgb = np.stack([
-                    np.clip((1.0 - ndvi) * 200, 0, 255).astype(np.uint8),
-                    np.clip((ndvi + 0.2) * 255, 0, 255).astype(np.uint8),
-                    np.zeros_like(ndvi, dtype=np.uint8)
+                    np.clip(1.0 - ndvi_norm, 0.0, 1.0),
+                    np.clip(ndvi_norm, 0.0, 1.0),
+                    np.zeros_like(ndvi_norm, dtype=np.float32),
                 ], axis=-1)
-                img = Image.fromarray(ndvi_rgb)
-            elif mode == "ndbi" and data.shape[0] >= 4:
-                nir = data[3].astype(np.float32)
+                img = Image.fromarray((ndvi_rgb * 255).astype(np.uint8))
+            elif mode == "ndbi":
+                # The project’s real tile dataset is 4-band Sentinel-2 (B02/B03/B04/B08) with no SWIR band,
+                # so a true NDBI is unavailable. For UI compatibility, we generate a proxy built-up signal
+                # from red-vs-NIR contrast instead of fabricating a SWIR-based index.
+                nir = data[3].astype(np.float32) if data.shape[0] >= 4 else green.astype(np.float32)
                 red_f = red.astype(np.float32)
-                ndbi = (red_f - nir) / (red_f + nir + 1e-6)
+                proxy_ndbi = (red_f - nir) / (red_f + nir + 1e-6)
+                proxy_ndbi = np.nan_to_num(proxy_ndbi, nan=0.0, posinf=1.0, neginf=-1.0)
+                proxy_norm = np.clip((proxy_ndbi + 1.0) / 2.0, 0.0, 1.0)
                 ndbi_rgb = np.stack([
-                    np.clip((ndbi + 0.3) * 255, 0, 255).astype(np.uint8),
-                    np.clip(red_f / (p98 + 1e-6) * 200, 0, 255).astype(np.uint8),
-                    np.clip((1.0 - ndbi) * 150, 0, 255).astype(np.uint8)
+                    np.clip(1.0 - proxy_norm, 0.0, 1.0),
+                    np.clip(proxy_norm * 0.7, 0.0, 1.0),
+                    np.clip(proxy_norm, 0.0, 1.0),
                 ], axis=-1)
-                img = Image.fromarray(ndbi_rgb)
+                img = Image.fromarray((ndbi_rgb * 255).astype(np.uint8))
             elif mode == "sar" and data.shape[0] >= 4:
                 nir = data[3].astype(np.float32)
                 red_f = red.astype(np.float32)
@@ -1093,12 +1127,13 @@ def get_tile_image(tile_filename: str, mode: str = "rgb"):
                 ], axis=-1)
                 img = Image.fromarray(sar_rgb)
             else:
+                # True RGB uses the actual Sentinel-2 dataset order: B02 (blue), B03 (green), B04 (red)
                 rgb = np.stack([red, green, blue], axis=-1).astype(np.float32)
-                rgb = np.clip(rgb, p2, p98)
-                rgb = ((rgb - p2) / (p98 - p2 + 1e-6) * 255).astype(np.uint8)
-                img = Image.fromarray(rgb)
-        elif data is not None and data.shape[0] > 0:
-            img = Image.fromarray(data[0].astype(np.uint8))
+                rgb = np.clip(rgb, 0.0, None)
+                rgb = normalize_rgb_array(rgb)
+                img = Image.fromarray((rgb * 255).astype(np.uint8))
+        elif data.shape[0] > 0:
+            img = Image.fromarray(np.clip(data[0], 0, 255).astype(np.uint8))
         else:
             raise HTTPException(status_code=422, detail=f"Tile {tile_filename} contains no readable raster data")
 
@@ -1106,6 +1141,8 @@ def get_tile_image(tile_filename: str, mode: str = "rgb"):
         img.save(buf, format="PNG")
         buf.seek(0)
         return Response(content=buf.getvalue(), media_type="image/png")
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"Error serving tile image {tile_filename}: {e}")
         raise HTTPException(status_code=500, detail=f"Could not render tile {tile_filename}: {e}")

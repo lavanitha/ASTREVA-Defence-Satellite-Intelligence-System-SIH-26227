@@ -1,4 +1,7 @@
 import pytest
+import numpy as np
+from io import BytesIO
+from PIL import Image
 from fastapi.testclient import TestClient
 import sys
 import os
@@ -120,6 +123,12 @@ def test_real_tile_layers_and_change_mask():
         assert response.status_code == 200
         assert response.headers["content-type"].startswith("image/png")
         assert response.content.startswith(b"\x89PNG\r\n\x1a\n")
+
+    rgb_response = client.get(f"/api/tiles/{after_tile}/image", params={"mode": "rgb"})
+    rgb = np.asarray(Image.open(BytesIO(rgb_response.content)).convert("RGB"))
+    assert rgb.shape == (512, 512, 3)
+    assert np.unique(rgb.reshape(-1, 3), axis=0).shape[0] > 1000
+    assert np.std(rgb[:, :, 0].astype(np.int16) - rgb[:, :, 2].astype(np.int16)) > 10
 
     mask_response = client.get(
         "/api/tiles/mask",

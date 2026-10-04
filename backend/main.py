@@ -962,6 +962,8 @@ def get_change_mask(before: str, after: str):
     after_path = os.path.join(SIH_TILES_DIR, after)
     if not os.path.exists(before_path) or not os.path.exists(after_path):
         raise HTTPException(status_code=404, detail="One or both source tiles are unavailable")
+    if not HAS_RASTERIO and not HAS_TIFFFILE:
+        raise HTTPException(status_code=503, detail="GeoTIFF mask rendering requires rasterio or tifffile")
 
     try:
         b_data = None
@@ -978,6 +980,8 @@ def get_change_mask(before: str, after: str):
             b_data = np.transpose(b_raw, (2, 0, 1)) if (b_raw.ndim == 3 and b_raw.shape[2] in [1, 3, 4]) else b_raw
             a_data = np.transpose(a_raw, (2, 0, 1)) if (a_raw.ndim == 3 and a_raw.shape[2] in [1, 3, 4]) else a_raw
             nodata = 0
+        else:
+            raise HTTPException(status_code=503, detail="GeoTIFF mask rendering requires rasterio or tifffile")
 
         if b_data is not None and a_data is not None and b_data.shape[0] >= 3 and a_data.shape[0] >= 3:
             valid = (b_data[0] > nodata) & (a_data[0] > nodata) & (b_data[0] > 0) & (a_data[0] > 0)
@@ -1044,12 +1048,7 @@ def get_tile_image(tile_filename: str, mode: str = "rgb"):
             else:
                 data = np.asarray(raw, dtype=np.float32)
         else:
-            with Image.open(tile_path) as pil_img:
-                raw = np.array(pil_img)
-                if raw.ndim == 3:
-                    data = np.transpose(raw, (2, 0, 1)).astype(np.float32)
-                else:
-                    data = np.expand_dims(raw, axis=0).astype(np.float32)
+            raise HTTPException(status_code=503, detail="GeoTIFF image rendering requires rasterio or tifffile")
 
         if data is None or data.size == 0:
             raise HTTPException(status_code=422, detail=f"Tile {tile_filename} contains no readable raster data")
